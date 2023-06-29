@@ -46,7 +46,7 @@ export default {
   height: 54px;
   line-height: 54px;
   // background: #393e46;
-  background-image: linear-gradient(to right, #d72228, #ed9247);
+  background-image: linear-gradient(to right, #393e46, #393e46);
   text-align: center;
   overflow: hidden;
 
@@ -54,9 +54,13 @@ export default {
     height: 100%;
     width: 100%;
 
+
+
     & .sidebar-logo {
       margin-right: 12px;
+      margin-top: -13px;
       display: inline-block;
+      width: 200px;
       vertical-align: middle;
       margin-bottom: -2px;
     }
@@ -79,6 +83,8 @@ export default {
   &.collapse {
     .sidebar-logo {
       margin-right: 0;
+      width: 255px !important;
+      display: block;
     }
   }
 }

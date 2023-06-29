@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <img src="../../assets/logo1.png" />
+        <img class="login-logo" src="../../assets/logo.png" />
       </div>
       <span v-if="login.type === 'up'">
         <el-form-item v-show="isMultiTenant" prop="tenant">
@@ -170,7 +170,7 @@
       <!--</el-dropdown-menu>-->
       <!--</el-dropdown>-->
     </el-form>
-    <span class="login-footer">© 2020 - 品达物流集团</span>
+    <span class="login-footer">© 2023 - NEU Express </span>
   </div>
 </template>
 
@@ -635,10 +635,10 @@ $dark_gray: #aaa;
 $light_gray: #eee;
 
 .login-container {
-  background: url(../../assets/background.png) 60% no-repeat;
+  background: url(../../assets/background.png) 100% no-repeat;
   // background-color: #2d3a4b;
   background-size: cover;
-  width: 65%;
+  width: 100%;
   height: 100vh;
   .login-info {
     position: absolute;
@@ -662,17 +662,19 @@ $light_gray: #eee;
   .login-form {
     position: absolute;
     top: 50%;
-    left: 80%;
+    left: 50%;
     margin: -180px 0 0 -160px;
     width: 320px;
     height: 440px;
     padding: 36px;
     background: #fff;
+    opacity:0.7;
     border-radius: 3px;
     .code-input {
       width: 50%;
       display: inline-block;
       vertical-align: middle;
+      opacity:1.0;
     }
     .code-image {
       display: inline-block;
@@ -729,6 +731,12 @@ $light_gray: #eee;
       margin: 0 auto 40px auto;
       text-align: center;
       font-weight: bold;
+    }
+
+    .login-logo {
+      width: 255px !important;
+      margin: 0 auto;
+      display: block;
     }
 
     .set-language {
