@@ -1,8 +1,8 @@
 {
-  "name": "pd-authority-ui",
+  "name": "dy-authority-ui",
   "version": "1.0.0",
   "description": "前端项目",
-  "author": "pinda",
+  "author": "dy",
   "license": "Apache 2.0",
   "scripts": {
     "dev": "vue-cli-service serve",

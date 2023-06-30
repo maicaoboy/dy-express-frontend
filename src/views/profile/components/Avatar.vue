@@ -46,7 +46,7 @@
   </el-dialog>
 </template>
 <script>
-import imgUpload from '@/components/pinda/imgUpload'
+import imgUpload from '@/components/dy/imgUpload'
 import userApi from '@/api/User.js'
 const hthz = [
   'default.jpg',

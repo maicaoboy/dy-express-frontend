@@ -59,7 +59,7 @@ const constRouter = [
       {
         hidden: true,
         path: '/sms/manage/edit',
-        component: () => import('@/views/pinda/sms/manage/Edit'),
+        component: () => import('@/views/dy/sms/manage/Edit'),
         name: 'smsEdit',
         meta: {
           title: '发送短信', icon: '', noCache: true

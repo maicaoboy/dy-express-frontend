@@ -355,7 +355,7 @@ export default {
     sidebarLogo: '侧边栏 Logo'
   },
   system: {
-    title: 'pinda-admin'
+    title: 'dy-admin'
   },
   tips: {
     systemError: '系统维护中，请稍微再试~',
@@ -381,7 +381,7 @@ export default {
     onlyChooseOne: '只能选择一个节点作为父节点',
     noNodeSelected: '请先选择节点',
     confirmDeleteNode: '选中节点及其子结点将被永久删除, 是否继续？',
-    iframeGrant: '用户名：pinda 密码：pinda',
+    iframeGrant: 'dy dy',
     notEqual: '两次输入不一致',
     oldPasswordIncorrect: '原密码不正确',
     uploadSuccess: '上传成功',

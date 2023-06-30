@@ -2,4 +2,4 @@
 cnpm install
 npm run build:docker
 
-docker build -t pinda-authority-ui .
+docker build -t dy-authority-ui .

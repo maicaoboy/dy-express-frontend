@@ -14,7 +14,7 @@ export default {
     deleteCache: 'DeleteCache'
   },
   login: {
-    title: 'Pinda Authority',
+    title: 'dy-express Authority',
     logIn: 'Login',
     tenant: 'tenant',
     username: 'Username',
@@ -306,7 +306,7 @@ export default {
     sidebarLogo: 'Sidebar Logo'
   },
   system: {
-    title: 'Pinda Authority System'
+    title: 'Dy_Express Authority System'
   },
   tips: {
     systemError: 'System maintenance, please try again~',
@@ -324,7 +324,7 @@ export default {
     confirmDelete: 'The selected data will be permanently deleted, continue?',
     confirmDeleteCache: 'Whether to clear the user permission cache immediately?',
     containCurrentUser: 'The operation has been canceled because it contains the currently logged in user',
-    neverLogin: 'Never logged in to the pinda system',
+    neverLogin: 'Never logged in to the dy system',
     nothing: 'Nothing',
     topId: 'A value of 0 indicates a top-level node',
     choose: 'Select: ',
@@ -332,7 +332,7 @@ export default {
     onlyChooseOne: 'Only one node can be selected as the parent node',
     noNodeSelected: 'Please select a node first',
     confirmDeleteNode: 'The selected node and its child nodes will be permanently deleted. Continue?',
-    iframeGrant: 'Userame: pinda Password: pinda',
+    iframeGrant: 'Userame: dy Password: dy',
     notEqual: 'Inconsistent values entered twice',
     oldPasswordIncorrect: 'Old password incorrect',
     uploadSuccess: 'Upload Successfully',
