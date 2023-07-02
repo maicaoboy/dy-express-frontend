@@ -18,7 +18,6 @@ import request from '@/utils/request'
 import * as filters from './filters' // global filters
 import { hasPermission, hasNoPermission, hasAnyPermission } from './utils/permissionDirect'
 
-
 const Plugins = [
   hasPermission,
   hasNoPermission,
