@@ -180,12 +180,19 @@ function filterAsyncRouter(routes) {
   })
 }
 
+// function view(path) {
+//   return function (resolve) {
+//     import(`@/views/${path}.vue`).then(mod => {
+//       resolve(mod)
+//     })
+//   }
+// }
+
 function view(path) {
   return function (resolve) {
-    import(`@/views/${path}.vue`).then(mod => {
-      resolve(mod)
-    })
+    require([`@/views/${path}.vue`], resolve)
   }
 }
+
 
 export default router

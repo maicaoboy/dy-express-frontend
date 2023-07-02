@@ -263,7 +263,7 @@
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import Pagination from '@/components/Pagination'
-import goodsInfoEdit from './Edit'
+// import goodsInfoEdit from './Edit'
 import goodsInfoApi from '@/api/GoodsInfo.js'
 
 export default {
