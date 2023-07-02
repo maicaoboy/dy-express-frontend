@@ -25,7 +25,9 @@
       <el-input v-model="user.workDescribe" rows="3" type="textarea" />
     </el-form-item>
     <el-form-item>
-      <el-button plain type="primary" @click="submit">{{ $t('common.edit') }}</el-button>
+      <el-button plain type="primary" @click="submit">
+        {{ $t('common.edit') }}
+      </el-button>
     </el-form-item>
   </el-form>
 </template>

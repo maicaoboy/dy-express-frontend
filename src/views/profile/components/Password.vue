@@ -17,7 +17,9 @@
       <el-input v-model="p.confirmPassword" type="password" />
     </el-form-item>
     <el-form-item>
-      <el-button plain type="primary" @click="submit">{{ $t('common.edit') }}</el-button>
+      <el-button plain type="primary" @click="submit">
+        {{ $t('common.edit') }}
+      </el-button>
     </el-form-item>
   </el-form>
 </template>

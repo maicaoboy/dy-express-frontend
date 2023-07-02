@@ -9,7 +9,7 @@
       label-position="left"
     >
       <div class="title-container">
-        <img class="login-logo" src="../../assets/logo.png" />
+        <img class="login-logo" src="../../assets/logo.png">
       </div>
       <span v-if="login.type === 'up'">
         <el-form-item v-show="isMultiTenant" prop="tenant">
@@ -63,7 +63,7 @@
             @keyup.enter.native="handleLogin"
           />
         </el-form-item>
-        <img :src="imageCode" alt="codeImage" class="code-image" @click="getCodeImage" />
+        <img :src="imageCode" alt="codeImage" class="code-image" @click="getCodeImage">
         <el-button
           :loading="loading"
           style="width:100%;margin-bottom:14px;background-image: linear-gradient(to right, #D92E2C,#F86E2B);border:0px"
@@ -81,7 +81,7 @@
                 :src="resolveLogo(l.img)"
                 alt
                 @click="socialLogin(l.name)"
-              />
+              >
             </div>
           </template>
         </div>
@@ -185,9 +185,9 @@ export default {
   name: 'Login',
   data() {
     return {
-      //是否启用多租户
+      // 是否启用多租户
       isMultiTenant:
-        process.env.VUE_APP_IS_MULTI_TENANT === 'true' ? true : false,
+        process.env.VUE_APP_IS_MULTI_TENANT === 'true',
       tabActiveName: 'bindLogin',
       login: {
         type: 'up'
@@ -480,7 +480,7 @@ export default {
         that.loginForm['key'] = that.randomId
         loginApi.login(this.loginForm).then(response => {
           const res = response.data
-          //debugger;
+          // debugger;
           if (res.isSuccess) {
             that.saveLoginData(res.data.token)
             that.saveUserInfo(res.data.user, res.data.permissionsList)
@@ -574,15 +574,7 @@ export default {
     },
     loginSuccessCallback(user) {
       console.log(user)
-	  return ;
-      // 登录成功后的回调，记录登录日志，最后登录时间等
-      // this.$get(`system/user/success/${account}`).catch((e) => { console.log(e) })
-      commonApi.dictionaryEnums().then(response => {
-        const res = response.data
-        if (res.isSuccess) {
-          this.$store.commit('common/setEnums', res.data)
-        }
-      })
+	    return
     }
   }
 }

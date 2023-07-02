@@ -34,7 +34,9 @@
             <el-tag
               :disabled="type==='view'"
               :type="smsTask.status | statusFilter"
-            >{{ smsTask.status.desc }}</el-tag>
+            >
+              {{ smsTask.status.desc }}
+            </el-tag>
           </el-form-item>
         </el-col>
       </el-row>
@@ -45,7 +47,9 @@
           :closable="type!=='view'"
           :disable-transitions="false"
           @close="handleClose(tag)"
-        >{{ tag }}</el-tag>
+        >
+          {{ tag }}
+        </el-tag>
         <el-input
           v-if="receiverVisible"
           ref="saveTagInput"
@@ -55,7 +59,9 @@
           @blur="handleInputConfirm"
           @keyup.enter.native="handleInputConfirm"
         />
-        <el-button v-else :disabled="type==='view'" class="button-new-tag" @click="showInput">添加</el-button>
+        <el-button v-else :disabled="type==='view'" class="button-new-tag" @click="showInput">
+          添加
+        </el-button>
       </el-form-item>
       <el-form-item :label="$t('table.smsTask.topic')" prop="topic">
         <el-input v-model="smsTask.topic" :disabled="type==='view'" />
@@ -88,8 +94,12 @@
         <el-col :sm="12" :xs="24" style="margin-top: 10px;">
           <el-form-item label="定时发送" prop="sendTime">
             <el-radio-group v-model="timing" :disabled="type==='view'" size="medium">
-              <el-radio-button :label="false">否</el-radio-button>
-              <el-radio-button :label="true">是</el-radio-button>
+              <el-radio-button :label="false">
+                否
+              </el-radio-button>
+              <el-radio-button :label="true">
+                是
+              </el-radio-button>
             </el-radio-group>
             <el-date-picker
               v-show="timing"
@@ -108,8 +118,12 @@
         <el-col :sm="12" :xs="24" style="margin-top: 10px;">
           <el-form-item v-show="type==='view'" label="是否草稿" prop="draft">
             <el-radio-group v-model="smsTask.draft" :disabled="type==='view'" size="medium">
-              <el-radio-button :label="false">否</el-radio-button>
-              <el-radio-button :label="true">是</el-radio-button>
+              <el-radio-button :label="false">
+                否
+              </el-radio-button>
+              <el-radio-button :label="true">
+                是
+              </el-radio-button>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -122,14 +136,18 @@
         plain
         type="primary"
         @click="submitForm(false)"
-      >立即发送</el-button>
+      >
+        立即发送
+      </el-button>
       <el-button
         v-show="type!=='view'"
         :disabled="disabled"
         plain
         type="warning"
         @click="submitForm(true)"
-      >存草稿</el-button>
+      >
+        存草稿
+      </el-button>
     </div>
     <aside v-show="type!=='view'" class="tips">
       模板提示：
@@ -251,7 +269,7 @@ export default {
     }
   },
   mounted() {
-    //在vue的mount阶段执行的函数都是顺序执行，不会阻塞的，所以如果希望mount阶段的函数也是阻塞的，需要额外写一个async函数，然后把需要同步执行的函数写到里面，然后在mount阶段调用这个额外写的函数
+    // 在vue的mount阶段执行的函数都是顺序执行，不会阻塞的，所以如果希望mount阶段的函数也是阻塞的，需要额外写一个async函数，然后把需要同步执行的函数写到里面，然后在mount阶段调用这个额外写的函数
     this.initSmsTemplateList()
     this.loadSendStatus()
   },
@@ -309,11 +327,11 @@ export default {
       const vm = this
       // vm.preSearch()
       if (id) {
-        //遍历模板添加文本框
+        // 遍历模板添加文本框
         for (const item of vm.smsTemplateList) {
           if (item.id === id) {
             let templateParam = {}
-            if (typeof item.templateParams == 'string') {
+            if (typeof item.templateParams === 'string') {
               templateParam = JSON.parse(item.templateParams)
             } else {
               templateParam = item.templateParams
@@ -335,13 +353,13 @@ export default {
         vm.changeContent()
       }
     },
-    //模板文本框输入内容
+    // 模板文本框输入内容
     templateCode(val, key) {
       const vm = this
       vm.smsTask.templateParam[key] = val
       vm.changeContent()
     },
-    //短信内容处理
+    // 短信内容处理
     changeContent() {
       const vm = this
       if (!vm.smsTemplate) {
@@ -491,7 +509,7 @@ export default {
     handleInputConfirm() {
       const vm = this
       // 正则校验
-      let inputValue = vm.receiver
+      const inputValue = vm.receiver
       if (inputValue) {
         if (!validMobile(inputValue)) {
           this.$message({

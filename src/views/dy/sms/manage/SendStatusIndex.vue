@@ -16,8 +16,12 @@
         :placeholder="$t('table.smsSendStatus.ext')"
         class="filter-item search-item"
       />
-      <el-button class="filter-item" plain type="primary" @click="search">{{ $t('table.search') }}</el-button>
-      <el-button class="filter-item" plain type="warning" @click="reset">{{ $t('table.reset') }}</el-button>
+      <el-button class="filter-item" plain type="primary" @click="search">
+        {{ $t('table.search') }}
+      </el-button>
+      <el-button class="filter-item" plain type="warning" @click="reset">
+        {{ $t('table.reset') }}
+      </el-button>
     </div>
 
     <el-table

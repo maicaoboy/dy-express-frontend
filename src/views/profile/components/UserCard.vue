@@ -10,11 +10,15 @@
             class="change-avatar"
             type="primary"
             @click="openAvatar"
-          >{{ $t('common.changeAvatar') }}</el-link>
+          >
+            {{ $t('common.changeAvatar') }}
+          </el-link>
         </pan-thumb>
       </div>
       <div class="box-center">
-        <div class="user-name text-center">{{ user.name }}</div>
+        <div class="user-name text-center">
+          {{ user.name }}
+        </div>
         <div class="user-role text-center text-muted">
           <span>{{ user.email ? user.email : $t('common.noEmail') }}</span> ·
           <span>{{ user.mobile ? user.mobile : $t('common.noMobile') }}</span>
@@ -28,7 +32,9 @@
           <span>{{ $t('table.user.workDescribe') }}</span>
         </div>
         <div class="user-bio-section-body">
-          <div class="text-muted">{{ user.workDescribe ? user.workDescribe: $t('tips.nothing') }}</div>
+          <div class="text-muted">
+            {{ user.workDescribe ? user.workDescribe: $t('tips.nothing') }}
+          </div>
         </div>
       </div>
       <div class="user-education user-bio-section">
@@ -47,7 +53,7 @@
                   :title="$t('common.unbind')"
                   alt
                   @click="unbind(l.name)"
-                />
+                >
                 <img
                   v-else
                   :class="{ 'radius': l.radius }"
@@ -56,7 +62,7 @@
                   alt
                   class="unbind"
                   @click="bind(l.name)"
-                />
+                >
               </div>
             </template>
           </div>

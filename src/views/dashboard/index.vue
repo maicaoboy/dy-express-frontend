@@ -4,44 +4,68 @@
       <el-col :xs="24" :sm="12" :span="6">
         <el-card class="box-card" :body-style="{ padding: '5px 20px' , minHeight: '60px' }">
           <div style="float:left;margin-left:-10px">
-            <img src="../../assets/wd.png" />
+            <img src="../../assets/wd.png">
           </div>
           <div style="margin:15px;float:left;">
-            <div style="color:#333333">昌平网点</div>
-            <div style="color:#999999;font-size:14px;margin-top:5px">北京省/北京市/昌平区/金燕龙</div>
+            <div style="color:#333333">
+              昌平网点
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              北京省/北京市/昌平区/金燕龙
+            </div>
           </div>
           <div style="margin:10px;float:left">
-            <div style="color:#3681FF;text-align:center">0</div>
-            <div style="color:#999999;font-size:14px;margin-top:5px">下属机构</div>
+            <div style="color:#3681FF;text-align:center">
+              0
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              下属机构
+            </div>
           </div>
           <div style="margin:10px 15px;float:left;">
-            <div style="color:#3681FF;text-align:center">120</div>
-            <div style="color:#999999;font-size:14px;margin-top:5px">系统员工</div>
+            <div style="color:#3681FF;text-align:center">
+              120
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              系统员工
+            </div>
           </div>
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="12" :span="6">
         <el-card class="box-card" :body-style="{ padding: '5px 20px' , minHeight: '60px' }">
           <div style="float:left;margin-left:-10px;margin-top:10px">
-            <img src="../../assets/dfpzy.png" />
+            <img src="../../assets/dfpzy.png">
           </div>
           <div style="margin:15px 10px;float:left;">
-            <div style="color:#F04B30">65</div>
-            <div style="color:#999999;font-size:14px;margin-top:5px">待分配作业范围</div>
+            <div style="color:#F04B30">
+              65
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              待分配作业范围
+            </div>
           </div>
           <div style="float:left;margin-top:10px">
-            <img src="../../assets/qjdb.png" />
+            <img src="../../assets/qjdb.png">
           </div>
           <div style="margin:15px;float:left">
-            <div style="color:#F04B30;text-align:center">3456</div>
-            <div style="color:#999999;font-size:14px;margin-top:5px">取件待办</div>
+            <div style="color:#F04B30;text-align:center">
+              3456
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              取件待办
+            </div>
           </div>
           <div style="float:left;margin-top:10px">
-            <img src="../../assets/pjdb.png" />
+            <img src="../../assets/pjdb.png">
           </div>
           <div style="margin:15px 20px;float:left;">
-            <div style="color:#F04B30;text-align:center">120</div>
-            <div style="color:#999999;font-size:14px;margin-top:5px">派件待办</div>
+            <div style="color:#F04B30;text-align:center">
+              120
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              派件待办
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -78,57 +102,57 @@
       <el-card class="box-card" style="width:120px;margin:20px 1px;float: left;">
         <div>
           <label style="color: #F04B30;">300</label>
-          <br />取件任务
+          <br>取件任务
         </div>
         <div style="margin-top:20px;">
           <label style="color: #F04B30;">300</label>
-          <br />仓库任务
+          <br>仓库任务
         </div>
         <div style="margin-top:20px;">
           <label style="color: #F04B30;">300</label>
-          <br />派件任务
+          <br>派件任务
         </div>
       </el-card>
       <el-card class="box-card" style="width:120px;margin:20px 5px;float: left;" shadow="hover">
         <div>
           <label style="color: #F04B30;">300</label>
-          <br />取件任务待派遣
+          <br>取件任务待派遣
         </div>
         <div style="margin-top:20px;">
           <label style="color: #F04B30;">300</label>
-          <br />仓库任务
+          <br>仓库任务
         </div>
         <div style="margin-top:20px;">
           <label style="color: #F04B30;">300</label>
-          <br />派件任务
+          <br>派件任务
         </div>
       </el-card>
       <el-card class="box-card" style="width:120px;margin:20px 5px;float: left;" shadow="hover">
         <div>
           <label style="color: #F04B30;">300</label>
-          <br />取件任务
+          <br>取件任务
         </div>
         <div style="margin-top:20px;">
           <label style="color: #F04B30;">300</label>
-          <br />仓库任务
+          <br>仓库任务
         </div>
         <div style="margin-top:20px;">
           <label style="color: #F04B30;">300</label>
-          <br />派件任务
+          <br>派件任务
         </div>
       </el-card>
       <el-card class="box-card" style="width:120px;margin:20px 5px;float: left;" shadow="hover">
         <div>
           <label style="color: #F04B30;">300</label>
-          <br />取件任务
+          <br>取件任务
         </div>
         <div style="margin-top:20px;">
           <label style="color: #F04B30;">300</label>
-          <br />仓库任务
+          <br>仓库任务
         </div>
         <div style="margin-top:20px;">
           <label style="color: #F04B30;">300</label>
-          <br />派件任务
+          <br>派件任务
         </div>
       </el-card>
 

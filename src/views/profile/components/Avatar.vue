@@ -12,21 +12,21 @@
       <el-tab-pane :label="$t('common.hthz')" name="first">
         <template v-for="(avatar, index) in hthz">
           <div :key="index" class="avatar-wrapper">
-            <img :alt="$t('common.ctc')" :src="resolveAvatar(avatar)" @click="change(avatar)" />
+            <img :alt="$t('common.ctc')" :src="resolveAvatar(avatar)" @click="change(avatar)">
           </div>
         </template>
       </el-tab-pane>
       <el-tab-pane :label="$t('common.al')" name="second">
         <template v-for="(avatar, index) in al">
           <div :key="index" class="avatar-wrapper">
-            <img :alt="$t('common.ctc')" :src="resolveAvatar(avatar)" @click="change(avatar)" />
+            <img :alt="$t('common.ctc')" :src="resolveAvatar(avatar)" @click="change(avatar)">
           </div>
         </template>
       </el-tab-pane>
       <el-tab-pane :label="$t('common.lm')" name="third">
         <template v-for="(avatar, index) in lm">
           <div :key="index" class="avatar-wrapper">
-            <img :alt="$t('common.ctc')" :src="resolveAvatar(avatar)" @click="change(avatar)" />
+            <img :alt="$t('common.ctc')" :src="resolveAvatar(avatar)" @click="change(avatar)">
           </div>
         </template>
       </el-tab-pane>
