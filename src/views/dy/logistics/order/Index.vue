@@ -3,43 +3,67 @@
     <div class="filter-container">
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderNo') }}</label>
       <el-input
-        v-model="queryParams.code"
+        v-model="queryParams.orderNo"
         :placeholder="$t('table.order.orderNo')"
         class="filter-item search-item"
         clearable
       />
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderStatus') }}</label>
-      <el-input
-        v-model="queryParams.orderStatus"
-        :placeholder="$t('table.select')"
-        class="filter-item search-item"
-        clearable
-      />
+      <template>
+        <el-select v-model="queryParams.orderStatus" placeholder="$t('table.select')">
+          <el-option
+            v-for="item in orderStatusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </template>
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.payStatus') }}</label>
-      <el-input
-        v-model="queryParams.payStatus"
-        :placeholder="$t('table.select')"
-        class="filter-item search-item"
-        clearable
-      />
+      <template>
+        <el-select v-model="queryParams.payStatus" placeholder="$t('table.select')">
+          <el-option
+            v-for="item in payStatusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </template>
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderName') }}</label>
       <el-input
-        v-model="queryParams.payStatus"
+        v-model="queryParams.senderName"
         :placeholder="$t('table.order.senderName')"
         class="filter-item search-item"
         clearable
       />
-      <el-date-picker
-        v-model="queryParams.timeRange"
-        :range-separator="null"
-        class="filter-item search-item date-range-item"
-        end-placeholder="结束日期"
-        format="yyyy-MM-dd HH:mm:ss"
-        start-placeholder="开始日期"
-        type="daterange"
-        style="width: 300px;"
-        value-format="yyyy-MM-dd HH:mm:ss"
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderPhone') }}</label>
+      <el-input
+        v-model="queryParams.senderPhone"
+        :placeholder="$t('table.order.senderPhone')"
+        class="filter-item search-item"
+        clearable
       />
+      <!-- TODO地址级联查询 -->
+      <!-- <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderAddress') }}</label> -->
+
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receverName') }}</label>
+      <el-input
+        v-model="queryParams.receverName"
+        :placeholder="$t('table.order.receverName')"
+        class="filter-item search-item"
+        clearable
+      />
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receverPhone') }}</label>
+      <el-input
+        v-model="queryParams.receverPhone"
+        :placeholder="$t('table.order.receverPhone')"
+        class="filter-item search-item"
+        clearable
+      />
+      <!-- // TODO地址级联查询
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverAddress') }}</label> -->
+
       <el-button
         style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="search"
@@ -52,38 +76,6 @@
       >
         {{ $t('table.reset') }}
       </el-button>
-      <el-dropdown
-        v-has-any-permission="['role:add','role:delete','role:export']"
-        class="filter-item"
-        trigger="click"
-      >
-        <el-button
-          style="height:40px;margin-top:6px;background-color: #fff;color: #606266;border-color: #DCDFE6"
-        >
-          {{ $t('table.more') }}
-          <i class="el-icon-arrow-down el-icon--right" />
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            v-has-permission="['role:add']"
-            @click.native="add"
-          >
-            {{ $t('table.add') }}
-          </el-dropdown-item>
-          <el-dropdown-item
-            v-has-permission="['role:delete']"
-            @click.native="batchDelete"
-          >
-            {{ $t('table.delete') }}
-          </el-dropdown-item>
-          <el-dropdown-item
-            v-has-permission="['role:export']"
-            @click.native="exportExcel"
-          >
-            {{ $t('table.export') }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
     </div>
     <el-card shadow="never" style="margin-top: 10px;">
       <el-table
@@ -97,14 +89,14 @@
         @selection-change="onSelectChange"
         @sort-change="sortChange"
       >
-        <el-table-column align="center" type="selection" width="40px" />
-        <el-table-column :label="$t('table.role.code')" align="center" prop="code" width="200px">
+        <el-table-column type="index" width="50" :label="$t('table.serial')" />
+        <el-table-column :label="$t('table.order.orderNo')" align="center" prop="code" width="200px">
           <template slot-scope="scope">
-            <span>{{ scope.row.code }}</span>
+            <span>{{ scope.row.orderNo }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          :label="$t('table.role.name')"
+          :label="$t('table.order.orderTime')"
           :show-overflow-tooltip="true"
           align="center"
           prop="name"
@@ -266,7 +258,9 @@ export default {
       pagination: {
         size: 10,
         current: 1
-      }
+      },
+      orderStatusOptions: [],
+      payStatusOptions: []
     }
   },
   computed: {},
@@ -376,6 +370,32 @@ export default {
       this.sort.field = val.prop
       this.sort.order = val.order
       this.search()
+    },
+    initOptions() {
+      this.orderStatusOptions = [
+        {
+          label: '待取件',
+          value: '0'
+        },
+        {
+          label: '已取件',
+          value: '1'
+        },
+        {
+          label: '已取消',
+          value: '2'
+        }
+      ]
+      this.payStatusOptions = [
+        {
+          label: '未支付',
+          value: '0'
+        },
+        {
+          label: '已支付',
+          value: '1'
+        }
+      ]
     }
   }
 }

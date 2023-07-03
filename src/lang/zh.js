@@ -34,12 +34,13 @@ export default {
       orderNo: '订单号',
       orderStatus: '订单状态',
       payStatus: '支付状态',
-      senderName: '发货人',
+      senderName: '发货人姓名',
       senderPhone: '发货人电话',
       senderAddress: '发货人地址',
-      receiverName: '收货人',
+      receiverName: '收货人姓名',
       receiverPhone: '收货人电话',
-      receiverAddress: '收货人地址'
+      receiverAddress: '收货人地址',
+      orderTime: '下单时间'
     },
     goodsTypeSearch: {
       name: '货物类型名称'
@@ -362,7 +363,8 @@ export default {
     openInNewPage: '新页面打开',
     createTime: '创建时间',
     updateTime: '修改时间',
-    select: '请选择'
+    select: '请选择',
+    serial: '序号'
   },
   tagsView: {
     refresh: '刷新当前',
