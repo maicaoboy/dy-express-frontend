@@ -1,20 +1,19 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <label style="color:#909399;font-weight:500;">编码：</label>
-      <el-input
-        v-model="queryParams.code"
-        :placeholder="$t('table.role.code')"
-        class="filter-item search-item"
-        clearable
-      />
-      <label style="color:#909399;font-weight:500;">角色名称：</label>
+      <label style="color:#909399;font-weight:500;">商品类型名称：</label>
       <el-input
         v-model="queryParams.name"
-        :placeholder="$t('table.role.name')"
+        :placeholder="$t('table.goodsType.name')"
         class="filter-item search-item"
-        clearable
       />
+      <label style="color:#909399;font-weight:500;">商品编码：</label>
+      <el-input
+        v-model="queryParams.code"
+        :placeholder="$t('table.goodsType.code')"
+        class="filter-item search-item"
+      />
+      <label style="color:#909399;font-weight:500;">日期：</label>
       <el-date-picker
         v-model="queryParams.timeRange"
         :range-separator="null"
@@ -23,7 +22,6 @@
         format="yyyy-MM-dd HH:mm:ss"
         start-placeholder="开始日期"
         type="daterange"
-        style="width: 300px;"
         value-format="yyyy-MM-dd HH:mm:ss"
       />
       <el-button
@@ -33,13 +31,13 @@
         {{ $t('table.search') }}
       </el-button>
       <el-button
-        style="background-color: #fff;color: #606266;border-radius: 5px;border-color: #DCDFE6;"
+        style="background-color: #fff;color: #606266;;border-radius:5px;border-color: #DCDFE6;"
         @click="reset"
       >
         {{ $t('table.reset') }}
       </el-button>
       <el-dropdown
-        v-has-any-permission="['role:add','role:delete','role:export']"
+        v-has-any-permission="['goodsInfo:add','goodsInfo:delete','goodsInfo:export']"
         class="filter-item"
         trigger="click"
       >
@@ -51,19 +49,19 @@
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item
-            v-has-permission="['role:add']"
+            v-has-permission="['goodsInfo:add']"
             @click.native="add"
           >
             {{ $t('table.add') }}
           </el-dropdown-item>
           <el-dropdown-item
-            v-has-permission="['role:delete']"
+            v-has-permission="['goodsInfo:delete']"
             @click.native="batchDelete"
           >
             {{ $t('table.delete') }}
           </el-dropdown-item>
           <el-dropdown-item
-            v-has-permission="['role:export']"
+            v-has-permission="['goodsInfo:export']"
             @click.native="exportExcel"
           >
             {{ $t('table.export') }}
@@ -84,13 +82,9 @@
         @sort-change="sortChange"
       >
         <el-table-column align="center" type="selection" width="40px" />
-        <el-table-column :label="$t('table.role.code')" align="center" prop="code" width="200px">
-          <template slot-scope="scope">
-            <span>{{ scope.row.code }}</span>
-          </template>
-        </el-table-column>
+
         <el-table-column
-          :label="$t('table.role.name')"
+          :label="$t('table.goodsInfo.name')"
           :show-overflow-tooltip="true"
           align="center"
           prop="name"
@@ -100,48 +94,129 @@
           </template>
         </el-table-column>
         <el-table-column
-          :label="$t('table.role.describe')"
+          :label="$t('table.goodsInfo.code')"
           :show-overflow-tooltip="true"
           align="center"
-          prop="describe"
+          prop="name"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.describe }}</span>
-          </template>
-        </el-table-column>
-        <!--
-        <el-table-column :label="$t('table.role.dsType')" align="center" width="100px">
-          <template slot-scope="scope">
-            <span>{{ scope.row.dsType.desc }}</span>
-          </template>
-        </el-table-column>
-		-->
-        <el-table-column :label="$t('table.role.readonly')" align="center" width="80px">
-          <template slot-scope="scope">
-            <span>{{ scope.row.readonly ? '是' : '否' }}</span>
+            <span>{{ scope.row.code }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          :filter-method="filterStatus"
-          :filters="[{ text: $t('common.status.valid'), value: true }, { text: $t('common.status.invalid'), value: false }]"
-          :label="$t('table.role.status')"
-          class-name="status-col"
-          width="70px"
+          :label="$t('table.goodsInfo.price')"
+          :show-overflow-tooltip="true"
+          align="center"
+          prop="name"
         >
-          <template slot-scope="{row}">
-            <el-tag
-              :type="row.status | statusFilter"
-            >
-              {{ row.status ? $t('common.status.valid') : $t('common.status.invalid') }}
-            </el-tag>
+          <template slot-scope="scope">
+            <span>{{ scope.row.price }}</span>
           </template>
         </el-table-column>
         <el-table-column
-          :label="$t('table.createTime')"
+          :label="$t('table.goodsInfo.averageCost')"
+          :show-overflow-tooltip="true"
+          align="center"
+          prop="name"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.averageCost }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.publishStatus')"
+          :show-overflow-tooltip="true"
+          align="center"
+          prop="name"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.publishStatus ? $t('table.goodsInfo.publishStatusEnum._1') : $t('table.goodsInfo.publishStatusEnum._0') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.auditStatus')"
+          :show-overflow-tooltip="true"
+          align="center"
+          prop="name"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.auditStatus ? $t('table.goodsInfo.auditStatusEnum._1') : $t('table.goodsInfo.auditStatusEnum._0') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.weight')"
+          :show-overflow-tooltip="true"
+          align="center"
+          prop="name"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.weight }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.length')"
+          :show-overflow-tooltip="true"
+          align="center"
+          prop="name"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.length }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.height')"
+          :show-overflow-tooltip="true"
+          align="center"
+          prop="name"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.height }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.width')"
+          :show-overflow-tooltip="true"
+          align="center"
+          prop="name"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.width }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.color')"
+          :show-overflow-tooltip="true"
+          align="center"
+          prop="name"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.color }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.productionDate')"
           align="center"
           prop="createTime"
-          sortable="custom"
-          width="160px"
+          width="170px"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.productionDate }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.shelfLife')"
+          align="center"
+          prop="createTime"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.shelfLife }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.goodsInfo.createTime')"
+          align="center"
+          prop="createTime"
+          width="170px"
         >
           <template slot-scope="scope">
             <span>{{ scope.row.createTime }}</span>
@@ -151,50 +226,18 @@
           :label="$t('table.operation')"
           align="center"
           class-name="small-padding fixed-width"
-          width="150px"
+          width="100px"
         >
           <template slot-scope="{row}">
-            <i v-hasPermission="['role:update']" style="color:#009EFF;" @click="edit(row)">编辑</i>
+            <!--   <i @click="edit(row)" class="el-icon-edit table-operation" style="color: #2db7f5;" v-hasPermission="['goodsInfo:update']" />
+            <i @click="singleDelete(row)" class="el-icon-delete table-operation" style="color: #f50;" v-hasPermission="['goodsInfo:delete']" />-->
+            <i v-hasPermission="['goodsInfo:update']" style="color: #009EFF;" @click="edit(row)">修改</i>
             <el-divider direction="vertical" />
-            <el-dropdown v-has-any-permission="['role:delete','role:auth','role:config']">
-              <span class="el-dropdown-link" style="color:#009EFF;">
-                {{ $t('table.more') }}
-                <i class="el-icon-arrow-down el-icon--right" />
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
-                  v-hasPermission="['role:delete']"
-                  icon="el-icon-delete"
-                  style="color: #8dc149;"
-                  @click.native="singleDelete(row)"
-                >
-                  删除
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-hasPermission="['role:auth']"
-                  icon="el-icon-user"
-                  style="color: #009EFF;"
-                  @click.native="authUser(row)"
-                >
-                  授权
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-hasPermission="['role:config']"
-                  icon="el-icon-setting"
-                  style="color: #009EFF;"
-                  @click.native="authResource(row)"
-                >
-                  配置
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-
-            <el-link
-              v-has-no-permission="['role:update','role:delete','role:auth','role:config']"
-              class="no-perm"
-            >
-              {{ $t('tips.noPermission') }}
-            </el-link>
+            <i
+              v-hasPermission="['goodsInfo:delete']"
+              style="color: #8dc149;"
+              @click="singleDelete(row)"
+            >删除</i>
           </template>
         </el-table-column>
       </el-table>
@@ -205,62 +248,36 @@
         :total="Number(tableData.total)"
         @pagination="fetch"
       />
-      <role-edit
+      <goodsInfo-edit
         ref="edit"
         :dialog-visible="dialog.isVisible"
         :type="dialog.type"
         @close="editClose"
         @success="editSuccess"
       />
-      <user-role
-        ref="userRole"
-        :dialog-visible="userRoleDialog.isVisible"
-        @close="userRoleClose"
-        @success="userRoleSuccess"
-      />
-      <role-authority
-        ref="roleAuthority"
-        :dialog-visible="roleAuthorityDialog.isVisible"
-        @close="roleAuthorityClose"
-        @success="roleAuthoritySuccess"
-      />
     </el-card>
   </div>
 </template>
 
 <script>
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import Pagination from '@/components/Pagination'
-import RoleEdit from './Edit'
-import UserRole from './UserRole'
-import RoleAuthority from './RoleAuthority'
-import roleApi from '@/api/Role.js'
+import goodsInfoEdit from './addgoodtype'
+import goodsInfoApi from '@/api/GoodsInfo.js'
 
 export default {
-  name: 'RoleManage',
-  components: { Pagination, RoleEdit, UserRole, RoleAuthority },
-  filters: {
-    statusFilter(status) {
-      const map = {
-        false: 'danger',
-        true: 'success'
-      }
-      return map[status] || 'success'
-    }
-  },
+  name: 'GoodsInfoManage',
+  components: { Pagination, goodsInfoEdit, Treeselect },
   data() {
     return {
       dialog: {
         isVisible: false,
         type: 'add'
       },
-      userRoleDialog: {
-        isVisible: false
-      },
-      roleAuthorityDialog: {
-        isVisible: false
-      },
       tableKey: 0,
       // total: 0,
+      orgList: [],
       queryParams: {},
       sort: {},
       selection: [],
@@ -280,25 +297,16 @@ export default {
     this.fetch()
   },
   methods: {
+    loadListOptions({ callback }) {
+      callback()
+    },
     filterStatus(value, row) {
       return row.status === value
     },
     editClose() {
       this.dialog.isVisible = false
     },
-    userRoleClose() {
-      this.userRoleDialog.isVisible = false
-    },
-    roleAuthorityClose() {
-      this.roleAuthorityDialog.isVisible = false
-    },
     editSuccess() {
-      this.search()
-    },
-    userRoleSuccess() {
-      this.search()
-    },
-    roleAuthoritySuccess() {
       this.search()
     },
     onSelectChange(selection) {
@@ -324,6 +332,13 @@ export default {
       })
     },
     singleDelete(row) {
+      if (row.id == '2' || row.id == '3') {
+        this.$message({
+          message: '禁止删除',
+          type: 'warning'
+        })
+        return
+      }
       this.$refs.table.toggleRowSelection(row, true)
       this.batchDelete()
     },
@@ -355,7 +370,7 @@ export default {
       this.$refs.table.clearSelection()
     },
     delete(ids) {
-      roleApi.delete({ ids: ids }).then(response => {
+      goodsInfoApi.delete({ ids: ids }).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.$message({
@@ -369,10 +384,12 @@ export default {
     add() {
       this.dialog.type = 'add'
       this.dialog.isVisible = true
-      this.$refs.edit.setRole(false)
+      this.$refs.edit.setgoodsInfo(false, this.orgList)
     },
     edit(row) {
-      this.$refs.edit.setRole(row)
+      row.auditStatus = row.auditStatus ? 1 : 0
+      row.publishStatus = row.publishStatus ? 1 : 0
+      this.$refs.edit.setgoodsInfo(row, this.orgList)
       this.dialog.type = 'edit'
       this.dialog.isVisible = true
     },
@@ -384,9 +401,12 @@ export default {
         params.startCreateTime = this.queryParams.timeRange[0]
         params.endCreateTime = this.queryParams.timeRange[1]
       }
-      roleApi.page(params).then(response => {
+      goodsInfoApi.page(params).then(response => {
         const res = response.data
         this.loading = false
+        if (res.isError) {
+          return
+        }
         this.tableData = res.data
       })
     },
@@ -394,36 +414,19 @@ export default {
       this.sort.field = val.prop
       this.sort.order = val.order
       this.search()
-    },
-    authResource(row) {
-      this.roleAuthorityDialog.isVisible = true
-      this.$refs.roleAuthority.setRoleAuthority(row)
-    },
-    authUser(row) {
-      this.userRoleDialog.isVisible = true
-      this.$refs.userRole.setUserRole(row)
     }
   }
 }
 </script>
 <style lang="scss">
-.search-role {
-  background-color: #8dc149;
-  color: #fff;
-  border-radius: 5px;
-}
-.reset-role {
-  background-color: #fff;
-  color: #000;
-  border-radius: 5px;
-}
-.el-table {
-  border: 1px solid #f7f6f9;
-}
-.el-table tr,
-.el-table td {
-  border-top: 0;
-  border-right: 0;
-  border-bottom: 1px solid #f7f6f9;
-}
+  .el-table {
+    border: 1px solid #f7f6f9;
+  }
+
+  .el-table tr,
+  .el-table td {
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #f7f6f9;
+  }
 </style>

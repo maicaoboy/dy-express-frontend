@@ -25,7 +25,7 @@
         value-format="yyyy-MM-dd HH:mm:ss"
       />
       <el-button
-        style="background-color: #E05635;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
+        style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="search"
       >
         {{ $t('table.search') }}
@@ -235,7 +235,7 @@
             <el-divider direction="vertical" />
             <i
               v-hasPermission="['goodsInfo:delete']"
-              style="color: #E05635;"
+              style="color: #8dc149;"
               @click="singleDelete(row)"
             >删除</i>
           </template>
@@ -263,7 +263,7 @@
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import Pagination from '@/components/Pagination'
-// import goodsInfoEdit from './Edit'
+import goodsInfoEdit from './addgood'
 import goodsInfoApi from '@/api/GoodsInfo.js'
 
 export default {
@@ -332,7 +332,7 @@ export default {
       })
     },
     singleDelete(row) {
-      if (row.id === '2' || row.id === '3') {
+      if (row.id == '2' || row.id == '3') {
         this.$message({
           message: '禁止删除',
           type: 'warning'
@@ -418,16 +418,15 @@ export default {
   }
 }
 </script>
-  <style lang="scss">
-    .el-table {
-      border: 1px solid #f7f6f9;
-    }
+<style lang="scss">
+  .el-table {
+    border: 1px solid #f7f6f9;
+  }
 
-    .el-table tr,
-    .el-table td {
-      border-top: 0;
-      border-right: 0;
-      border-bottom: 1px solid #f7f6f9;
-    }
-  </style>
-
+  .el-table tr,
+  .el-table td {
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #f7f6f9;
+  }
+</style>

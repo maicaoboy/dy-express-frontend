@@ -5,7 +5,7 @@ const apiList = {
 }
 
 export default {
-  getVisitList (data) {
+  getVisitList(data) {
     return axiosApi({
       method: 'GET',
       url: apiList.getVisitList,

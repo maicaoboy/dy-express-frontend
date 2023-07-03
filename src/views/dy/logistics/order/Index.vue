@@ -1,17 +1,31 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <label style="color:#909399;font-weight:500;">编码：</label>
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderNo') }}</label>
       <el-input
         v-model="queryParams.code"
-        :placeholder="$t('table.role.code')"
+        :placeholder="$t('table.order.orderNo')"
         class="filter-item search-item"
         clearable
       />
-      <label style="color:#909399;font-weight:500;">角色名称：</label>
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderStatus') }}</label>
       <el-input
-        v-model="queryParams.name"
-        :placeholder="$t('table.role.name')"
+        v-model="queryParams.orderStatus"
+        :placeholder="$t('table.select')"
+        class="filter-item search-item"
+        clearable
+      />
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.payStatus') }}</label>
+      <el-input
+        v-model="queryParams.payStatus"
+        :placeholder="$t('table.select')"
+        class="filter-item search-item"
+        clearable
+      />
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderName') }}</label>
+      <el-input
+        v-model="queryParams.payStatus"
+        :placeholder="$t('table.order.senderName')"
         class="filter-item search-item"
         clearable
       />
@@ -110,12 +124,12 @@
           </template>
         </el-table-column>
         <!--
-        <el-table-column :label="$t('table.role.dsType')" align="center" width="100px">
-          <template slot-scope="scope">
-            <span>{{ scope.row.dsType.desc }}</span>
-          </template>
-        </el-table-column>
-		-->
+          <el-table-column :label="$t('table.role.dsType')" align="center" width="100px">
+            <template slot-scope="scope">
+              <span>{{ scope.row.dsType.desc }}</span>
+            </template>
+          </el-table-column>
+          -->
         <el-table-column :label="$t('table.role.readonly')" align="center" width="80px">
           <template slot-scope="scope">
             <span>{{ scope.row.readonly ? '是' : '否' }}</span>
@@ -212,18 +226,6 @@
         @close="editClose"
         @success="editSuccess"
       />
-      <user-role
-        ref="userRole"
-        :dialog-visible="userRoleDialog.isVisible"
-        @close="userRoleClose"
-        @success="userRoleSuccess"
-      />
-      <role-authority
-        ref="roleAuthority"
-        :dialog-visible="roleAuthorityDialog.isVisible"
-        @close="roleAuthorityClose"
-        @success="roleAuthoritySuccess"
-      />
     </el-card>
   </div>
 </template>
@@ -231,13 +233,11 @@
 <script>
 import Pagination from '@/components/Pagination'
 import RoleEdit from './Edit'
-import UserRole from './UserRole'
-import RoleAuthority from './RoleAuthority'
 import roleApi from '@/api/Role.js'
 
 export default {
   name: 'RoleManage',
-  components: { Pagination, RoleEdit, UserRole, RoleAuthority },
+  components: { Pagination, RoleEdit },
   filters: {
     statusFilter(status) {
       const map = {
@@ -252,12 +252,6 @@ export default {
       dialog: {
         isVisible: false,
         type: 'add'
-      },
-      userRoleDialog: {
-        isVisible: false
-      },
-      roleAuthorityDialog: {
-        isVisible: false
       },
       tableKey: 0,
       // total: 0,
@@ -286,19 +280,7 @@ export default {
     editClose() {
       this.dialog.isVisible = false
     },
-    userRoleClose() {
-      this.userRoleDialog.isVisible = false
-    },
-    roleAuthorityClose() {
-      this.roleAuthorityDialog.isVisible = false
-    },
     editSuccess() {
-      this.search()
-    },
-    userRoleSuccess() {
-      this.search()
-    },
-    roleAuthoritySuccess() {
       this.search()
     },
     onSelectChange(selection) {
@@ -394,36 +376,29 @@ export default {
       this.sort.field = val.prop
       this.sort.order = val.order
       this.search()
-    },
-    authResource(row) {
-      this.roleAuthorityDialog.isVisible = true
-      this.$refs.roleAuthority.setRoleAuthority(row)
-    },
-    authUser(row) {
-      this.userRoleDialog.isVisible = true
-      this.$refs.userRole.setUserRole(row)
     }
   }
 }
 </script>
-<style lang="scss">
-.search-role {
-  background-color: #8dc149;
-  color: #fff;
-  border-radius: 5px;
-}
-.reset-role {
-  background-color: #fff;
-  color: #000;
-  border-radius: 5px;
-}
-.el-table {
-  border: 1px solid #f7f6f9;
-}
-.el-table tr,
-.el-table td {
-  border-top: 0;
-  border-right: 0;
-  border-bottom: 1px solid #f7f6f9;
-}
-</style>
+  <style lang="scss">
+  .search-role {
+    background-color: #8dc149;
+    color: #fff;
+    border-radius: 5px;
+  }
+  .reset-role {
+    background-color: #fff;
+    color: #000;
+    border-radius: 5px;
+  }
+  .el-table {
+    border: 1px solid #f7f6f9;
+  }
+  .el-table tr,
+  .el-table td {
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #f7f6f9;
+  }
+  </style>
+

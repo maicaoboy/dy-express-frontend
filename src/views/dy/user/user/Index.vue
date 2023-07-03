@@ -34,13 +34,17 @@
         value-format="yyyy-MM-dd HH:mm:ss"
       />
       <el-button
-        style="background-color: #E05635;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
+        style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="search"
-      >{{ $t('table.search') }}</el-button>
+      >
+        {{ $t('table.search') }}
+      </el-button>
       <el-button
         style="background-color: #fff;color: #606266;border-radius: 5px;border-color: #DCDFE6;"
         @click="reset"
-      >{{ $t('table.reset') }}</el-button>
+      >
+        {{ $t('table.reset') }}
+      </el-button>
       <el-dropdown
         v-has-any-permission="['user:add','user:delete','user:reset','user:export']"
         class="filter-item"
@@ -56,19 +60,27 @@
           <el-dropdown-item
             v-has-permission="['user:add']"
             @click.native="add"
-          >{{ $t('table.add') }}</el-dropdown-item>
+          >
+            {{ $t('table.add') }}
+          </el-dropdown-item>
           <el-dropdown-item
             v-has-permission="['user:delete']"
             @click.native="batchDelete"
-          >{{ $t('table.delete') }}</el-dropdown-item>
+          >
+            {{ $t('table.delete') }}
+          </el-dropdown-item>
           <el-dropdown-item
             v-has-permission="['user:reset']"
             @click.native="resetPassword"
-          >{{ $t('table.resetPassword') }}</el-dropdown-item>
+          >
+            {{ $t('table.resetPassword') }}
+          </el-dropdown-item>
           <el-dropdown-item
             v-has-permission="['user:export']"
             @click.native="exportExcel"
-          >{{ $t('table.export') }}</el-dropdown-item>
+          >
+            {{ $t('table.export') }}
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -125,7 +137,9 @@
           width="70px"
         >
           <template slot-scope="{row}">
-            <el-tag :type="row.sex.code | sexFilter">{{ row.sex.desc }}</el-tag>
+            <el-tag :type="row.sex.code | sexFilter">
+              {{ row.sex.desc }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -157,7 +171,9 @@
           <template slot-scope="{row}">
             <el-tag
               :type="row.status | statusFilter"
-            >{{ row.status ? $t('common.status.valid') : $t('common.status.invalid') }}</el-tag>
+            >
+              {{ row.status ? $t('common.status.valid') : $t('common.status.invalid') }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -179,19 +195,21 @@
         >
           <template slot-scope="{row}">
             <i v-hasPermission="['user:view']" style="color: #009EFF;" @click="view(row)">查看</i>
-            <el-divider direction="vertical"></el-divider>
+            <el-divider direction="vertical" />
             <i v-hasPermission="['user:update']" style="color: #009EFF;" @click="edit(row)">修改</i>
-            <el-divider direction="vertical"></el-divider>
+            <el-divider direction="vertical" />
             <i
               v-hasPermission="['user:delete']"
-              style="color: #E05635;"
+              style="color: #8dc149;"
               @click="singleDelete(row)"
             >删除</i>
             <el-link
               v-has-no-permission="['user:view','user:update','user:delete']"
               class="no-perm"
               style="color: #009EFF;"
-            >{{ $t('tips.noPermission') }}</el-link>
+            >
+              {{ $t('tips.noPermission') }}
+            </el-link>
             <!--<i @click="view(row)" class="el-icon-view table-operation" style="color: #87d068;" v-hasPermission="['user:view']">111</i>
             <i @click="edit(row)" class="el-icon-edit table-operation" style="color: #2db7f5;" v-hasPermission="['user:update']" />
             <i @click="singleDelete(row)" class="el-icon-delete table-operation" style="color: #f50;" v-hasPermission="['user:delete']" />-->
@@ -484,10 +502,10 @@ export default {
   border-color: #009eff;
 }
 .el-tag.el-tag--success {
-  background-color: #e05635;
+  background-color: #8dc149;
   color: #fff;
   border-radius: 30px;
-  border-color: #e05635;
+  border-color: #8dc149;
 }
 .el-table {
   border: 1px solid #f7f6f9;

@@ -16,26 +16,26 @@ const apiList = {
 }
 
 export default {
-  allTree (data) {
+  allTree(data) {
     return axiosApi({
       ...apiList.allTree,
       formData: true,
       data
     })
   },
-  save (data) {
+  save(data) {
     return axiosApi({
       ...apiList.save,
       data
     })
   },
-  update (data) {
+  update(data) {
     return axiosApi({
       ...apiList.update,
       data
     })
   },
-  delete (data) {
+  delete(data) {
     return axiosApi({
       ...apiList.delete,
       data

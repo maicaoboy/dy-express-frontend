@@ -11,13 +11,17 @@
               clearable
             />
             <el-button
-              style="background-color: #E05635;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
+              style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
               @click="search"
-            >{{ $t('table.search') }}</el-button>
+            >
+              {{ $t('table.search') }}
+            </el-button>
             <el-button
               style="background-color: #fff;color: #606266;border-radius: 5px;border-color: #DCDFE6;"
               @click="reset"
-            >{{ $t('table.reset') }}</el-button>
+            >
+              {{ $t('table.reset') }}
+            </el-button>
             <el-dropdown
               v-has-any-permission="['org:add','org:delete','org:export']"
               trigger="click"
@@ -32,15 +36,21 @@
                 <el-dropdown-item
                   v-has-permission="['org:add']"
                   @click.native="add"
-                >{{ $t('table.add') }}</el-dropdown-item>
+                >
+                  {{ $t('table.add') }}
+                </el-dropdown-item>
                 <el-dropdown-item
                   v-has-permission="['org:delete']"
                   @click.native="deleteOrg"
-                >{{ $t('table.delete') }}</el-dropdown-item>
+                >
+                  {{ $t('table.delete') }}
+                </el-dropdown-item>
                 <el-dropdown-item
                   v-has-permission="['org:export']"
                   @click.native="exportExcel"
-                >{{ $t('table.export') }}</el-dropdown-item>
+                >
+                  {{ $t('table.export') }}
+                </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -91,8 +101,12 @@
               </el-form-item>
               <el-form-item :label="$t('table.org.status')" prop="status">
                 <el-radio-group v-model="org.status">
-                  <el-radio :label="true">{{ $t('common.status.valid') }}</el-radio>
-                  <el-radio :label="false">{{ $t('common.status.invalid') }}</el-radio>
+                  <el-radio :label="true">
+                    {{ $t('common.status.valid') }}
+                  </el-radio>
+                  <el-radio :label="false">
+                    {{ $t('common.status.invalid') }}
+                  </el-radio>
                 </el-radio-group>
               </el-form-item>
               <el-form-item :label="$t('table.org.sortValue')" prop="sortValue">
@@ -110,9 +124,11 @@
           <el-row>
             <el-col :span="24" style="text-align: center">
               <el-button
-                style="background-color: #E05635;color: #fff;"
+                style="background-color: #8dc149;color: #fff;"
                 @click="submit"
-              >{{ org.id === '' ? this.$t('common.add') : this.$t('common.edit') }}</el-button>
+              >
+                {{ org.id === '' ? this.$t('common.add') : this.$t('common.edit') }}
+              </el-button>
             </el-col>
           </el-row>
         </el-card>
@@ -291,11 +307,11 @@ export default {
 </script>
 <style lang="scss">
 .addEdit {
-  background-color: #e05635;
+  background-color: #8dc149;
   color: #fff;
   border-radius: 5px;
   &:hover {
-    background-color: #e05635;
+    background-color: #8dc149;
     color: #fff;
     border-color: #dcdfe6;
   }

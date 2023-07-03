@@ -14,11 +14,35 @@
           :disabled="type==='edit'"
           @keyup.enter.native="submitForm"
         />
-        <p class="note">建议使用:作为分隔符，并以view、add、update、delete、export、import、download、upload等关键词结尾</p>
-        <p class="note">如：menu:add、 resource:view、 file:upload</p>
+        <p class="note">
+          建议使用:作为分隔符，并以view、add、update、delete、export、import、download、upload等关键词结尾
+        </p>
+        <p class="note">
+          如：menu:add、 resource:view、 file:upload
+        </p>
       </el-form-item>
       <el-form-item :label="$t('table.resource.name')" prop="name" @keyup.enter.native="submitForm">
         <el-input v-model="resource.name" />
+      </el-form-item>
+      <el-form-item :label="$t('table.resource.method')" prop="method">
+        <el-input
+          v-model="resource.method"
+          :disabled="type==='edit'"
+          @keyup.enter.native="submitForm"
+        />
+        <p class="note">
+          请填写method: GET,POST,PUT,DELETE
+        </p>
+      </el-form-item>
+      <el-form-item :label="$t('table.resource.url')" prop="url">
+        <el-input
+          v-model="resource.url"
+          :disabled="type==='edit'"
+          @keyup.enter.native="submitForm"
+        />
+        <p class="note">
+          从controller的url开始填写,不需要填写微服务及/api的前缀
+        </p>
       </el-form-item>
       <el-form-item
         :label="$t('table.resource.describe')"
@@ -29,8 +53,12 @@
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button plain type="warning" @click="isVisible = false">{{ $t('common.cancel') }}</el-button>
-      <el-button plain type="primary" @click="submitForm">{{ $t('common.confirm') }}</el-button>
+      <el-button plain type="warning" @click="isVisible = false">
+        {{ $t('common.cancel') }}
+      </el-button>
+      <el-button plain type="primary" @click="submitForm">
+        {{ $t('common.confirm') }}
+      </el-button>
     </div>
   </el-dialog>
 </template>
@@ -90,6 +118,16 @@ export default {
           required: true,
           message: this.$t('rules.require'),
           trigger: 'blur'
+        },
+        method: {
+          required: true,
+          message: this.$t('rules.require'),
+          trigger: 'blur'
+        },
+        url: {
+          required: true,
+          message: this.$t('rules.require'),
+          trigger: 'blur'
         }
       }
     }
@@ -124,6 +162,8 @@ export default {
         id: '',
         name: '',
         code: '',
+        method: '',
+        url: '',
         describe: ''
       }
     },

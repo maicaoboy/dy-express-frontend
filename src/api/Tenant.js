@@ -21,7 +21,7 @@ const apiList = {
 }
 
 export default {
-  page (data) {
+  page(data) {
     return axiosApi({
       method: 'GET',
       url: apiList.page,
@@ -29,25 +29,25 @@ export default {
       data
     })
   },
-  save (data) {
+  save(data) {
     return axiosApi({
       ...apiList.save,
       data
     })
   },
-  saveInit (data) {
+  saveInit(data) {
     return axiosApi({
       ...apiList.saveInit,
       data
     })
   },
-  update (data) {
+  update(data) {
     return axiosApi({
       ...apiList.update,
       data
     })
   },
-  remove (data) {
+  remove(data) {
     return axiosApi({
       ...apiList.remove,
       data

@@ -27,13 +27,17 @@
         value-format="yyyy-MM-dd HH:mm:ss"
       />
       <el-button
-        style="background-color: #E05635;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
+        style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="search"
-      >{{ $t('table.search') }}</el-button>
+      >
+        {{ $t('table.search') }}
+      </el-button>
       <el-button
         style="background-color: #fff;color: #606266;border-radius: 5px;border-color: #DCDFE6;"
         @click="reset"
-      >{{ $t('table.reset') }}</el-button>
+      >
+        {{ $t('table.reset') }}
+      </el-button>
       <el-dropdown
         v-has-any-permission="['optLog:delete','optLog:export']"
         class="filter-item"
@@ -49,11 +53,15 @@
           <el-dropdown-item
             v-has-permission="['optLog:delete']"
             @click.native="batchDelete"
-          >{{ $t('table.delete') }}</el-dropdown-item>
+          >
+            {{ $t('table.delete') }}
+          </el-dropdown-item>
           <el-dropdown-item
             v-has-permission="['optLog:export']"
             @click.native="exportExcel"
-          >{{ $t('table.export') }}</el-dropdown-item>
+          >
+            {{ $t('table.export') }}
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -183,7 +191,9 @@
           width="110px"
         >
           <template slot-scope="{row}">
-            <el-tag :type="row.consumingTime | timeFilter">{{ transTime(row.consumingTime) }}</el-tag>
+            <el-tag :type="row.consumingTime | timeFilter">
+              {{ transTime(row.consumingTime) }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column :formatter="uaForamt" label="终端 | 浏览器" prop="ua" width="120" />
@@ -199,12 +209,14 @@
               style="color: #009EFF;"
               @click="singleDelete(row)"
             >修改</i>
-            <el-divider direction="vertical"></el-divider>
+            <el-divider direction="vertical" />
             <i v-has-permission="['optLog:view']" style="color: #009EFF;" @click="onView(row)">查看</i>
             <el-link
               v-has-no-permission="['optLog:delete','optLog:view']"
               class="no-perm"
-            >{{ $t('tips.noPermission') }}</el-link>
+            >
+              {{ $t('tips.noPermission') }}
+            </el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -241,7 +253,9 @@
 
           <div class="box-item">
             <span class="field-label">请求参数:</span>
-            <aside style>{{ currentRow.params }}</aside>
+            <aside style>
+              {{ currentRow.params }}
+            </aside>
           </div>
 
           <div class="box-item">
@@ -314,7 +328,7 @@ export default {
     conver(obj) {
       const list = []
       if (obj) {
-        for (let key in obj) {
+        for (const key in obj) {
           list.push({
             text: obj[key],
             value: key
@@ -424,7 +438,7 @@ export default {
       this.currentRow = {}
     },
     uaForamt(row) {
-      let ua = readUserAgent(row.ua)
+      const ua = readUserAgent(row.ua)
       return ua.terminal + '  |  ' + ua.browser
     }
   }

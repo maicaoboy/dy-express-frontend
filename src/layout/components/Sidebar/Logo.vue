@@ -49,8 +49,8 @@ export default {
   width: 100%;
   height: 54px;
   line-height: 54px;
-  // background: #393e46;
-  background-image: linear-gradient(to right, #393e46, #393e46);
+  // background: #181818;
+  background-image: linear-gradient(to right, #181818, #181818);
   text-align: center;
   overflow: hidden;
 

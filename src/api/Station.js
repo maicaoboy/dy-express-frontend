@@ -21,26 +21,26 @@ const apiList = {
 }
 
 export default {
-  page (data) {
+  page(data) {
     return axiosApi({
       ...apiList.page,
       formData: true,
       data
     })
   },
-  save (data) {
+  save(data) {
     return axiosApi({
       ...apiList.save,
       data
     })
   },
-  update (data) {
+  update(data) {
     return axiosApi({
       ...apiList.update,
       data
     })
   },
-  delete (data) {
+  delete(data) {
     return axiosApi({
       ...apiList.delete,
       data

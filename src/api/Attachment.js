@@ -28,40 +28,40 @@ const apiList = {
 }
 
 export default {
-  page (data) {
+  page(data) {
     return axiosApi({
       ...apiList.page,
       formData: true,
       data
     })
   },
-  upload (data) {
+  upload(data) {
     return axiosApi({
       ...apiList.upload,
       data
     })
   },
-  download (data) {
+  download(data) {
     return axiosApi({
       ...apiList.download,
-      responseType: "blob",
+      responseType: 'blob',
       // responseType: "arraybuffer",
       data
     })
   },
-  downloadBiz (data) {
+  downloadBiz(data) {
     return axiosApi({
       ...apiList.downloadBiz,
       data
     })
   },
-  downloadUrl (data) {
+  downloadUrl(data) {
     return axiosApi({
       ...apiList.downloadUrl,
       data
     })
   },
-  delete (data) {
+  delete(data) {
     return axiosApi({
       ...apiList.delete,
       data

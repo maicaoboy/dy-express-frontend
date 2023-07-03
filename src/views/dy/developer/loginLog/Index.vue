@@ -34,13 +34,17 @@
         value-format="yyyy-MM-dd HH:mm:ss"
       />
       <el-button
-        style="background-color: #E05635;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
+        style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="search"
-      >{{ $t("table.search") }}</el-button>
+      >
+        {{ $t("table.search") }}
+      </el-button>
       <el-button
         style="background-color: #fff;color: #606266;border-radius: 5px;border-color: #DCDFE6;"
         @click="reset"
-      >{{ $t("table.reset") }}</el-button>
+      >
+        {{ $t("table.reset") }}
+      </el-button>
       <el-dropdown
         v-has-any-permission="['loginLog:delete', 'loginLog:export']"
         class="filter-item"
@@ -56,11 +60,15 @@
           <el-dropdown-item
             v-has-permission="['loginLog:delete']"
             @click.native="batchDelete"
-          >{{ $t("table.delete") }}</el-dropdown-item>
+          >
+            {{ $t("table.delete") }}
+          </el-dropdown-item>
           <el-dropdown-item
             v-has-permission="['loginLog:export']"
             @click.native="exportExcel"
-          >{{ $t("table.export") }}</el-dropdown-item>
+          >
+            {{ $t("table.export") }}
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -187,14 +195,16 @@
           <template slot-scope="{ row }">
             <i
               v-has-permission="['loginLog:delete']"
-              style="color: #E05635;"
+              style="color: #8dc149;"
               @click="singleDelete(row)"
             >删除</i>
 
             <el-link
               v-has-no-permission="['loginLog:delete']"
               class="no-perm"
-            >{{ $t("tips.noPermission") }}</el-link>
+            >
+              {{ $t("tips.noPermission") }}
+            </el-link>
           </template>
         </el-table-column>
       </el-table>
@@ -319,7 +329,7 @@ export default {
 </script>
 <style lang="scss">
 .search-loginlog {
-  background-color: #e05635;
+  background-color: #8dc149;
   color: #fff;
   border-radius: 5px;
 }

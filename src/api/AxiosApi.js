@@ -23,7 +23,7 @@ axios.interceptors.response.use(
   }
 )
 
-function handleError (error, reject) {
+function handleError(error, reject) {
   debugger
   if (error.code === 'ECONNABORTED') {
     Message({
@@ -41,7 +41,7 @@ function handleError (error, reject) {
   reject(error)
 }
 
-function handleSuccess (res, resolve) {
+function handleSuccess(res, resolve) {
   if (res.data.isError) {
     // 未登录
     if (res.data.code === 40001) {

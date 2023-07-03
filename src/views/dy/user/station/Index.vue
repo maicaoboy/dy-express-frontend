@@ -30,13 +30,17 @@
         value-format="yyyy-MM-dd HH:mm:ss"
       />
       <el-button
-        style="background-color: #E05635;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
+        style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="search"
-      >{{ $t('table.search') }}</el-button>
+      >
+        {{ $t('table.search') }}
+      </el-button>
       <el-button
         style="background-color: #fff;color: #606266;;border-radius:5px;border-color: #DCDFE6;"
         @click="reset"
-      >{{ $t('table.reset') }}</el-button>
+      >
+        {{ $t('table.reset') }}
+      </el-button>
       <el-dropdown
         v-has-any-permission="['station:add','station:delete','station:export']"
         class="filter-item"
@@ -52,15 +56,21 @@
           <el-dropdown-item
             v-has-permission="['station:add']"
             @click.native="add"
-          >{{ $t('table.add') }}</el-dropdown-item>
+          >
+            {{ $t('table.add') }}
+          </el-dropdown-item>
           <el-dropdown-item
             v-has-permission="['station:delete']"
             @click.native="batchDelete"
-          >{{ $t('table.delete') }}</el-dropdown-item>
+          >
+            {{ $t('table.delete') }}
+          </el-dropdown-item>
           <el-dropdown-item
             v-has-permission="['station:export']"
             @click.native="exportExcel"
-          >{{ $t('table.export') }}</el-dropdown-item>
+          >
+            {{ $t('table.export') }}
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -112,7 +122,9 @@
           <template slot-scope="{row}">
             <el-tag
               :type="row.status | statusFilter"
-            >{{ row.status ? $t('common.status.valid') : $t('common.status.invalid') }}</el-tag>
+            >
+              {{ row.status ? $t('common.status.valid') : $t('common.status.invalid') }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -136,13 +148,13 @@
             <!--   <i @click="edit(row)" class="el-icon-edit table-operation" style="color: #2db7f5;" v-hasPermission="['station:update']" />
             <i @click="singleDelete(row)" class="el-icon-delete table-operation" style="color: #f50;" v-hasPermission="['station:delete']" />-->
             <i v-hasPermission="['station:update']" style="color: #009EFF;" @click="edit(row)">修改</i>
-            <el-divider direction="vertical"></el-divider>
+            <el-divider direction="vertical" />
             <i
               v-hasPermission="['station:delete']"
-              style="color: #E05635;"
+              style="color: #8dc149;"
               @click="singleDelete(row)"
             >删除</i>
-			<!--
+            <!--
             <el-link
               v-has-no-permission="['station:update','station:delete']"
               class="no-perm"

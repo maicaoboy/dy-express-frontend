@@ -30,6 +30,28 @@ export default {
     github: '项目地址'
   },
   table: {
+    order: {
+      orderNo: '订单号',
+      orderStatus: '订单状态',
+      payStatus: '支付状态',
+      senderName: '发货人',
+      senderPhone: '发货人电话',
+      senderAddress: '发货人地址',
+      receiverName: '收货人',
+      receiverPhone: '收货人电话',
+      receiverAddress: '收货人地址'
+    },
+    goodsTypeSearch: {
+      name: '货物类型名称'
+    },
+    goodsType: {
+      code: '货物类型编码',
+      name: '货物类型名称',
+      defaultWeigrt: '默认重量',
+      defaultVolume: '默认体积',
+      describe: '描述',
+      operate: '操作'
+    },
     tenant: {
       code: '企业编码',
       name: '企业名称',
@@ -208,93 +230,93 @@ export default {
       readTime: '读消息的时间'
     },
     systemApi: {
-      code: "接口编码",
-      name: "接口名称",
-      describe: "资源描述",
-      requestMethod: "请求方式",
-      contentType: "响应类型",
-      serviceId: "服务ID",
-      path: "请求路径",
-      status: "状态",
-      isPersist: "保留数据",
-      isAuth: "是否需要认证",
-      isOpen: "是否公开",
-      className: "类名",
-      methodName: "方法名"
+      code: '接口编码',
+      name: '接口名称',
+      describe: '资源描述',
+      requestMethod: '请求方式',
+      contentType: '响应类型',
+      serviceId: '服务ID',
+      path: '请求路径',
+      status: '状态',
+      isPersist: '保留数据',
+      isAuth: '是否需要认证',
+      isOpen: '是否公开',
+      className: '类名',
+      methodName: '方法名'
     },
     application: {
-      appKey: "appKey",
-      appSecret: "appSecret",
-      website: "官网",
-      name: "应用名称",
-      icon: "应用图标",
-      appType: "类型",
-      describe: "备注",
-      status: "状态"
+      appKey: 'appKey',
+      appSecret: 'appSecret',
+      website: '官网',
+      name: '应用名称',
+      icon: '应用图标',
+      appType: '类型',
+      describe: '备注',
+      status: '状态'
     },
     dictionary: {
-      code: "编码",
-      name: "名称",
-      describe: "描述",
-      status: "状态"
+      code: '编码',
+      name: '名称',
+      describe: '描述',
+      status: '状态'
     },
     dictionaryItem: {
-      dictionaryId: "字典ID",
-      dictionaryCode: "字典编码",
-      code: "编码",
-      name: "名称",
-      describe: "描述",
-      status: "状态",
-      sortValue: "排序"
+      dictionaryId: '字典ID',
+      dictionaryCode: '字典编码',
+      code: '编码',
+      name: '名称',
+      describe: '描述',
+      status: '状态',
+      sortValue: '排序'
     },
     receiveRecord: {
-      customerName: "客户端",
-      url: "请求地址",
-      method: "请求方式",
-      requestHeader: "请求头",
-      requestParams: "请求参数",
-      responseHeader: "返回头",
-      responseParams: "返回参数",
-      beginTime: "请求开始时间",
-      endTime: "请求结束时间",
-      useTime: "耗时(毫秒)",
-      ipAddr: "IP地址"
+      customerName: '客户端',
+      url: '请求地址',
+      method: '请求方式',
+      requestHeader: '请求头',
+      requestParams: '请求参数',
+      responseHeader: '返回头',
+      responseParams: '返回参数',
+      beginTime: '请求开始时间',
+      endTime: '请求结束时间',
+      useTime: '耗时(毫秒)',
+      ipAddr: 'IP地址'
     },
     sendRecord: {
-      platformName: "平台名称",
-      apiName: "接口名称",
-      version: "版本",
-      method: "请求方式",
-      requestHeader: "请求头",
-      requestParams: "请求参数",
-      responseHeader: "返回头",
-      responseParams: "返回参数",
-      beginTime: "请求开始时间",
-      endTime: "请求结束时间",
-      useTime: "耗时(毫秒)"
+      platformName: '平台名称',
+      apiName: '接口名称',
+      version: '版本',
+      method: '请求方式',
+      requestHeader: '请求头',
+      requestParams: '请求参数',
+      responseHeader: '返回头',
+      responseParams: '返回参数',
+      beginTime: '请求开始时间',
+      endTime: '请求结束时间',
+      useTime: '耗时(毫秒)'
     },
     platform: {
-      platformId: "平台标识",
-      profiles: "类型",
-      name: "名称",
-      method: "请求方式",
-      baseUrl: "地址",
-      version: "版本",
-      username: "用户",
-      password: "密码",
-      params: "其他参数",
-      createTime: "创建时间"
+      platformId: '平台标识',
+      profiles: '类型',
+      name: '名称',
+      method: '请求方式',
+      baseUrl: '地址',
+      version: '版本',
+      username: '用户',
+      password: '密码',
+      params: '其他参数',
+      createTime: '创建时间'
     },
     customer: {
-      name: "客户名称",
-      username: "用户名",
-      password: "秘钥",
-      contacts: "联系人",
-      contactsPhone: "联系人电话",
-      rate: "服务费率",
-      status: "状态",
-      loginTime: "最后认证时间",
-      createTime: "创建时间"
+      name: '客户名称',
+      username: '用户名',
+      password: '秘钥',
+      contacts: '联系人',
+      contactsPhone: '联系人电话',
+      rate: '服务费率',
+      status: '状态',
+      loginTime: '最后认证时间',
+      createTime: '创建时间'
     },
     gen: {
       config: {
@@ -339,7 +361,8 @@ export default {
     resetPassword: '密码重置',
     openInNewPage: '新页面打开',
     createTime: '创建时间',
-    updateTime: '修改时间'
+    updateTime: '修改时间',
+    select: '请选择'
   },
   tagsView: {
     refresh: '刷新当前',
