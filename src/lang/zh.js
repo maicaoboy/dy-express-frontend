@@ -40,7 +40,8 @@ export default {
       receiverName: '收货人姓名',
       receiverPhone: '收货人电话',
       receiverAddress: '收货人地址',
-      orderTime: '下单时间'
+      orderTime: '下单时间',
+      transportNo: '运单号'
     },
     goodsTypeSearch: {
       name: '货物类型名称'

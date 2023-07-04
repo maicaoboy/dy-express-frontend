@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderNo') }}</label>
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderNo') }}: </label>
       <el-input
         v-model="queryParams.orderNo"
         :placeholder="$t('table.order.orderNo')"
         class="filter-item search-item"
         clearable
       />
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderStatus') }}</label>
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderStatus') }}: </label>
       <template>
-        <el-select v-model="queryParams.orderStatus" placeholder="$t('table.select')">
+        <el-select v-model="queryParams.orderStatus" :placeholder="$t('table.select')">
           <el-option
             v-for="item in orderStatusOptions"
             :key="item.value"
@@ -19,9 +19,9 @@
           />
         </el-select>
       </template>
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.payStatus') }}</label>
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.payStatus') }}: </label>
       <template>
-        <el-select v-model="queryParams.payStatus" placeholder="$t('table.select')">
+        <el-select v-model="queryParams.payStatus" :placeholder="$t('table.select')">
           <el-option
             v-for="item in payStatusOptions"
             :key="item.value"
@@ -30,40 +30,46 @@
           />
         </el-select>
       </template>
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderName') }}</label>
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderName') }}: </label>
       <el-input
         v-model="queryParams.senderName"
         :placeholder="$t('table.order.senderName')"
         class="filter-item search-item"
         clearable
       />
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderPhone') }}</label>
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderPhone') }}: </label>
       <el-input
         v-model="queryParams.senderPhone"
         :placeholder="$t('table.order.senderPhone')"
         class="filter-item search-item"
         clearable
       />
-      <!-- TODO地址级联查询 -->
-      <!-- <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderAddress') }}</label> -->
-
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receverName') }}</label>
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderAddress') }}: </label>
+      <el-cascader
+        v-model="selectedSenderAddress"
+        size="large"
+        :options="provinceAndCityData"
+      />
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverName') }}: </label>
       <el-input
-        v-model="queryParams.receverName"
-        :placeholder="$t('table.order.receverName')"
+        v-model="queryParams.receiverName"
+        :placeholder="$t('table.order.receiverName')"
         class="filter-item search-item"
         clearable
       />
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receverPhone') }}</label>
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverPhone') }}: </label>
       <el-input
-        v-model="queryParams.receverPhone"
+        v-model="queryParams.receiverPhone"
         :placeholder="$t('table.order.receverPhone')"
         class="filter-item search-item"
         clearable
       />
-      <!-- // TODO地址级联查询
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverAddress') }}</label> -->
-
+      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverAddress') }}: </label>
+      <el-cascader
+        v-model="selectedReceiverAddress"
+        size="large"
+        :options="provinceAndCityData"
+      />
       <el-button
         style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="search"
@@ -90,134 +96,86 @@
         @sort-change="sortChange"
       >
         <el-table-column type="index" width="50" :label="$t('table.serial')" />
-        <el-table-column :label="$t('table.order.orderNo')" align="center" prop="code" width="200px">
+        <el-table-column :label="$t('table.order.orderNo')" align="center" prop="code" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.orderNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          :label="$t('table.order.orderTime')"
-          :show-overflow-tooltip="true"
-          align="center"
-          prop="name"
-        >
+        <el-table-column :label="$t('table.order.transportNo')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+            <span>{{ scope.row.transportNo }}</span>
           </template>
         </el-table-column>
-        <el-table-column
-          :label="$t('table.role.describe')"
-          :show-overflow-tooltip="true"
-          align="center"
-          prop="describe"
-        >
+        <el-table-column :label="$t('table.order.orderTime')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.describe }}</span>
+            <span>{{ scope.row.orderTime }}</span>
           </template>
         </el-table-column>
-        <!--
-          <el-table-column :label="$t('table.role.dsType')" align="center" width="100px">
+        <el-table-column :label="$t('table.order.orderStatus')" align="center" prop="code" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.orderStatus }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.order.senderName')" align="center" prop="code" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.senderName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.order.senderPhone')" align="center" prop="code" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.senderPhone }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.order.senderAddress')" align="center" prop="code" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.senderAddress }}</span>
+          </template>
+          <el-table-column :label="$t('table.order.receiverName')" align="center" prop="code" width="200">
             <template slot-scope="scope">
-              <span>{{ scope.row.dsType.desc }}</span>
+              <span>{{ scope.row.receiverName }}</span>
             </template>
           </el-table-column>
-          -->
-        <el-table-column :label="$t('table.role.readonly')" align="center" width="80px">
-          <template slot-scope="scope">
-            <span>{{ scope.row.readonly ? '是' : '否' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :filter-method="filterStatus"
-          :filters="[{ text: $t('common.status.valid'), value: true }, { text: $t('common.status.invalid'), value: false }]"
-          :label="$t('table.role.status')"
-          class-name="status-col"
-          width="70px"
-        >
-          <template slot-scope="{row}">
-            <el-tag
-              :type="row.status | statusFilter"
-            >
-              {{ row.status ? $t('common.status.valid') : $t('common.status.invalid') }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('table.createTime')"
-          align="center"
-          prop="createTime"
-          sortable="custom"
-          width="160px"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.createTime }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          :label="$t('table.operation')"
-          align="center"
-          class-name="small-padding fixed-width"
-          width="150px"
-        >
-          <template slot-scope="{row}">
-            <i v-hasPermission="['role:update']" style="color:#009EFF;" @click="edit(row)">编辑</i>
-            <el-divider direction="vertical" />
-            <el-dropdown v-has-any-permission="['role:delete','role:auth','role:config']">
-              <span class="el-dropdown-link" style="color:#009EFF;">
-                {{ $t('table.more') }}
-                <i class="el-icon-arrow-down el-icon--right" />
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
-                  v-hasPermission="['role:delete']"
-                  icon="el-icon-delete"
-                  style="color: #8dc149;"
-                  @click.native="singleDelete(row)"
-                >
-                  删除
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-hasPermission="['role:auth']"
-                  icon="el-icon-user"
-                  style="color: #009EFF;"
-                  @click.native="authUser(row)"
-                >
-                  授权
-                </el-dropdown-item>
-                <el-dropdown-item
-                  v-hasPermission="['role:config']"
-                  icon="el-icon-setting"
-                  style="color: #009EFF;"
-                  @click.native="authResource(row)"
-                >
-                  配置
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
+          <el-table-column :label="$t('table.order.receiverPhone')" align="center" prop="code" width="200">
+            <template slot-scope="scope">
+              <span>{{ scope.row.receiverPhone }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('table.order.receiverAddress')" align="center" prop="code" width="200">
+            <template slot-scope="scope">
+              <span>{{ scope.row.receiverAddress }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            fixed="right"
+            label="操作"
+            width="100"
+          >
+            <template slot-scope="scope">
+              <el-button type="text" size="small" @click="handleClick(scope.row)">
+                查看
+              </el-button>
+              <el-button type="text" size="small">
+                编辑
+              </el-button>
+            </template>
+          </el-table-column>
 
-            <el-link
-              v-has-no-permission="['role:update','role:delete','role:auth','role:config']"
-              class="no-perm"
-            >
-              {{ $t('tips.noPermission') }}
-            </el-link>
-          </template>
+          <pagination
+            v-show="tableData.total>0"
+            :limit.sync="pagination.size"
+            :page.sync="pagination.current"
+            :total="Number(tableData.total)"
+            @pagination="fetch"
+          />
+          <role-edit
+            ref="edit"
+            :dialog-visible="dialog.isVisible"
+            :type="dialog.type"
+            @close="editClose"
+            @success="editSuccess"
+          />
         </el-table-column>
       </el-table>
-      <pagination
-        v-show="tableData.total>0"
-        :limit.sync="pagination.size"
-        :page.sync="pagination.current"
-        :total="Number(tableData.total)"
-        @pagination="fetch"
-      />
-      <role-edit
-        ref="edit"
-        :dialog-visible="dialog.isVisible"
-        :type="dialog.type"
-        @close="editClose"
-        @success="editSuccess"
-      />
     </el-card>
   </div>
 </template>
@@ -225,7 +183,8 @@
 <script>
 import Pagination from '@/components/Pagination'
 import RoleEdit from './Edit'
-import roleApi from '@/api/Role.js'
+import orderApi from '@/api/Order.js'
+import { provinceAndCityData } from 'element-china-area-data'
 
 export default {
   name: 'RoleManage',
@@ -241,6 +200,7 @@ export default {
   },
   data() {
     return {
+      provinceAndCityData,
       dialog: {
         isVisible: false,
         type: 'add'
@@ -260,11 +220,14 @@ export default {
         current: 1
       },
       orderStatusOptions: [],
-      payStatusOptions: []
+      payStatusOptions: [],
+      selectedSenderAddress: [],
+      selectedReceiverAddress: []
     }
   },
   computed: {},
   mounted() {
+    this.initOptions()
     this.fetch()
   },
   methods: {
@@ -331,7 +294,7 @@ export default {
       this.$refs.table.clearSelection()
     },
     delete(ids) {
-      roleApi.delete({ ids: ids }).then(response => {
+      orderApi.delete({ ids: ids }).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.$message({
@@ -356,11 +319,7 @@ export default {
       this.loading = true
       params.size = this.pagination.size
       params.current = this.pagination.current
-      if (this.queryParams.timeRange) {
-        params.startCreateTime = this.queryParams.timeRange[0]
-        params.endCreateTime = this.queryParams.timeRange[1]
-      }
-      roleApi.page(params).then(response => {
+      orderApi.page(params).then(response => {
         const res = response.data
         this.loading = false
         this.tableData = res.data
