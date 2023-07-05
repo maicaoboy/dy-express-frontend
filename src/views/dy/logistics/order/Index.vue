@@ -3,14 +3,14 @@
     <div class="filter-container">
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderNo') }}: </label>
       <el-input
-        v-model="queryParams.orderNo"
+        v-model="queryParams.id"
         :placeholder="$t('table.order.orderNo')"
         class="filter-item search-item"
         clearable
       />
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderStatus') }}: </label>
       <template>
-        <el-select v-model="queryParams.orderStatus" :placeholder="$t('table.select')">
+        <el-select v-model="queryParams.status" :placeholder="$t('table.select')">
           <el-option
             v-for="item in orderStatusOptions"
             :key="item.value"
@@ -21,7 +21,7 @@
       </template>
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.payStatus') }}: </label>
       <template>
-        <el-select v-model="queryParams.payStatus" :placeholder="$t('table.select')">
+        <el-select v-model="queryParams.paymentStatus" :placeholder="$t('table.select')">
           <el-option
             v-for="item in payStatusOptions"
             :key="item.value"
@@ -46,7 +46,7 @@
       />
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderAddress') }}: </label>
       <el-cascader
-        v-model="selectedSenderAddress"
+        v-model="queryParams.senderAddress"
         size="large"
         :options="provinceAndCityData"
       />
@@ -66,7 +66,7 @@
       />
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverAddress') }}: </label>
       <el-cascader
-        v-model="selectedReceiverAddress"
+        v-model="queryParams.receiverAddress"
         size="large"
         :options="provinceAndCityData"
       />
@@ -92,13 +92,11 @@
         :header-cell-style="{background:'#FCFBFF',border:'0'}"
         fit
         style="width: 100%;"
-        @selection-change="onSelectChange"
-        @sort-change="sortChange"
       >
         <el-table-column type="index" width="50" :label="$t('table.serial')" />
         <el-table-column :label="$t('table.order.orderNo')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.orderNo }}</span>
+            <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.order.transportNo')" align="center" prop="code" width="200">
@@ -108,7 +106,7 @@
         </el-table-column>
         <el-table-column :label="$t('table.order.orderTime')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.orderTime }}</span>
+            <span>{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.order.orderStatus')" align="center" prop="code" width="200">
@@ -116,6 +114,7 @@
             <span>{{ scope.row.orderStatus }}</span>
           </template>
         </el-table-column>
+        <el-table-column prop="status" :label="$t('table.order.orderStatus')" :formatter="orderStatusFormater" />
         <el-table-column :label="$t('table.order.senderName')" align="center" prop="code" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.senderName }}</span>
@@ -130,65 +129,62 @@
           <template slot-scope="scope">
             <span>{{ scope.row.senderAddress }}</span>
           </template>
-          <el-table-column :label="$t('table.order.receiverName')" align="center" prop="code" width="200">
-            <template slot-scope="scope">
-              <span>{{ scope.row.receiverName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column :label="$t('table.order.receiverPhone')" align="center" prop="code" width="200">
-            <template slot-scope="scope">
-              <span>{{ scope.row.receiverPhone }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column :label="$t('table.order.receiverAddress')" align="center" prop="code" width="200">
-            <template slot-scope="scope">
-              <span>{{ scope.row.receiverAddress }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            fixed="right"
-            label="操作"
-            width="100"
-          >
-            <template slot-scope="scope">
-              <el-button type="text" size="small" @click="handleClick(scope.row)">
-                查看
-              </el-button>
-              <el-button type="text" size="small">
-                编辑
-              </el-button>
-            </template>
-          </el-table-column>
+        </el-table-column>
 
-          <pagination
-            v-show="tableData.total>0"
-            :limit.sync="pagination.size"
-            :page.sync="pagination.current"
-            :total="Number(tableData.total)"
-            @pagination="fetch"
-          />
-          <role-edit
-            ref="edit"
-            :dialog-visible="dialog.isVisible"
-            :type="dialog.type"
-            @close="editClose"
-            @success="editSuccess"
-          />
+        <el-table-column :label="$t('table.order.receiverName')" align="center" prop="code" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.receiverName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.order.receiverPhone')" align="center" prop="code" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.receiverPhone }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.order.receiverAddress')" align="center" prop="code" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.receiverAddress }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          fixed="right"
+          label="操作"
+          width="100"
+        >
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="handleEdit(scope.row)">
+              {{ $t('table.edit') }}
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
+      <pagination
+        v-show="tableData.total>0"
+        :limit.sync="pagination.size"
+        :page.sync="pagination.current"
+        :total="Number(tableData.total)"
+        @pagination="fetch"
+      />
+      <order-edit
+        ref="edit"
+        :dialog-visible="dialog.isVisible"
+        :type="dialog.type"
+        @close="editClose"
+        @success="editSuccess"
+      />
     </el-card>
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Pagination'
-import RoleEdit from './Edit'
+import OrderEdit from './Edit'
 import orderApi from '@/api/Order.js'
 import { provinceAndCityData } from 'element-china-area-data'
 
 export default {
   name: 'RoleManage',
-  components: { Pagination, RoleEdit },
+  components: { Pagination, OrderEdit },
   filters: {
     statusFilter(status) {
       const map = {
@@ -240,9 +236,6 @@ export default {
     editSuccess() {
       this.search()
     },
-    onSelectChange(selection) {
-      this.selection = selection
-    },
     search() {
       this.fetch({
         ...this.queryParams,
@@ -256,64 +249,10 @@ export default {
       this.$refs.table.clearFilter()
       this.search()
     },
-    exportExcel() {
-      this.$message({
-        message: '待完善',
-        type: 'warning'
-      })
-    },
-    singleDelete(row) {
-      this.$refs.table.toggleRowSelection(row, true)
-      this.batchDelete()
-    },
-    batchDelete() {
-      if (!this.selection.length) {
-        this.$message({
-          message: this.$t('tips.noDataSelected'),
-          type: 'warning'
-        })
-        return
-      }
-      this.$confirm(this.$t('tips.confirmDelete'), this.$t('common.tips'), {
-        confirmButtonText: this.$t('common.confirm'),
-        cancelButtonText: this.$t('common.cancel'),
-        type: 'warning'
-      })
-        .then(() => {
-          const ids = []
-          this.selection.forEach(u => {
-            ids.push(u.id)
-          })
-          this.delete(ids)
-        })
-        .catch(() => {
-          this.clearSelections()
-        })
-    },
-    clearSelections() {
-      this.$refs.table.clearSelection()
-    },
-    delete(ids) {
-      orderApi.delete({ ids: ids }).then(response => {
-        const res = response.data
-        if (res.isSuccess) {
-          this.$message({
-            message: this.$t('tips.deleteSuccess'),
-            type: 'success'
-          })
-        }
-        this.search()
-      })
-    },
     add() {
       this.dialog.type = 'add'
       this.dialog.isVisible = true
       this.$refs.edit.setRole(false)
-    },
-    edit(row) {
-      this.$refs.edit.setRole(row)
-      this.dialog.type = 'edit'
-      this.dialog.isVisible = true
     },
     fetch(params = {}) {
       this.loading = true
@@ -326,36 +265,126 @@ export default {
         this.tableData = res.data
       })
     },
-    sortChange(val) {
-      this.sort.field = val.prop
-      this.sort.order = val.order
-      this.search()
+    handleEdit(row) {
+      console.log(row)
+      this.$refs.edit.setOrder(row)
+      this.dialog.type = 'edit'
+      this.dialog.isVisible = true
     },
     initOptions() {
+      /**
+     * 订单状态: 23000为待取件,23001为已取件，23002为网点自寄，23003为网点入库，
+     * 23004为待装车，23005为运输中，23006为网点出库，23007为待派送，23008为派送中，
+     * 23009为已签收，23010为拒收，230011为已取消
+     */
       this.orderStatusOptions = [
         {
           label: '待取件',
-          value: '0'
+          value: 23000
         },
         {
           label: '已取件',
-          value: '1'
+          value: 23001
+        },
+        {
+          label: '网点自寄',
+          value: 23002
+        },
+        {
+          label: '网点入库',
+          value: 23003
+        },
+        {
+          label: '待装车',
+          value: 23004
+        },
+        {
+          label: '运输中',
+          value: 23005
+        },
+        {
+          label: '网点出库',
+          value: 23006
+        },
+        {
+          label: '待派送',
+          value: 23007
+        },
+        {
+          label: '派送中',
+          value: 23008
+        },
+        {
+          label: '已签收',
+          value: 23009
+        },
+        {
+          label: '拒收',
+          value: 23010
         },
         {
           label: '已取消',
-          value: '2'
+          value: 23011
+        }
+      ]
+
+      /**
+     * 订单类型，1为同城订单，2为城际订单
+     */
+      this.orderTypeOptions = [
+        {
+          label: '同城订单',
+          value: 1
+        },
+        {
+          label: '城际订单',
+          value: 2
         }
       ]
       this.payStatusOptions = [
         {
           label: '未支付',
-          value: '0'
+          value: 1
         },
         {
           label: '已支付',
-          value: '1'
+          value: 2
         }
       ]
+    },
+    /**
+     * 订单状态: 23000为待取件,23001为已取件，23002为网点自寄，23003为网点入库，
+     * 23004为待装车，23005为运输中，23006为网点出库，23007为待派送，23008为派送中，
+     * 23009为已签收，23010为拒收，230011为已取消
+     */
+    orderStatusFormater(row, column) {
+      if (row.status === 23000) {
+        return '待取件'
+      } else if (row.status === 23001) {
+        return '已取件'
+      } else if (row.status === 23002) {
+        return '网点自寄'
+      } else if (row.status === 23003) {
+        return '网点入库'
+      } else if (row.status === 23004) {
+        return '待装车'
+      } else if (row.status === 23005) {
+        return '运输中'
+      } else if (row.status === 23006) {
+        return '网点出库'
+      } else if (row.status === 23007) {
+        return '待派送'
+      } else if (row.status === 23008) {
+        return '派送中'
+      } else if (row.status === 23009) {
+        return '已签收'
+      } else if (row.status === 23010) {
+        return '拒收'
+      } else if (row.status === 23011) {
+        return '已取消'
+      } else {
+        return '未知'
+      }
     }
   }
 }

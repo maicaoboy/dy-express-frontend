@@ -365,7 +365,8 @@ export default {
     createTime: '创建时间',
     updateTime: '修改时间',
     select: '请选择',
-    serial: '序号'
+    serial: '序号',
+    edit: '编辑'
   },
   tagsView: {
     refresh: '刷新当前',
