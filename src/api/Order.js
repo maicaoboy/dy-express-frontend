@@ -10,7 +10,7 @@ const apiList = {
     url: `/order/order/update`
   },
   page: {
-    method: 'GET',
+    method: 'POST',
     url: `/order/order/page`
   },
   findbyid: {

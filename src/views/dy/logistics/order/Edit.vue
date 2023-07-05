@@ -161,7 +161,7 @@ export default {
   },
   watch: {},
   mounted() {
-    this.initOrg()
+    // this.initOrg()
     window.onresize = () => {
       return (() => {
         this.width = this.initWidth()

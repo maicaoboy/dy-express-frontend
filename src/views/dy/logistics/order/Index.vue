@@ -60,7 +60,7 @@
       <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverPhone') }}: </label>
       <el-input
         v-model="queryParams.receiverPhone"
-        :placeholder="$t('table.order.receverPhone')"
+        :placeholder="$t('table.order.receiverPhone')"
         class="filter-item search-item"
         clearable
       />
@@ -317,8 +317,9 @@ export default {
     },
     fetch(params = {}) {
       this.loading = true
-      params.size = this.pagination.size
-      params.current = this.pagination.current
+      params.pageSize = this.pagination.size
+      params.page = this.pagination.current
+      console.log(params)
       orderApi.page(params).then(response => {
         const res = response.data
         this.loading = false
