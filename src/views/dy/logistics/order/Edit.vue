@@ -23,7 +23,7 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('table.order.paymentStatus')" prop="status">
+      <el-form-item :label="$t('table.order.payStatus')" prop="status">
         <el-select v-model="order.paymentStatus" :placeholder="$t('table.select')">
           <el-option
             v-for="item in payStatusOptions"
@@ -36,23 +36,22 @@
       <el-form-item :label="$t('table.order.orderType')" prop="status">
         <el-select v-model="order.paymentStatus" :placeholder="$t('table.select')">
           <el-option
-            v-for="item in orderType"
+            v-for="item in orderTypeOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value"
           />
         </el-select>
       </el-form-item>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button plain type="warning" @click="isVisible = false">
-          {{ $t('common.cancel') }}
-        </el-button>
-        <el-button plain type="primary" @click="submitForm">
-          {{ $t('common.confirm') }}
-        </el-button>
-      </div>
     </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button plain type="warning" @click="isVisible = false">
+        {{ $t('common.cancel') }}
+      </el-button>
+      <el-button plain type="primary" @click="submitForm">
+        {{ $t('common.confirm') }}
+      </el-button>
+    </div>
   </el-dialog>
 </template>
 <script>
