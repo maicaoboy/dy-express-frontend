@@ -218,6 +218,7 @@ export default {
         size: 10,
         current: 1
       },
+      orderTypeOptions: [],
       orderStatusOptions: [],
       payStatusOptions: [],
       selectedSenderAddress: [],
@@ -330,7 +331,6 @@ export default {
           value: 23011
         }
       ]
-
       /**
      * 订单类型，1为同城订单，2为城际订单
      */

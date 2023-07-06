@@ -38,9 +38,11 @@ export default {
       senderName: '发货人姓名',
       senderPhone: '发货人电话',
       senderAddress: '发货人地址',
+      senderAddressDetail: '发货人详细地址',
       receiverName: '收货人姓名',
       receiverPhone: '收货人电话',
       receiverAddress: '收货人地址',
+      receiverAddressDetail: '收货人详细地址',
       orderTime: '下单时间',
       transportNo: '运单号'
     },

@@ -43,6 +43,38 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item :label="$t('table.order.senderName')" prop="orderType">
+        <el-input v-model="order.senderName" />
+      </el-form-item>
+      <el-form-item :label="$t('table.order.senderPhone')" prop="orderType">
+        <el-input v-model="order.senderPhone" />
+      </el-form-item>
+      <el-form-item :label="$t('table.order.senderAddress')" prop="orderType">
+        <el-cascader
+          v-model="order.senderAddress3id"
+          size="large"
+          :options="regionData"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('table.order.senderAddressDetail')" prop="orderType">
+        <el-input v-model="order.senderAddressDetail" />
+      </el-form-item>
+      <el-form-item :label="$t('table.order.receiverName')" prop="orderType">
+        <el-input v-model="order.receiverName" />
+      </el-form-item>
+      <el-form-item :label="$t('table.order.receiverPhone')" prop="orderType">
+        <el-input v-model="order.receiverPhone" />
+      </el-form-item>
+      <el-form-item :label="$t('table.order.receiverAddress')" prop="orderType">
+        <el-cascader
+          v-model="order.receiverAddress3id"
+          size="large"
+          :options="regionData"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('table.order.receiverAddressDetail')" prop="orderType">
+        <el-input v-model="order.receiverAddressDetail" />
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button plain type="warning" @click="isVisible = false">
@@ -56,6 +88,7 @@
 </template>
 <script>
 import orderApi from '@/api/Order.js'
+import { regionData } from 'element-china-area-data'
 
 export default {
   name: 'OrderEdit',
@@ -84,7 +117,8 @@ export default {
   },
   data() {
     return {
-      order: this.initOrder(),
+      regionData,
+      order: {},
       rules: {
         status: {
           required: true,
@@ -128,15 +162,19 @@ export default {
         senderName: '',
         senderPhone: '',
         senderAddress: '',
+        senderAddress3id: [],
         senderAddressDetail: '',
         receiverName: '',
         receiverPhone: '',
         receiverAddress: '',
+        receiverAddress3id: [],
         receiverAddressDetail: ''
       }
     },
     setOrder(order) {
       this.order = { ...order }
+      this.order.senderAddress3id = []
+      this.order.receiverAddress3id = []
     },
     close() {
       this.$emit('close')
@@ -144,8 +182,6 @@ export default {
     reset() {
       // 先清除校验，再清除表单，不然有奇怪的bug
       this.$refs.form.clearValidate()
-      this.$refs.form.resetFields()
-      this.role = this.initOrder()
     },
     submitForm() {
       const that = this
@@ -159,12 +195,6 @@ export default {
     },
     editSubmit() {
       const that = this
-      if (that.orgHidden && that.role.orgList) {
-        that.role.orgList.length = 0
-      } else {
-        that.role.orgList = that.$refs.orgTree.getCheckedKeys()
-      }
-
       if (that.type === 'add') {
         that.save()
       } else {
@@ -186,7 +216,24 @@ export default {
       })
     },
     update() {
-      orderApi.update(this.role).then(response => {
+      console.log(this.order)
+      if (this.order.senderAddress3id.length === 0 || this.order.receiverAddress3id.length === 0) {
+        this.$message({
+          message: '请选择省市区',
+          type: 'error'
+        })
+        return
+      }
+      this.order.senderProvinceId = this.order.senderAddress3id[0]
+      this.order.senderCityId = this.order.senderAddress3id[1]
+      this.order.senderCountyId = this.order.senderAddress3id[2]
+      this.order.receiverProvinceId = this.order.receiverAddress3id[0]
+      this.order.receiverCityId = this.order.receiverAddress3id[1]
+      this.order.receiverCountyId = this.order.receiverAddress3id[2]
+      console.log(this.order)
+      console.log('hahaha')
+      console.log(regionData)
+      orderApi.update(this.order).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.isVisible = false
