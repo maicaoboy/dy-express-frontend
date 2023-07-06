@@ -57,7 +57,7 @@
         />
       </el-form-item>
       <el-form-item :label="$t('table.order.senderAddressDetail')" prop="orderType">
-        <el-input v-model="order.senderAddressDetail" />
+        <el-input v-model="order.senderAddress" />
       </el-form-item>
       <el-form-item :label="$t('table.order.receiverName')" prop="orderType">
         <el-input v-model="order.receiverName" />
@@ -73,7 +73,7 @@
         />
       </el-form-item>
       <el-form-item :label="$t('table.order.receiverAddressDetail')" prop="orderType">
-        <el-input v-model="order.receiverAddressDetail" />
+        <el-input v-model="order.receiverAddress" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -173,8 +173,8 @@ export default {
     },
     setOrder(order) {
       this.order = { ...order }
-      this.order.senderAddress3id = []
-      this.order.receiverAddress3id = []
+      this.order.senderAddress3id = [this.order.senderProvinceId, this.order.senderCityId, this.order.senderCountyId]
+      this.order.receiverAddress3id = [this.order.receiverProvinceId, this.order.receiverCityId, this.order.receiverCountyId]
     },
     close() {
       this.$emit('close')
@@ -231,8 +231,7 @@ export default {
       this.order.receiverCityId = this.order.receiverAddress3id[1]
       this.order.receiverCountyId = this.order.receiverAddress3id[2]
       console.log(this.order)
-      console.log('hahaha')
-      console.log(regionData)
+      console.log('edit')
       orderApi.update(this.order).then(response => {
         const res = response.data
         if (res.isSuccess) {

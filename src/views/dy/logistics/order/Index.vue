@@ -109,11 +109,6 @@
             <span>{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.order.orderStatus')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.orderStatus }}</span>
-          </template>
-        </el-table-column>
         <el-table-column prop="status" :label="$t('table.order.orderStatus')" :formatter="orderStatusFormater" />
         <el-table-column :label="$t('table.order.senderName')" align="center" prop="code" width="200">
           <template slot-scope="scope">
@@ -125,12 +120,7 @@
             <span>{{ scope.row.senderPhone }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.order.senderAddress')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.senderAddress }}</span>
-          </template>
-        </el-table-column>
-
+        <el-table-column :label="$t('table.order.senderAddress')" :formatter="senderAddressFormater" align="center" prop="code" width="200" />
         <el-table-column :label="$t('table.order.receiverName')" align="center" prop="code" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.receiverName }}</span>
@@ -141,11 +131,7 @@
             <span>{{ scope.row.receiverPhone }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.order.receiverAddress')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.receiverAddress }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column :label="$t('table.order.receiverAddress')" :formatter="receiverAddressFormater" align="center" prop="code" width="200" />
         <el-table-column
           fixed="right"
           label="操作"
@@ -183,7 +169,7 @@
 import Pagination from '@/components/Pagination'
 import OrderEdit from './Edit'
 import orderApi from '@/api/Order.js'
-import { provinceAndCityData } from 'element-china-area-data'
+import { provinceAndCityData, codeToText } from 'element-china-area-data'
 
 export default {
   name: 'RoleManage',
@@ -200,6 +186,7 @@ export default {
   data() {
     return {
       provinceAndCityData,
+      codeToText,
       dialog: {
         isVisible: false,
         type: 'add'
@@ -388,6 +375,12 @@ export default {
       } else {
         return '未知'
       }
+    },
+    senderAddressFormater(row, column) {
+      return codeToText[row.senderProvinceId] + codeToText[row.senderCityId] + codeToText[row.receiverCountyId] + row.senderAddress
+    },
+    receiverAddressFormater(row, column) {
+      return codeToText[row.receiverProvinceId] + codeToText[row.receiverCityId] + codeToText[row.receiverCountyId] + row.receiverAddress
     }
   }
 }
