@@ -168,6 +168,9 @@
       <order-edit
         ref="edit"
         :dialog-visible="dialog.isVisible"
+        :order-status-options="orderStatusOptions"
+        :order-type-options="orderTypeOptions"
+        :pay-status-options="payStatusOptions"
         :type="dialog.type"
         @close="editClose"
         @success="editSuccess"

@@ -10,6 +10,39 @@
       <el-form-item :label="$t('table.order.orderNo')" prop="id">
         <el-input v-model="order.id" :disabled="type==='edit'" />
       </el-form-item>
+      <el-form-item :label="$t('table.order.transportNo')" prop="id">
+        <el-input v-model="order.transportNo" :disabled="type==='edit'" />
+      </el-form-item>
+      <el-form-item :label="$t('table.order.orderStatus')" prop="status">
+        <el-select v-model="order.status" :placeholder="$t('table.select')">
+          <el-option
+            v-for="item in orderStatusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('table.order.paymentStatus')" prop="status">
+        <el-select v-model="order.paymentStatus" :placeholder="$t('table.select')">
+          <el-option
+            v-for="item in payStatusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('table.order.orderType')" prop="status">
+        <el-select v-model="order.paymentStatus" :placeholder="$t('table.select')">
+          <el-option
+            v-for="item in orderType"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
 
       <div slot="footer" class="dialog-footer">
         <el-button plain type="warning" @click="isVisible = false">
@@ -29,6 +62,18 @@ export default {
   name: 'OrderEdit',
   components: {},
   props: {
+    payStatusOptions: {
+      type: Array,
+      required: true
+    },
+    orderStatusOptions: {
+      type: Array,
+      required: true
+    },
+    orderTypeOptions: {
+      type: Array,
+      required: true
+    },
     dialogVisible: {
       type: Boolean,
       default: false
