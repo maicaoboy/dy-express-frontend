@@ -1,75 +1,119 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderNo') }}: </label>
-      <el-input
-        v-model="queryParams.id"
-        :placeholder="$t('table.order.orderNo')"
-        class="filter-item search-item"
-        clearable
-      />
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderStatus') }}: </label>
-      <template>
-        <el-select v-model="queryParams.status" :placeholder="$t('table.select')">
-          <el-option
-            v-for="item in orderStatusOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </template>
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.payStatus') }}: </label>
-      <template>
-        <el-select v-model="queryParams.paymentStatus" :placeholder="$t('table.select')">
-          <el-option
-            v-for="item in payStatusOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </template>
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderName') }}: </label>
-      <el-input
-        v-model="queryParams.senderName"
-        :placeholder="$t('table.order.senderName')"
-        class="filter-item search-item"
-        clearable
-      />
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderPhone') }}: </label>
-      <el-input
-        v-model="queryParams.senderPhone"
-        :placeholder="$t('table.order.senderPhone')"
-        class="filter-item search-item"
-        clearable
-      />
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderAddress') }}: </label>
-      <el-cascader
-        v-model="queryParams.senderAddress"
-        size="large"
-        :options="provinceAndCityData"
-      />
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverName') }}: </label>
-      <el-input
-        v-model="queryParams.receiverName"
-        :placeholder="$t('table.order.receiverName')"
-        class="filter-item search-item"
-        clearable
-      />
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverPhone') }}: </label>
-      <el-input
-        v-model="queryParams.receiverPhone"
-        :placeholder="$t('table.order.receiverPhone')"
-        class="filter-item search-item"
-        clearable
-      />
-      <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverAddress') }}: </label>
-      <el-cascader
-        v-model="queryParams.receiverAddress"
-        size="large"
-        :options="provinceAndCityData"
-      />
+      <el-row>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderNo') }}: </label>
+            <el-input
+              v-model="queryParams.id"
+              :placeholder="$t('table.order.orderNo')"
+              class="filter-item search-item"
+              clearable
+            />
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.order.orderStatus') }}: </label>
+            <template>
+              <el-select v-model="queryParams.status" :placeholder="$t('table.select')">
+                <el-option
+                  v-for="item in orderStatusOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </template>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.order.payStatus') }}: </label>
+            <template>
+              <el-select v-model="queryParams.paymentStatus" :placeholder="$t('table.select')">
+                <el-option
+                  v-for="item in payStatusOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </template>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderName') }}: </label>
+            <el-input
+              v-model="queryParams.senderName"
+              :placeholder="$t('table.order.senderName')"
+              class="filter-item search-item"
+              clearable
+            />
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderPhone') }}: </label>
+            <el-input
+              v-model="queryParams.senderPhone"
+              :placeholder="$t('table.order.senderPhone')"
+              class="filter-item search-item"
+              clearable
+            />
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.order.senderAddress') }}: </label>
+            <el-cascader
+              v-model="queryParams.senderAddress"
+              size="large"
+              :options="provinceAndCityData"
+            />
+          </div>
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverName') }}: </label>
+            <el-input
+              v-model="queryParams.receiverName"
+              :placeholder="$t('table.order.receiverName')"
+              class="filter-item search-item"
+              clearable
+            />
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverPhone') }}: </label>
+            <el-input
+              v-model="queryParams.receiverPhone"
+              :placeholder="$t('table.order.receiverPhone')"
+              class="filter-item search-item"
+              clearable
+            />
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.order.receiverAddress') }}: </label>
+            <el-cascader
+              v-model="queryParams.receiverAddress"
+              size="large"
+              :options="provinceAndCityData"
+            />
+          </div>
+        </el-col>
+      </el-row>
+
       <el-button
         style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="search"
@@ -81,6 +125,13 @@
         @click="reset"
       >
         {{ $t('table.reset') }}
+      </el-button>
+      <el-button
+        v-has-permission="['order:add']"
+        style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
+        @click="handleAdd()"
+      >
+        {{ $t('table.add') }}
       </el-button>
     </div>
     <el-card shadow="never" style="margin-top: 10px;">
@@ -249,7 +300,7 @@ export default {
       this.loading = true
       params.pageSize = this.pagination.size
       params.page = this.pagination.current
-      console.log(params)
+      // console.log(params)
       orderApi.page(params).then(response => {
         const res = response.data
         this.loading = false
@@ -257,9 +308,14 @@ export default {
       })
     },
     handleEdit(row) {
-      console.log(row)
+      // console.log(row)
       this.$refs.edit.setOrder(row)
       this.dialog.type = 'edit'
+      this.dialog.isVisible = true
+    },
+    handleAdd() {
+      this.$refs.edit.initOrder()
+      this.dialog.type = 'add'
       this.dialog.isVisible = true
     },
     initOptions() {

@@ -34,7 +34,7 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('table.order.orderType')" prop="status">
-        <el-select v-model="order.paymentStatus" :placeholder="$t('table.select')">
+        <el-select v-model="order.orderType" :placeholder="$t('table.select')">
           <el-option
             v-for="item in orderTypeOptions"
             :key="item.value"
@@ -150,7 +150,7 @@ export default {
   watch: {},
   methods: {
     initOrder() {
-      return {
+      this.order = {
         id: '',
         status: '',
         createTime: '',
@@ -216,7 +216,7 @@ export default {
       })
     },
     update() {
-      console.log(this.order)
+      // console.log(this.order)
       if (this.order.senderAddress3id.length === 0 || this.order.receiverAddress3id.length === 0) {
         this.$message({
           message: '请选择省市区',
@@ -230,8 +230,8 @@ export default {
       this.order.receiverProvinceId = this.order.receiverAddress3id[0]
       this.order.receiverCityId = this.order.receiverAddress3id[1]
       this.order.receiverCountyId = this.order.receiverAddress3id[2]
-      console.log(this.order)
-      console.log('edit')
+      // console.log(this.order)
+      // console.log('edit')
       orderApi.update(this.order).then(response => {
         const res = response.data
         if (res.isSuccess) {
