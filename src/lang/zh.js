@@ -30,6 +30,12 @@ export default {
     github: '项目地址'
   },
   table: {
+    driver: {
+      name: '司机姓名',
+      phone: '司机电话',
+      id: '司机编号',
+      org: '司机所属机构'
+    },
     order: {
       orderNo: '订单号',
       orderStatus: '订单状态',
@@ -52,10 +58,12 @@ export default {
     goodsType: {
       code: '货物类型编码',
       name: '货物类型名称',
-      defaultWeigrt: '默认重量',
+      defaultWeight: '默认重量',
       defaultVolume: '默认体积',
       describe: '描述',
-      operate: '操作'
+      operate: '操作',
+      truckType: '运输车型',
+      add: '新增货物类型'
     },
     tenant: {
       code: '企业编码',
