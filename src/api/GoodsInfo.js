@@ -2,27 +2,27 @@ import axiosApi from './AxiosApi.js'
 
 const apiList = {
   save: {
-    url: `/base/goodsType`,
+    url: `/base/base/goodsType`,
     method: 'POST'
   },
   get: {
-    url: `/base/goodsType`,
+    url: `/base/base/goodsType`,
     method: 'GET'
   },
   getAll: {
-    url: `/base/goodsType/all`,
+    url: `/base/base/goodsType/all`,
     method: 'GET'
   },
   page: {
-    url: `/base/goodsType/page`,
+    url: `/base/base/goodsType/page`,
     method: 'GET'
   },
   delete: {
-    url: `/base/goodsType`,
+    url: `/base/base/goodsType`,
     method: 'DELETE'
   },
   update: {
-    url: `/base/goodsType`,
+    url: `/base/base/goodsType`,
     method: 'PUT'
   }
 }

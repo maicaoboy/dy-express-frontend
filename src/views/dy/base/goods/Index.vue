@@ -16,7 +16,7 @@
           <div class="grid-content bg-purple">
             <label style="color:#909399;font-weight:500;">{{ $t('table.goodsType.truckType') }}</label>
             <template>
-              <el-select :placeholder="$t('table.select')">
+              <el-select v-model="queryParams.status" :placeholder="$t('table.select')">
                 <el-option
                   v-for="item in truckTypeOptions"
                   :key="item.value"
@@ -49,9 +49,11 @@
       >
         {{ $t('table.goodsType.add') }}
       </el-button>
+      <!--表单-->
       <el-table
         :key="tableKey"
         ref="table"
+        :data="tableData.items"
         :header-cell-style="{background:'#FCFBFF',border:'0'}"
         fit
         style="width: 100%;"
@@ -62,42 +64,72 @@
           align="center"
           width="150"
         />
+        <!--货物编码-->
         <el-table-column
-          prop="code"
+          prop="id"
           :label="$t('table.goodsType.code')"
           align="center"
           width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <!--货物名称-->
         <el-table-column
-          prop="unit"
+          prop="name"
           :label="$t('table.goodsType.name')"
           align="center"
           width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <!--货物的装车种类-->
         <el-table-column
           prop="updateTime"
           :label="$t('table.goodsType.truckType')"
           align="center"
           width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.truckTypeIds }}</span>
+          </template>
+        </el-table-column>
+        <!--货物的默认体积-->
         <el-table-column
           prop="volume"
           :label="$t('table.goodsType.defaultVolume')"
           align="center"
           width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.defaultVolume }}</span>
+          </template>
+        </el-table-column>
+        <!--货物的默认重量-->
         <el-table-column
           prop="weight"
           :label="$t('table.goodsType.defaultWeight')"
           align="center"
           width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.defaultWeight }}</span>
+          </template>
+        </el-table-column>
+        <!--货物的描述-->
         <el-table-column
           prop="remark"
           :label="$t('table.goodsType.describe')"
           align="center"
           width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.remark }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="createTime"
           :label="$t('table.goodsType.operate')"
@@ -127,19 +159,47 @@
   </div>
 </template>
 <script>
+import GoodsInfoApi from '@/api/GoodsInfo'
+
 export default {
   data() {
     return {
       queryParams: {},
-      truckTypeOptions: []
+      truckTypeOptions: [],
+      tableData: {
+        total: 0
+      },
+      loading: false,
+      pagination: {
+        size: 10,
+        current: 1
+      },
+      tableKey: 0
     }
   },
-  initOptions() {
-    this.truckTypeOptions = [
-      { label: '货车', value: 0 },
-      { label: '卡车', value: 1 },
-      { label: '冷藏车', value: 2 }
-    ]
+  mounted() {
+    this.initOptions()
+    this.fetch()
+  },
+  methods: {
+    fetch(params = {}) {
+      this.loading = true
+      params.pageSize = this.pagination.size
+      params.page = this.pagination.current
+      // console.log(params)
+      GoodsInfoApi.page(params).then(response => {
+        const res = response.data
+        this.loading = false
+        this.tableData = res
+      })
+    },
+    initOptions() {
+      this.truckTypeOptions = [
+        { label: '货车', value: 0 },
+        { label: '卡车', value: 1 },
+        { label: '冷藏车', value: 2 }
+      ]
+    }
   }
 }
 </script>
