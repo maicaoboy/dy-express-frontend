@@ -113,6 +113,32 @@ export default {
       name: '',
       orgTree: [],
       org: this.initOrg(),
+      regionData,
+      selectedOptions: [],
+      lng: 116.404,
+      lat: 39.915,
+      mapVisable: true,
+      options: [{
+        value: 0,
+        label: '总公司'
+      },
+      {
+        value: 1,
+        label: '分公司'
+      },
+      {
+        value: 2,
+        label: '一级转运中心'
+      },
+      {
+        value: 3,
+        label: '二级转运中心'
+      },
+      {
+        value: 4,
+        label: '网点'
+      }
+      ],
       rules: {
         name: [
           {
