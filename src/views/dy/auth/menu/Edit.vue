@@ -25,19 +25,28 @@
         <el-input v-model="resource.name" />
       </el-form-item>
       <el-form-item :label="$t('table.resource.method')" prop="method">
-        <el-input
+        <el-select v-model="resource.method" placeholder="请选择">
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <!-- <el-input
           v-model="resource.method"
           :disabled="type==='edit'"
           @keyup.enter.native="submitForm"
         />
         <p class="note">
           请填写method: GET,POST,PUT,DELETE
-        </p>
+        </p> -->
       </el-form-item>
       <el-form-item :label="$t('table.resource.url')" prop="url">
         <el-input
           v-model="resource.url"
           :disabled="type==='edit'"
+          @keyup.native="menuPath"
           @keyup.enter.native="submitForm"
         />
         <p class="note">
@@ -80,6 +89,23 @@ export default {
   },
   data() {
     return {
+      options: [{
+        value: 'GET',
+        label: 'GET'
+      },
+      {
+        value: 'POST',
+        label: 'POST'
+      },
+      {
+        value: 'PUT',
+        label: 'PUT'
+      },
+      {
+        value: 'DELETE',
+        label: 'DELETE'
+      }
+      ],
       resource: this.initResource(),
       screenWidth: 0,
       width: this.initWidth(),
@@ -124,11 +150,35 @@ export default {
           message: this.$t('rules.require'),
           trigger: 'blur'
         },
-        url: {
-          required: true,
-          message: this.$t('rules.require'),
-          trigger: 'blur'
-        }
+        // url: {
+        //   required: true,
+        //   message: this.$t('rules.require'),
+        //   trigger: 'blur'
+        // },
+        url: [
+          {
+            max: 255,
+            message: this.$t('rules.noMoreThan100'),
+            trigger: 'blur'
+          },
+          {
+            required: true,
+            message: this.$t('rules.require'),
+            trigger: 'blur'
+          },
+          {
+            validator: (rule, value, callback) => {
+              const isUrl = this.isUrl(this.resource.url)
+
+              if (value === '/' || (!isUrl && value.endsWith('/'))) {
+                callback('请填写有效的路由地址')
+              } else {
+                callback()
+              }
+            },
+            trigger: 'blur'
+          }
+        ]
       }
     }
   },
@@ -157,6 +207,30 @@ export default {
     }
   },
   methods: {
+    menuPath() {
+      const isUrl = this.isUrl(this.resource.url)
+      if (!isUrl && !this.resource.url.startsWith('/')) {
+        this.resource.url = '/' + this.resource.url
+      } else if (isUrl) {
+        if (this.resource.url.startsWith('/')) {
+          this.resource.url = this.resource.url.substr(1)
+        }
+      }
+    },
+    isUrl(path) {
+      const urls = [
+        'http://',
+        '/http://',
+        'https://',
+        '/https://',
+        'www.',
+        '/www.'
+      ]
+      const urlIndex = urls.findIndex(item => {
+        return path.startsWith(item)
+      })
+      return urlIndex >= 0
+    },
     initResource() {
       return {
         id: '',

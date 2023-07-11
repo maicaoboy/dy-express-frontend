@@ -53,6 +53,16 @@
               <el-form-item :label="$t('table.org.abbreviation')" prop="abbreviation">
                 <el-input v-model="org.abbreviation" />
               </el-form-item>
+              <el-form-item :label="$t('table.org.orgtype')" prop="orgtype">
+                <el-select v-model="org.orgType" :placeholder="$t('table.org.select')">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
               <el-form-item :label="$t('table.org.describe')" prop="describe">
                 <el-input v-model="org.describe" />
               </el-form-item>
@@ -103,11 +113,6 @@ export default {
       name: '',
       orgTree: [],
       org: this.initOrg(),
-      regionData,
-      selectedOptions: [],
-      lng: 116.404,
-      lat: 39.915,
-      mapVisable: true,
       rules: {
         name: [
           {
