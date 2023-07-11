@@ -96,6 +96,16 @@
               <el-form-item :label="$t('table.org.abbreviation')" prop="abbreviation">
                 <el-input v-model="org.abbreviation" />
               </el-form-item>
+              <el-form-item :label="$t('table.org.orgtype')" prop="orgtype">
+                <el-select v-model="org.orgType" :placeholder="$t('table.org.select')">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
+              </el-form-item>
               <el-form-item :label="$t('table.org.describe')" prop="describe">
                 <el-input v-model="org.describe" />
               </el-form-item>
@@ -145,6 +155,27 @@ export default {
       name: '',
       orgTree: [],
       org: this.initOrg(),
+      options: [{
+        value: 0,
+        label: '总公司'
+      },
+      {
+        value: 1,
+        label: '分公司'
+      },
+      {
+        value: 2,
+        label: '一级转运中心'
+      },
+      {
+        value: 3,
+        label: '二级转运中心'
+      },
+      {
+        value: 4,
+        label: '网点'
+      }
+      ],
       rules: {
         name: [
           {

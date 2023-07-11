@@ -30,6 +30,15 @@ export default {
     github: '项目地址'
   },
   table: {
+    transportlinetype: {
+      typeNumber: '运输线路类型编码',
+      searchtypeNumber: '请输入运输线路类型编码',
+      name: '运输线路类型名称',
+      searchname: '请输入运输线路类型名称',
+      agencyType: '机构类型',
+      searchagencyType: '请选择机构类型',
+      addtrasportlinetype: '新增运输线路类型'
+    },
     order: {
       orderNo: '订单号',
       orderStatus: '订单状态',
@@ -129,10 +138,12 @@ export default {
     org: {
       name: '部门名称',
       abbreviation: '简称',
+      orgtype: '机构类型',
       describe: '描述',
       parentId: '上级ID',
       sortValue: '排序',
-      status: '状态'
+      status: '状态',
+      select: '选择机构类型'
     },
     station: {
       name: '岗位名称',
