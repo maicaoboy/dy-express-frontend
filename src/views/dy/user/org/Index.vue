@@ -5,12 +5,16 @@
         <div class="app-container">
           <div class="filter-container">
             <el-input v-model="name" :placeholder="$t('table.org.name')" class="filter-item search-item" clearable />
-            <el-button style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
-              @click="search">
+            <el-button
+              style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
+              @click="search"
+            >
               {{ $t('table.search') }}
             </el-button>
-            <el-button style="background-color: #fff;color: #606266;border-radius: 5px;border-color: #DCDFE6;"
-              @click="reset">
+            <el-button
+              style="background-color: #fff;color: #606266;border-radius: 5px;border-color: #DCDFE6;"
+              @click="reset"
+            >
               {{ $t('table.reset') }}
             </el-button>
             <el-dropdown v-has-any-permission="['org:add', 'org:delete', 'org:export']" trigger="click">
@@ -31,8 +35,17 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-          <el-tree ref="orgTree" :check-strictly="true" :data="orgTree" :filter-node-method="filterNode"
-            default-expand-all highlight-current node-key="id" show-checkbox @node-click="nodeClick" />
+          <el-tree
+            ref="orgTree"
+            :check-strictly="true"
+            :data="orgTree"
+            :filter-node-method="filterNode"
+            default-expand-all
+            highlight-current
+            node-key="id"
+            show-checkbox
+            @node-click="nodeClick"
+          />
         </div>
       </el-col>
       <el-col :sm="16" :xs="24">
@@ -80,14 +93,13 @@
                 <el-input-number v-model="org.sortValue" :max="100" :min="0" @change="handleNumChange" />
               </el-form-item>
               <el-form-item label="所在城市" prop="areaId">
-                <el-cascader size="large" :options="regionData" v-model="selectedOptions" @change="handleCityChange">
-                </el-cascader>
+                <el-cascader v-model="selectedOptions" size="large" :options="regionData" @change="handleCityChange" />
               </el-form-item>
             </el-form>
           </div>
         </el-card>
         <el-card v-show="mapVisable">
-          <div id="map" style="width: 100%; height: 500px;"></div>
+          <div id="map" style="width: 100%; height: 500px;" />
         </el-card>
         <el-card class="box-card" style="margin-top: -2rem;">
           <el-row>
@@ -113,6 +125,7 @@ export default {
       name: '',
       orgTree: [],
       org: this.initOrg(),
+      // '组织类型（0:网点 1:一级转运中心 2:二级转运中心 3:总公司 4:分公司）'
       regionData,
       selectedOptions: [],
       lng: 116.404,
@@ -120,23 +133,23 @@ export default {
       mapVisable: true,
       options: [{
         value: 0,
-        label: '总公司'
+        label: '网点'
       },
       {
         value: 1,
-        label: '分公司'
-      },
-      {
-        value: 2,
         label: '一级转运中心'
       },
       {
-        value: 3,
+        value: 2,
         label: '二级转运中心'
       },
       {
+        value: 3,
+        label: '总公司'
+      },
+      {
         value: 4,
-        label: '网点'
+        label: '分公司'
       }
       ],
       rules: {
@@ -176,26 +189,26 @@ export default {
       }
     },
     initMap() {
-      var map = new BMap.Map("map")
+      var map = new BMap.Map('map')
       map.centerAndZoom(new BMap.Point(this.lng, this.lat), 13)
-      var polygon = new BMap.Polygon(this.mutiPoints, { strokeColor: "blue", strokeWeight: 2, strokeOpacity: 0.5 })
+      var polygon = new BMap.Polygon(this.mutiPoints, { strokeColor: 'blue', strokeWeight: 2, strokeOpacity: 0.5 })
       map.addOverlay(polygon)
       map.enableScrollWheelZoom(true)
       // 监听多边形的鼠标点击事件，获取点击顶点的经纬度坐标
       var drawingManager = new BMapLib.DrawingManager(map, {
-				isOpen: false, //是否开启绘制模式
-				// enableDrawingTool: true, //是否显示工具栏
-				drawingToolOptions: {
-					anchor: BMAP_ANCHOR_TOP_RIGHT, //位置
-					offset: new BMap.Size(5, 5), //偏离值
-				},
-				circleOptions: styleOptions, //圆的样式
-				polylineOptions: styleOptions, //线的样式
-				polygonOptions: styleOptions, //多边形的样式
-				rectangleOptions: styleOptions //矩形的样式
-			});
-			//添加鼠标绘制工具监听事件，用于获取绘制结果
-			drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+        isOpen: false, // 是否开启绘制模式
+        // enableDrawingTool: true, //是否显示工具栏
+        drawingToolOptions: {
+          anchor: BMAP_ANCHOR_TOP_RIGHT, // 位置
+          offset: new BMap.Size(5, 5) // 偏离值
+        },
+        circleOptions: styleOptions, // 圆的样式
+        polylineOptions: styleOptions, // 线的样式
+        polygonOptions: styleOptions, // 多边形的样式
+        rectangleOptions: styleOptions // 矩形的样式
+      })
+      // 添加鼠标绘制工具监听事件，用于获取绘制结果
+      drawingManager.addEventListener('overlaycomplete', overlaycomplete)
       polygon.addEventListener('click', event => {
         this.mutiPoints.push(event.point)
         console.log('点击的顶点经纬度：', event.point.lng, event.point.lat)
@@ -221,7 +234,7 @@ export default {
     },
     handleCityChange() {
       console.log(this.selectedOptions[1])
-      length = this.selectedOptions.length-1;
+      length = this.selectedOptions.length - 1
       areaApi.getByCode(this.selectedOptions[length]).then(response => {
         this.lng = response.data.data.lng
         this.lat = response.data.data.lat
