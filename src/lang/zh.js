@@ -30,12 +30,25 @@ export default {
     github: '项目地址'
   },
   table: {
-    transportlinetype: {
-      typeNumber: '运输线路类型编码',
+    transportline: {
+      typeNumber: '类型编码',
       searchtypeNumber: '请输入运输线路类型编码',
-      name: '运输线路类型名称',
+      name: '线路名称',
       searchname: '请输入运输线路类型名称',
       agencyType: '机构类型',
+      startAgencyType: '起始机构类型',
+      endAgencyType: '目的机构类型',
+      searchagencyType: '请选择机构类型',
+      addtrasportlinetype: '新增运输线路类型'
+    },
+    transportlinetype: {
+      typeNumber: '类型编码',
+      searchtypeNumber: '请输入运输线路类型编码',
+      name: '线路名称',
+      searchname: '请输入运输线路类型名称',
+      agencyType: '机构类型',
+      startAgencyType: '起始机构类型',
+      endAgencyType: '目的机构类型',
       searchagencyType: '请选择机构类型',
       addtrasportlinetype: '新增运输线路类型'
     },
