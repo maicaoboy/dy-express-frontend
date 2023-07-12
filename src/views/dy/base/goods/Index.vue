@@ -91,7 +91,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.truckTypeIds }}</span>
+            <span>{{ scope.row.truckTypeNames }}</span>
           </template>
         </el-table-column>
         <!--货物的默认体积-->
@@ -160,6 +160,8 @@
         :is-visible="dialog.isVisible"
         :type="dialog.type"
         @close="editClose"
+        @handelAdd="handelAdd"
+        @handelEdit="handelEdit"
       />
     </el-card>
   </div>
@@ -168,6 +170,7 @@
 import GoodsInfoApi from '@/api/GoodsInfo'
 import EditForm from '@/views/dy/base/goods/EditForm.vue'
 import Pagination from '@/components/Pagination'
+import truckTypeApi from '@/api/TruckType'
 export default {
   components: {
     EditForm, Pagination
@@ -192,8 +195,8 @@ export default {
     }
   },
   mounted() {
-    this.initOptions()
     this.fetch()
+    this.initOptions()
   },
   methods: {
     fetch(params = {}) {
@@ -207,11 +210,32 @@ export default {
         this.tableData = res
       })
     },
+    inittruckType() {
+      let params
+      params.page = 1
+      params.pageSize = 10
+      truckTypeApi.page(params).then(response => {
+        const res = response.data
+        this.loading = false
+        // 将res.item()数组中的每个对象的id和name属性取出来，组成一个新的数组
+        this.truckTypeOptions = res.items.map(item => {
+          return {
+            label: item.name,
+            value: item.id
+          }
+        })
+      })
+    },
     initOptions() {
       this.truckTypeOptions = [
-        { label: '货车', value: 0 },
-        { label: '卡车', value: 1 },
-        { label: '冷藏车', value: 2 }
+        {
+          label: '冷藏车',
+          value: 1
+        },
+        {
+          label: '厢式货车',
+          value: 2
+        }
       ]
     },
     editClose() {

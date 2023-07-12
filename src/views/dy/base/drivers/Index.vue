@@ -76,7 +76,7 @@
           align="center"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.phone}}</span>
+            <span>{{ scope.row.phone }}</span>
           </template>
         </el-table-column>
         <!--所属机构-->
@@ -172,24 +172,7 @@ export default {
       this.dialog.type = 'add'
       this.dialog.isVisible = true
     },
-    handelAdd(good) {
-      GoodsInfoApi.save(good).then(response => {
-        const res = response.data
-        if (res.isSuccess) {
-          this.$message({
-            message: '保存成功',
-            type: 'success'
-          })
-          this.dialog.isVisible = false
-          this.search()
-        } else {
-          this.$message({
-            message: res.message,
-            type: 'error'
-          })
-        }
-      })
-    },
+
     editSuccess() {
       this.search()
     },
@@ -229,24 +212,6 @@ export default {
       this.dialog.isVisible = true
       this.$nextTick(() => {
         this.$refs.edit.init(row)
-      })
-    },
-    handelEdit(good) {
-      GoodsInfoApi.update(good).then(response => {
-        const res = response.data
-        if (res.isSuccess) {
-          this.$message({
-            message: '修改成功',
-            type: 'success'
-          })
-          this.dialog.isVisible = false
-          this.search()
-        } else {
-          this.$message({
-            message: res.message,
-            type: 'error'
-          })
-        }
       })
     }
   }

@@ -10,6 +10,7 @@
       <el-form-item :label="$t('table.goodsType.name')" prop="id">
         <el-input v-model="good.name" />
       </el-form-item>
+      <el-form></el-form>
       <el-form-item :label="$t('table.goodsType.truckType')" prop="status">
         <el-select v-model="good.truckType" :placeholder="$t('table.select')">
           <el-option
@@ -65,12 +66,12 @@ export default {
   methods: {
     submitForm() {
       const temp = this
-      this.$refs.form.validate(valid => {
+      temp.$refs.form.validate(valid => {
         if (valid) {
-          if (temp.type === 'add') {
-            temp.$emit('handelAdd', temp.good)
+          if (this.type === 'add') {
+            this.$emit('handelAdd', this.good)
           } else {
-            temp.$emit('handelEdit', temp.good)
+            this.$emit('handelEdit', this.good)
           }
         } else return false
       })
