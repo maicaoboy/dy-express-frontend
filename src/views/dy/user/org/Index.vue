@@ -4,12 +4,7 @@
       <el-col :sm="8" :xs="10">
         <div class="app-container">
           <div class="filter-container">
-            <el-input
-              v-model="name"
-              :placeholder="$t('table.org.name')"
-              class="filter-item search-item"
-              clearable
-            />
+            <el-input v-model="name" :placeholder="$t('table.org.name')" class="filter-item search-item" clearable />
             <el-button
               style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
               @click="search"
@@ -22,33 +17,19 @@
             >
               {{ $t('table.reset') }}
             </el-button>
-            <el-dropdown
-              v-has-any-permission="['org:add','org:delete','org:export']"
-              trigger="click"
-            >
-              <el-button
-                style="height:40px;margin-top:6px;background-color: #fff;color: #606266;border-color: #DCDFE6"
-              >
+            <el-dropdown v-has-any-permission="['org:add', 'org:delete', 'org:export']" trigger="click">
+              <el-button style="height:40px;margin-top:6px;background-color: #fff;color: #606266;border-color: #DCDFE6">
                 {{ $t('table.more') }}
                 <i class="el-icon-arrow-down el-icon--right" />
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item
-                  v-has-permission="['org:add']"
-                  @click.native="add"
-                >
+                <el-dropdown-item v-has-permission="['org:add']" @click.native="add">
                   {{ $t('table.add') }}
                 </el-dropdown-item>
-                <el-dropdown-item
-                  v-has-permission="['org:delete']"
-                  @click.native="deleteOrg"
-                >
+                <el-dropdown-item v-has-permission="['org:delete']" @click.native="deleteOrg">
                   {{ $t('table.delete') }}
                 </el-dropdown-item>
-                <el-dropdown-item
-                  v-has-permission="['org:export']"
-                  @click.native="exportExcel"
-                >
+                <el-dropdown-item v-has-permission="['org:export']" @click.native="exportExcel">
                   {{ $t('table.export') }}
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -73,20 +54,9 @@
             <span>{{ org.id === '' ? this.$t('common.add') : this.$t('common.edit') }}</span>
           </div>
           <div>
-            <el-form
-              ref="form"
-              :model="org"
-              :rules="rules"
-              label-position="right"
-              label-width="100px"
-            >
+            <el-form ref="form" :model="org" :rules="rules" label-position="right" label-width="100px">
               <el-form-item :label="$t('table.org.parentId')" prop="parentId">
-                <el-tooltip
-                  :content="$t('tips.topId')"
-                  class="item"
-                  effect="dark"
-                  placement="top-start"
-                >
+                <el-tooltip :content="$t('tips.topId')" class="item" effect="dark" placement="top-start">
                   <el-input v-model="org.parentId" readonly />
                 </el-tooltip>
               </el-form-item>
@@ -120,23 +90,21 @@
                 </el-radio-group>
               </el-form-item>
               <el-form-item :label="$t('table.org.sortValue')" prop="sortValue">
-                <el-input-number
-                  v-model="org.sortValue"
-                  :max="100"
-                  :min="0"
-                  @change="handleNumChange"
-                />
+                <el-input-number v-model="org.sortValue" :max="100" :min="0" @change="handleNumChange" />
+              </el-form-item>
+              <el-form-item label="所在城市" prop="areaId">
+                <el-cascader v-model="selectedOptions" size="large" :options="regionData" @change="handleCityChange" />
               </el-form-item>
             </el-form>
           </div>
         </el-card>
+        <el-card v-show="mapVisable">
+          <div id="map" style="width: 100%; height: 500px;" />
+        </el-card>
         <el-card class="box-card" style="margin-top: -2rem;">
           <el-row>
             <el-col :span="24" style="text-align: center">
-              <el-button
-                style="background-color: #8dc149;color: #fff;"
-                @click="submit"
-              >
+              <el-button style="background-color: #8dc149;color: #fff;" @click="submit">
                 {{ org.id === '' ? this.$t('common.add') : this.$t('common.edit') }}
               </el-button>
             </el-col>
@@ -148,6 +116,8 @@
 </template>
 <script>
 import orgApi from '@/api/Org.js'
+import areaApi from '@/api/Area.js'
+import { regionData, codeToText } from 'element-china-area-data'
 export default {
   name: 'OrgManager',
   data() {
@@ -156,6 +126,11 @@ export default {
       orgTree: [],
       org: this.initOrg(),
       // '组织类型（0:网点 1:一级转运中心 2:二级转运中心 3:总公司 4:分公司）'
+      regionData,
+      selectedOptions: [],
+      lng: 116.404,
+      lat: 39.915,
+      mapVisable: true,
       options: [{
         value: 0,
         label: '网点'
@@ -196,6 +171,7 @@ export default {
   },
   mounted() {
     this.initOrgTree()
+    this.initMap()
   },
   methods: {
     initOrg() {
@@ -206,8 +182,37 @@ export default {
         parentId: 0,
         status: true,
         describe: '',
-        sortValue: 0
+        sortValue: 0,
+        orgType: 0,
+        areaId: 0,
+        mutiPoints: []
       }
+    },
+    initMap() {
+      var map = new BMap.Map('map')
+      map.centerAndZoom(new BMap.Point(this.lng, this.lat), 13)
+      var polygon = new BMap.Polygon(this.mutiPoints, { strokeColor: 'blue', strokeWeight: 2, strokeOpacity: 0.5 })
+      map.addOverlay(polygon)
+      map.enableScrollWheelZoom(true)
+      // 监听多边形的鼠标点击事件，获取点击顶点的经纬度坐标
+      var drawingManager = new BMapLib.DrawingManager(map, {
+        isOpen: false, // 是否开启绘制模式
+        // enableDrawingTool: true, //是否显示工具栏
+        drawingToolOptions: {
+          anchor: BMAP_ANCHOR_TOP_RIGHT, // 位置
+          offset: new BMap.Size(5, 5) // 偏离值
+        },
+        circleOptions: styleOptions, // 圆的样式
+        polylineOptions: styleOptions, // 线的样式
+        polygonOptions: styleOptions, // 多边形的样式
+        rectangleOptions: styleOptions // 矩形的样式
+      })
+      // 添加鼠标绘制工具监听事件，用于获取绘制结果
+      drawingManager.addEventListener('overlaycomplete', overlaycomplete)
+      polygon.addEventListener('click', event => {
+        this.mutiPoints.push(event.point)
+        console.log('点击的顶点经纬度：', event.point.lng, event.point.lat)
+      })
     },
     initOrgTree() {
       orgApi.allTree({}).then(response => {
@@ -226,6 +231,16 @@ export default {
     },
     handleNumChange(val) {
       this.org.sortValue = val
+    },
+    handleCityChange() {
+      console.log(this.selectedOptions[1])
+      length = this.selectedOptions.length - 1
+      areaApi.getByCode(this.selectedOptions[length]).then(response => {
+        this.lng = response.data.data.lng
+        this.lat = response.data.data.lat
+        this.initMap()
+        console.log(response)
+      })
     },
     filterNode(value, data) {
       if (!value) return true
@@ -305,6 +320,7 @@ export default {
       })
     },
     save() {
+      this.org.areaId = this.selectedOptions[2]
       orgApi.save({ ...this.org }).then(response => {
         const res = response.data
         if (res.isSuccess) {
@@ -342,24 +358,30 @@ export default {
   background-color: #8dc149;
   color: #fff;
   border-radius: 5px;
+
   &:hover {
     background-color: #8dc149;
     color: #fff;
     border-color: #dcdfe6;
   }
 }
+
 .org {
   margin: 10px;
+
   .app-container {
     margin: 0 0 10px 0 !important;
   }
 }
+
 .el-card.is-always-shadow {
   box-shadow: none;
 }
+
 .el-card {
   border-radius: 0;
   border: none;
+
   .el-card__header {
     background: #f8faff;
     // padding: 10px 20px !important;
