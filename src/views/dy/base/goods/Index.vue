@@ -45,7 +45,7 @@
       <el-button
         class="addtype-button"
         style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
-        @click="reset"
+        @click="add"
       >
         {{ $t('table.goodsType.add') }}
       </el-button>
@@ -53,6 +53,7 @@
       <el-table
         :key="tableKey"
         ref="table"
+        v-loading="loading"
         :data="tableData.items"
         :header-cell-style="{background:'#FCFBFF',border:'0'}"
         fit
@@ -62,14 +63,12 @@
           type="index"
           :label="$t('table.serial')"
           align="center"
-          width="150"
         />
         <!--货物编码-->
         <el-table-column
           prop="id"
           :label="$t('table.goodsType.code')"
           align="center"
-          width="150"
         >
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
@@ -80,7 +79,6 @@
           prop="name"
           :label="$t('table.goodsType.name')"
           align="center"
-          width="150"
         >
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
@@ -91,7 +89,6 @@
           prop="updateTime"
           :label="$t('table.goodsType.truckType')"
           align="center"
-          width="150"
         >
           <template slot-scope="scope">
             <span>{{ scope.row.truckTypeIds }}</span>
@@ -102,7 +99,6 @@
           prop="volume"
           :label="$t('table.goodsType.defaultVolume')"
           align="center"
-          width="150"
         >
           <template slot-scope="scope">
             <span>{{ scope.row.defaultVolume }}</span>
@@ -113,7 +109,6 @@
           prop="weight"
           :label="$t('table.goodsType.defaultWeight')"
           align="center"
-          width="150"
         >
           <template slot-scope="scope">
             <span>{{ scope.row.defaultWeight }}</span>
@@ -124,7 +119,6 @@
           prop="remark"
           :label="$t('table.goodsType.describe')"
           align="center"
-          width="150"
         >
           <template slot-scope="scope">
             <span>{{ scope.row.remark }}</span>
@@ -135,13 +129,12 @@
           :label="$t('table.goodsType.operate')"
           fixed="right"
           align="center"
-          width="150"
         >
           <template slot-scope="scope">
             <el-button
               type="text"
               size="small"
-              @click="handleEdit(scope.$index, scope.row)"
+              @click="edit(scope.$index, scope.row)"
             >
               编辑
             </el-button>
@@ -155,26 +148,47 @@
           </template>
         </el-table-column>
       </el-table>
+      <pagination
+        v-show="true"
+        :limit.sync="pagination.size"
+        :page.sync="pagination.current"
+        :total="Number(tableData.counts)"
+        @pagination="fetch"
+      />
+      <edit-form
+        ref="edit"
+        :is-visible="dialog.isVisible"
+        :type="dialog.type"
+        @close="editClose"
+      />
     </el-card>
   </div>
 </template>
 <script>
 import GoodsInfoApi from '@/api/GoodsInfo'
-
+import EditForm from '@/views/dy/base/goods/EditForm.vue'
+import Pagination from '@/components/Pagination'
 export default {
+  components: {
+    EditForm, Pagination
+  },
   data() {
     return {
       queryParams: {},
       truckTypeOptions: [],
       tableData: {
-        total: 0
+        counts: '0'
       },
       loading: false,
       pagination: {
         size: 10,
         current: 1
       },
-      tableKey: 0
+      tableKey: 0,
+      dialog: {
+        isVisible: false,
+        type: 'add'
+      }
     }
   },
   mounted() {
@@ -199,6 +213,90 @@ export default {
         { label: '卡车', value: 1 },
         { label: '冷藏车', value: 2 }
       ]
+    },
+    editClose() {
+      this.dialog.isVisible = false
+    },
+    add() {
+      this.dialog.type = 'add'
+      this.dialog.isVisible = true
+    },
+    handelAdd(good) {
+      GoodsInfoApi.save(good).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          this.dialog.isVisible = false
+          this.search()
+        } else {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
+        }
+      })
+    },
+    editSuccess() {
+      this.search()
+    },
+    search() {
+      this.fetch({
+        ...this.queryParams,
+        ...this.sort
+      })
+    },
+    handleDelete(index, row) {
+      this.$confirm('此操作将删除id为：' + row.id + '的货物类型, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          GoodsInfoApi.delete(row).then(response => {
+            const res = response.data
+            if (res.isSuccess) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+              this.search()
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
+            }
+          })
+        })
+        .catch(() => {})
+    },
+    edit(index, row) {
+      this.dialog.type = 'edit'
+      this.dialog.isVisible = true
+      this.$nextTick(() => {
+        this.$refs.edit.init(row)
+      })
+    },
+    handelEdit(good) {
+      GoodsInfoApi.update(good).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+          this.dialog.isVisible = false
+          this.search()
+        } else {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
+        }
+      })
     }
   }
 }

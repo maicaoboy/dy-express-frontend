@@ -18,12 +18,12 @@ const apiList = {
     method: 'GET'
   },
   delete: {
-    url: `/base/base/goodsType`,
-    method: 'DELETE'
+    url: `/base/base/goodsType/delete`,
+    method: 'POST'
   },
   update: {
-    url: `/base/base/goodsType`,
-    method: 'PUT'
+    url: `/base/base/goodsType/update`,
+    method: 'POST'
   }
 }
 
