@@ -304,6 +304,7 @@ export default {
       orderApi.page(params).then(response => {
         const res = response.data
         this.loading = false
+        console.log(res.data)
         this.tableData = res.data
       })
     },
