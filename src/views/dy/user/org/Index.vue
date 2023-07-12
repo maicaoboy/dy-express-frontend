@@ -155,25 +155,26 @@ export default {
       name: '',
       orgTree: [],
       org: this.initOrg(),
+      // '组织类型（0:网点 1:一级转运中心 2:二级转运中心 3:总公司 4:分公司）'
       options: [{
         value: 0,
-        label: '总公司'
+        label: '网点'
       },
       {
         value: 1,
-        label: '分公司'
-      },
-      {
-        value: 2,
         label: '一级转运中心'
       },
       {
-        value: 3,
+        value: 2,
         label: '二级转运中心'
       },
       {
+        value: 3,
+        label: '总公司'
+      },
+      {
         value: 4,
-        label: '网点'
+        label: '分公司'
       }
       ],
       rules: {
