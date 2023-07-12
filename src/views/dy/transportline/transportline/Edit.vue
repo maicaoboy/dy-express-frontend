@@ -6,15 +6,25 @@
     :visible.sync="isVisible"
     top="50px"
   >
-    <el-form ref="form" :model="transportlinetype" :rules="rules" label-position="right" label-width="100px">
-      <el-form-item :label="$t('table.transportlinetype.typeNumber')" prop="typeNumber">
-        <el-input v-model="transportlinetype.typeNumber" :disabled="type==='edit'" />
+    <el-form ref="form" :model="transportline" :rules="rules" label-position="right" label-width="100px">
+      <el-form-item :label="$t('table.transportline.lineNumber')" prop="typeNumber">
+        <el-input v-model="transportline.lineNumber" />
       </el-form-item>
-      <el-form-item :label="$t('table.transportlinetype.name')" prop="name">
-        <el-input v-model="transportlinetype.name" />
+      <el-form-item :label="$t('table.transportline.name')" prop="name">
+        <el-input v-model="transportline.name" />
       </el-form-item>
-      <el-form-item :label="$t('table.transportlinetype.startAgencyType')" prop="status">
-        <el-select v-model="transportlinetype.startAgencyType" :placeholder="$t('table.select')">
+      <el-form-item :label="$t('table.transportline.transportlinetype')" prop="transportlinetype">
+        <el-select v-model="transportline.transportLineTypeId" :placeholder="$t('table.select')">
+          <el-option
+            v-for="item in transportlinetypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('table.transportline.startAgency')" prop="startAgency">
+        <el-select v-model="transportline.startAgencyId" :placeholder="$t('table.select')">
           <el-option
             v-for="item in agencyOptions"
             :key="item.value"
@@ -23,8 +33,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('table.transportlinetype.endAgencyType')" prop="status">
-        <el-select v-model="transportlinetype.endAgencyType" :placeholder="$t('table.select')">
+      <el-form-item :label="$t('table.transportline.endAgency')" prop="endAgency">
+        <el-select v-model="transportline.endAgencyId" :placeholder="$t('table.select')">
           <el-option
             v-for="item in agencyOptions"
             :key="item.value"
@@ -32,6 +42,27 @@
             :value="item.value"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('table.transportline.lineNumber')" prop="typeNumber">
+        <el-input v-model="transportline.lineNumber">
+          <template slot="append">
+            千米
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item :label="$t('table.transportline.cost')" prop="cost">
+        <el-input v-model="transportline.cost">
+          <template slot="append">
+            元
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item :label="$t('table.transportline.estimatedTime')" prop="estimateTime">
+        <el-input v-model="transportline.estimatedTime">
+          <template slot="append">
+            分钟
+          </template>
+        </el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -45,10 +76,10 @@
   </el-dialog>
 </template>
 <script>
-import transportlinetypeApi from '@/api/transportlinetype'
+import transportlineApi from '@/api/transportline'
 
 export default {
-  name: 'TransportlineTypeEdit',
+  name: 'TransportlineEdit',
   components: {},
   props: {
     dialogVisible: {
@@ -58,32 +89,21 @@ export default {
     type: {
       type: String,
       default: 'add'
+    },
+    orgList: {
+      type: Array,
+      default: () => []
+    },
+    transportlinetypeList: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
-      transportlinetype: {},
-      agencyOptions: [{
-        value: 0,
-        label: '网点'
-      },
-      {
-        value: 1,
-        label: '一级转运中心'
-      },
-      {
-        value: 2,
-        label: '二级转运中心'
-      },
-      {
-        value: 3,
-        label: '总公司'
-      },
-      {
-        value: 4,
-        label: '分公司'
-      }
-      ],
+      transportline: {},
+      agencyOptions: [],
+      transportlinetypeOptions: [],
       rules: {
         // status: {
         //   required: true,
@@ -114,16 +134,30 @@ export default {
   },
   watch: {},
   methods: {
-    initTransportlinetype() {
-      this.transportlinetype = {
+    initOptions() {
+      for (const item of this.orgList) {
+        this.agencyOptions.push({
+          value: item.id,
+          label: item.name
+        })
+      }
+      for (const item of this.transportlinetypeList) {
+        this.transportlinetypeOptions.push({
+          value: item.id,
+          label: item.name
+        })
+      }
+    },
+    inittransportline() {
+      this.transportline = {
         name: '',
         typeNumber: '',
         startAgencyType: '',
         endAgencyType: ''
       }
     },
-    setTransportlinetype(transportlinetype) {
-      this.transportlinetype = { ...transportlinetype }
+    settransportline(transportline) {
+      this.transportline = { ...transportline }
     },
     close() {
       this.$emit('close')
@@ -152,7 +186,7 @@ export default {
     },
     save() {
       const that = this
-      transportlinetypeApi.save(this.transportlinetype).then(response => {
+      transportlineApi.save(this.transportline).then(response => {
         const res = response.data
         if (res.isSuccess) {
           that.isVisible = false
@@ -165,7 +199,7 @@ export default {
       })
     },
     update() {
-      transportlinetypeApi.update(this.transportlinetype.id, this.transportlinetype).then(response => {
+      transportlineApi.update(this.transportline.id, this.transportline).then(response => {
         const res = response.data
         console.log(res)
         if (res.isSuccess) {
