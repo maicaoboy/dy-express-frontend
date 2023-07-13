@@ -6,6 +6,7 @@
           <div class="grid-content bg-purple">
             <label style="color:#909399;font-weight:500;">{{ $t('table.goodsTypeSearch.name') }}: </label>
             <el-input
+              v-model="queryParams.name"
               :placeholder="$t('table.goodsTypeSearch.name')"
               class="filter-item search-item"
               clearable
@@ -16,7 +17,7 @@
           <div class="grid-content bg-purple">
             <label style="color:#909399;font-weight:500;">{{ $t('table.goodsType.truckType') }}</label>
             <template>
-              <el-select v-model="queryParams.status" :placeholder="$t('table.select')">
+              <el-select v-model="queryParams.truckTypeNames" :placeholder="$t('table.select')">
                 <el-option
                   v-for="item in truckTypeOptions"
                   :key="item.value"
@@ -159,6 +160,7 @@
         ref="edit"
         :is-visible="dialog.isVisible"
         :type="dialog.type"
+        :truck-type-options="truckTypeOptions"
         @close="editClose"
         @handelAdd="handelAdd"
         @handelEdit="handelEdit"
@@ -188,6 +190,7 @@ export default {
         current: 1
       },
       tableKey: 0,
+      sort: {},
       dialog: {
         isVisible: false,
         type: 'add'
@@ -196,7 +199,7 @@ export default {
   },
   mounted() {
     this.fetch()
-    this.initOptions()
+    this.inittruckTypeOptions()
   },
   methods: {
     fetch(params = {}) {
@@ -210,13 +213,12 @@ export default {
         this.tableData = res
       })
     },
-    inittruckType() {
-      let params
+    inittruckTypeOptions() {
+      const params = {}
       params.page = 1
       params.pageSize = 10
       truckTypeApi.page(params).then(response => {
         const res = response.data
-        this.loading = false
         // 将res.item()数组中的每个对象的id和name属性取出来，组成一个新的数组
         this.truckTypeOptions = res.items.map(item => {
           return {
@@ -225,18 +227,6 @@ export default {
           }
         })
       })
-    },
-    initOptions() {
-      this.truckTypeOptions = [
-        {
-          label: '冷藏车',
-          value: 1
-        },
-        {
-          label: '厢式货车',
-          value: 2
-        }
-      ]
     },
     editClose() {
       this.dialog.isVisible = false
@@ -272,6 +262,13 @@ export default {
         ...this.sort
       })
     },
+    reset() {
+      this.queryParams = {}
+      this.sort = {}
+      this.$refs.table.clearSort()
+      this.$refs.table.clearFilter()
+      this.search()
+    },
     handleDelete(index, row) {
       this.$confirm('此操作将删除id为：' + row.id + '的货物类型, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -281,7 +278,7 @@ export default {
         .then(() => {
           GoodsInfoApi.delete(row).then(response => {
             const res = response.data
-            if (res.isSuccess) {
+            if (res.msg === 'success') {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -300,9 +297,7 @@ export default {
     edit(index, row) {
       this.dialog.type = 'edit'
       this.dialog.isVisible = true
-      this.$nextTick(() => {
-        this.$refs.edit.init(row)
-      })
+      this.$refs.edit.setGood(row)
     },
     handelEdit(good) {
       GoodsInfoApi.update(good).then(response => {

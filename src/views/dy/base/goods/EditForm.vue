@@ -30,6 +30,17 @@
       <el-form-item :label="$t('table.goodsType.describe')" prop="status">
         <el-input v-model="good.remark" />
       </el-form-item>
+      <!--      单选框-->
+      <el-form-item :label="$t('table.goodsType.status')" prop="status">
+        <el-radio-group v-model="good.status">
+          <el-radio :label="1">
+            有效
+          </el-radio>
+          <el-radio :label="0">
+            禁用
+          </el-radio>
+        </el-radio-group>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button plain type="warning" @click="closeForm">
@@ -51,6 +62,9 @@ export default {
     isVisible: {
       type: Boolean,
       default: false
+    },
+    truckTypeOptions: {
+      type: Array
     }
   },
   data() {
@@ -80,14 +94,18 @@ export default {
       this.intiGoods()
       this.$emit('close')
     },
+    setGood(good) {
+      this.good = { ...good }
+    },
     intiGoods() {
       this.good = {
         id: '',
         name: '',
-        truckType: [],
+        truckTypeIds: [],
         defaultWeight: '',
         defaultVolume: '',
-        remark: ''
+        remark: '',
+        status: 1
       }
     }
   }
