@@ -91,7 +91,8 @@ export default {
       describe: '描述',
       operate: '操作',
       truckType: '运输车型',
-      add: '新增货物类型'
+      add: '新增货物类型',
+      status: '状态'
     },
     tenant: {
       code: '企业编码',

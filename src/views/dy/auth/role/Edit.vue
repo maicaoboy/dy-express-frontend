@@ -199,8 +199,8 @@ export default {
       const vm = this
       if (val) {
         vm.role = { ...val }
-        //this.orgHidden = val.dsType.code !== 'CUSTOMIZE'
-		this.orgHidden = false
+        // this.orgHidden = val.dsType.code !== 'CUSTOMIZE'
+        this.orgHidden = false
         if (!this.orgHidden) {
           roleApi.get(val.id).then(response => {
             const res = response.data

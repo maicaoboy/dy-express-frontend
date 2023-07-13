@@ -6,6 +6,7 @@
           <div class="grid-content bg-purple">
             <label style="color:#909399;font-weight:500;">{{ $t('table.goodsTypeSearch.name') }}: </label>
             <el-input
+              v-model="queryParams.name"
               :placeholder="$t('table.goodsTypeSearch.name')"
               class="filter-item search-item"
               clearable
@@ -16,7 +17,7 @@
           <div class="grid-content bg-purple">
             <label style="color:#909399;font-weight:500;">{{ $t('table.goodsType.truckType') }}</label>
             <template>
-              <el-select :placeholder="$t('table.select')">
+              <el-select v-model="queryParams.truckTypeNames" :placeholder="$t('table.select')">
                 <el-option
                   v-for="item in truckTypeOptions"
                   :key="item.value"
@@ -45,13 +46,16 @@
       <el-button
         class="addtype-button"
         style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
-        @click="reset"
+        @click="add"
       >
         {{ $t('table.goodsType.add') }}
       </el-button>
+      <!--表单-->
       <el-table
         :key="tableKey"
         ref="table"
+        v-loading="loading"
+        :data="tableData.items"
         :header-cell-style="{background:'#FCFBFF',border:'0'}"
         fit
         style="width: 100%;"
@@ -60,56 +64,78 @@
           type="index"
           :label="$t('table.serial')"
           align="center"
-          width="150"
         />
+        <!--货物编码-->
         <el-table-column
-          prop="code"
+          prop="id"
           :label="$t('table.goodsType.code')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <!--货物名称-->
         <el-table-column
-          prop="unit"
+          prop="name"
           :label="$t('table.goodsType.name')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <!--货物的装车种类-->
         <el-table-column
           prop="updateTime"
           :label="$t('table.goodsType.truckType')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.truckTypeNames }}</span>
+          </template>
+        </el-table-column>
+        <!--货物的默认体积-->
         <el-table-column
           prop="volume"
           :label="$t('table.goodsType.defaultVolume')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.defaultVolume }}</span>
+          </template>
+        </el-table-column>
+        <!--货物的默认重量-->
         <el-table-column
           prop="weight"
           :label="$t('table.goodsType.defaultWeight')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.defaultWeight }}</span>
+          </template>
+        </el-table-column>
+        <!--货物的描述-->
         <el-table-column
           prop="remark"
           :label="$t('table.goodsType.describe')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.remark }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="createTime"
           :label="$t('table.goodsType.operate')"
           fixed="right"
           align="center"
-          width="150"
         >
           <template slot-scope="scope">
             <el-button
               type="text"
               size="small"
-              @click="handleEdit(scope.$index, scope.row)"
+              @click="edit(scope.$index, scope.row)"
             >
               编辑
             </el-button>
@@ -123,23 +149,174 @@
           </template>
         </el-table-column>
       </el-table>
+      <pagination
+        v-show="true"
+        :limit.sync="pagination.size"
+        :page.sync="pagination.current"
+        :total="Number(tableData.counts)"
+        @pagination="fetch"
+      />
+      <edit-form
+        ref="edit"
+        :is-visible="dialog.isVisible"
+        :type="dialog.type"
+        :truck-type-options="truckTypeOptions"
+        @close="editClose"
+        @handelAdd="handelAdd"
+        @handelEdit="handelEdit"
+      />
     </el-card>
   </div>
 </template>
 <script>
+import GoodsInfoApi from '@/api/GoodsInfo'
+import EditForm from '@/views/dy/base/goods/EditForm.vue'
+import Pagination from '@/components/Pagination'
+import truckTypeApi from '@/api/TruckType'
 export default {
+  components: {
+    EditForm, Pagination
+  },
   data() {
     return {
       queryParams: {},
-      truckTypeOptions: []
+      truckTypeOptions: [],
+      tableData: {
+        counts: '0'
+      },
+      loading: false,
+      pagination: {
+        size: 10,
+        current: 1
+      },
+      tableKey: 0,
+      sort: {},
+      dialog: {
+        isVisible: false,
+        type: 'add'
+      }
     }
   },
-  initOptions() {
-    this.truckTypeOptions = [
-      { label: '货车', value: 0 },
-      { label: '卡车', value: 1 },
-      { label: '冷藏车', value: 2 }
-    ]
+  mounted() {
+    this.fetch()
+    this.inittruckTypeOptions()
+  },
+  methods: {
+    fetch(params = {}) {
+      this.loading = true
+      params.pageSize = this.pagination.size
+      params.page = this.pagination.current
+      // console.log(params)
+      GoodsInfoApi.page(params).then(response => {
+        const res = response.data
+        this.loading = false
+        this.tableData = res
+      })
+    },
+    inittruckTypeOptions() {
+      const params = {}
+      params.page = 1
+      params.pageSize = 10
+      truckTypeApi.page(params).then(response => {
+        const res = response.data
+        // 将res.item()数组中的每个对象的id和name属性取出来，组成一个新的数组
+        this.truckTypeOptions = res.items.map(item => {
+          return {
+            label: item.name,
+            value: item.id
+          }
+        })
+      })
+    },
+    editClose() {
+      this.dialog.isVisible = false
+    },
+    add() {
+      this.dialog.type = 'add'
+      this.dialog.isVisible = true
+    },
+    handelAdd(good) {
+      GoodsInfoApi.save(good).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          this.dialog.isVisible = false
+          this.search()
+        } else {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
+        }
+      })
+    },
+    editSuccess() {
+      this.search()
+    },
+    search() {
+      this.fetch({
+        ...this.queryParams,
+        ...this.sort
+      })
+    },
+    reset() {
+      this.queryParams = {}
+      this.sort = {}
+      this.$refs.table.clearSort()
+      this.$refs.table.clearFilter()
+      this.search()
+    },
+    handleDelete(index, row) {
+      this.$confirm('此操作将删除id为：' + row.id + '的货物类型, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          GoodsInfoApi.delete(row).then(response => {
+            const res = response.data
+            if (res.msg === 'success') {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+              this.search()
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
+            }
+          })
+        })
+        .catch(() => {})
+    },
+    edit(index, row) {
+      this.dialog.type = 'edit'
+      this.dialog.isVisible = true
+      this.$refs.edit.setGood(row)
+    },
+    handelEdit(good) {
+      GoodsInfoApi.update(good).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.$message({
+            message: '修改成功',
+            type: 'success'
+          })
+          this.dialog.isVisible = false
+          this.search()
+        } else {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
+        }
+      })
+    }
   }
 }
 </script>
