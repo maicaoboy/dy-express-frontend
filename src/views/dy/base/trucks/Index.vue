@@ -4,10 +4,10 @@
       <el-row>
         <el-col :span="8">
           <div class="grid-content bg-purple">
-            <label style="color:#909399;font-weight:500;">{{ $t('table.goodsTypeSearch.name') }}: </label>
+            <label style="color:#909399;font-weight:500;">{{ $t('table.truck.truckNumber') }}: </label>
             <el-input
-              v-model="queryParams.name"
-              :placeholder="$t('table.goodsTypeSearch.name')"
+              v-model="queryParams.licensePlate"
+              :placeholder="$t('table.truck.truckNumber')"
               class="filter-item search-item"
               clearable
             />
@@ -17,7 +17,7 @@
           <div class="grid-content bg-purple">
             <label style="color:#909399;font-weight:500;">{{ $t('table.goodsType.truckType') }}</label>
             <template>
-              <el-select v-model="queryParams.truckTypeNames" :placeholder="$t('table.select')">
+              <el-select v-model="queryParams.truckTypeId" :placeholder="$t('table.select')">
                 <el-option
                   v-for="item in truckTypeOptions"
                   :key="item.value"
@@ -48,9 +48,8 @@
         style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="add"
       >
-        {{ $t('table.goodsType.add') }}
+        {{ $t('table.truck.add') }}
       </el-button>
-      <!--表单-->
       <el-table
         :key="tableKey"
         ref="table"
@@ -65,69 +64,78 @@
           :label="$t('table.serial')"
           align="center"
         />
-        <!--货物编码-->
+        <!--车辆编号-->
         <el-table-column
           prop="id"
-          :label="$t('table.goodsType.code')"
+          :label="$t('table.truck.truckid')"
           align="center"
         >
           <template slot-scope="scope">
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <!--货物名称-->
+        <!--车牌号码-->
         <el-table-column
           prop="name"
-          :label="$t('table.goodsType.name')"
+          :label="$t('table.truck.truckNumber')"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.licensePlate }}</span>
+          </template>
+        </el-table-column>
+        <!--车牌品牌-->
+        <el-table-column
+          prop="name"
+          :label="$t('table.truck.brand')"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.brand }}</span>
+          </template>
+        </el-table-column>
+        <!--车量类型-->
+        <el-table-column
+          prop="name"
+          :label="$t('table.truck.truckType')"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.truckTypeName }}</span>
+          </template>
+        </el-table-column>
+        <!--准载重量-->
+        <el-table-column
+          prop="name"
+          :label="$t('table.truck.allowableLoad')"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.allowableLoad }}</span>
+          </template>
+        </el-table-column>
+        <!--准载体积-->
+        <el-table-column
+          prop="name"
+          :label="$t('table.truck.allowableVolume')"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.allowableVolume }}</span>
+          </template>
+        </el-table-column>
+        <!--车次编号-->
+        <el-table-column
+          prop="name"
+          :label="$t('table.truck.tripid')"
           align="center"
         >
           <template slot-scope="scope">
             <span>{{ scope.row.name }}</span>
           </template>
         </el-table-column>
-        <!--货物的装车种类-->
         <el-table-column
-          prop="updateTime"
-          :label="$t('table.goodsType.truckType')"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.truckTypeNames }}</span>
-          </template>
-        </el-table-column>
-        <!--货物的默认体积-->
-        <el-table-column
-          prop="volume"
-          :label="$t('table.goodsType.defaultVolume')"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.defaultVolume }}</span>
-          </template>
-        </el-table-column>
-        <!--货物的默认重量-->
-        <el-table-column
-          prop="weight"
-          :label="$t('table.goodsType.defaultWeight')"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.defaultWeight }}</span>
-          </template>
-        </el-table-column>
-        <!--货物的描述-->
-        <el-table-column
-          prop="remark"
-          :label="$t('table.goodsType.describe')"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <span>{{ scope.row.remark }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="createTime"
-          :label="$t('table.goodsType.operate')"
+          :label="$t('table.operation')"
           fixed="right"
           align="center"
         >
@@ -137,7 +145,7 @@
               size="small"
               @click="edit(scope.$index, scope.row)"
             >
-              编辑
+              查看详情
             </el-button>
             <el-button
               type="text"
@@ -163,43 +171,47 @@
         :truck-type-options="truckTypeOptions"
         @close="editClose"
         @handelAdd="handelAdd"
-        @handelEdit="handelEdit"
       />
     </el-card>
   </div>
 </template>
 <script>
-import GoodsInfoApi from '@/api/GoodsInfo'
-import EditForm from '@/views/dy/base/goods/EditForm.vue'
 import Pagination from '@/components/Pagination'
-import truckTypeApi from '@/api/TruckType'
+import TruckApi from '@/api/Truck'
+import TruckTypeApi from '@/api/TruckType'
+import EditForm from '@/views/dy/base/trucks/EditForm.vue'
 export default {
+  name: 'TruckIndex',
   components: {
-    EditForm, Pagination
+    EditForm,
+    Pagination
   },
   data() {
     return {
-      queryParams: {},
-      truckTypeOptions: [],
-      tableData: {
-        counts: '0'
-      },
-      loading: false,
+      tableKey: 0,
       pagination: {
         size: 10,
         current: 1
       },
-      tableKey: 0,
+      loading: false,
+      tableData: {
+        items: [],
+        total: 0
+      },
       sort: {},
+      queryParams: {},
+      truckTypeOptions: [],
       dialog: {
         isVisible: false,
         type: 'add'
       }
     }
   },
-  mounted() {
-    this.fetch()
+  created() {
     this.inittruckTypeOptions()
+    this.$nextTick(() => {
+      this.fetch()
+    })
   },
   methods: {
     fetch(params = {}) {
@@ -207,54 +219,11 @@ export default {
       params.pageSize = this.pagination.size
       params.page = this.pagination.current
       // console.log(params)
-      GoodsInfoApi.page(params).then(response => {
+      TruckApi.page(params).then(response => {
         const res = response.data
         this.loading = false
         this.tableData = res
       })
-    },
-    inittruckTypeOptions() {
-      const params = {}
-      params.page = 1
-      params.pageSize = 10
-      truckTypeApi.page(params).then(response => {
-        const res = response.data
-        // 将res.item()数组中的每个对象的id和name属性取出来，组成一个新的数组
-        this.truckTypeOptions = res.items.map(item => {
-          return {
-            label: item.name,
-            value: item.id
-          }
-        })
-      })
-    },
-    editClose() {
-      this.dialog.isVisible = false
-    },
-    add() {
-      this.dialog.type = 'add'
-      this.dialog.isVisible = true
-    },
-    handelAdd(good) {
-      GoodsInfoApi.save(good).then(response => {
-        const res = response.data
-        if (res.isSuccess) {
-          this.$message({
-            message: '保存成功',
-            type: 'success'
-          })
-          this.dialog.isVisible = false
-          this.search()
-        } else {
-          this.$message({
-            message: res.message,
-            type: 'error'
-          })
-        }
-      })
-    },
-    editSuccess() {
-      this.search()
     },
     search() {
       this.fetch({
@@ -269,14 +238,18 @@ export default {
       this.$refs.table.clearFilter()
       this.search()
     },
+    add() {
+      this.dialog.type = 'add'
+      this.dialog.isVisible = true
+    },
     handleDelete(index, row) {
-      this.$confirm('此操作将删除id为：' + row.id + '的货物类型, 是否继续?', '提示', {
+      this.$confirm('此操作将删除id为：' + row.id + '的车辆数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          GoodsInfoApi.delete(row).then(response => {
+          TruckApi.delete(row.id).then(response => {
             const res = response.data
             if (res.msg === 'success') {
               this.$message({
@@ -294,17 +267,12 @@ export default {
         })
         .catch(() => {})
     },
-    edit(index, row) {
-      this.dialog.type = 'edit'
-      this.dialog.isVisible = true
-      this.$refs.edit.setGood(row)
-    },
-    handelEdit(good) {
-      GoodsInfoApi.update(good).then(response => {
+    handelAdd(truck) {
+      TruckApi.save(truck).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.$message({
-            message: '修改成功',
+            message: '保存成功',
             type: 'success'
           })
           this.dialog.isVisible = false
@@ -316,14 +284,25 @@ export default {
           })
         }
       })
+    },
+    editClose() {
+      this.dialog.isVisible = false
+    },
+    inittruckTypeOptions() {
+      const params = {}
+      params.page = 1
+      params.pageSize = 10
+      TruckTypeApi.page(params).then(response => {
+        const res = response.data
+        // 将res.item()数组中的每个对象的id和name属性取出来，组成一个新的数组
+        this.truckTypeOptions = res.items.map(item => {
+          return {
+            label: item.name,
+            value: item.id
+          }
+        })
+      })
     }
   }
 }
 </script>
-<style>
-.addtype-button {
-  padding-top: 10px;     /* 设置按钮的上边界宽度为 10px */
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-}
-</style>

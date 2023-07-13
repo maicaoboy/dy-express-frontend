@@ -4,20 +4,9 @@
       <el-row>
         <el-col :span="8">
           <div class="grid-content bg-purple">
-            <label style="color:#909399;font-weight:500;">{{ $t('table.driver.name') }}: </label>
+            <label style="color:#909399;font-weight:500;">司机名称: </label>
             <el-input
-              v-model="queryParams.name"
-              :placeholder="'请输入'+ $t('table.driver.name')"
-              class="filter-item search-item"
-              clearable
-            />
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content bg-purple">
-            <label style="color:#909399;font-weight:500;">{{ $t('table.driver.org') }}:</label>
-            <el-input
-              :placeholder="'请输入'+ $t('table.driver.org')"
+              :placeholder="司机名称"
               class="filter-item search-item"
               clearable
             />
@@ -41,13 +30,16 @@
       <el-button
         class="addtype-button"
         style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
-        @click="reset"
+        @click="add"
       >
-        {{ $t('table.goodsType.add') }}
+        添加司机信息
       </el-button>
+      <!--表单-->
       <el-table
         :key="tableKey"
         ref="table"
+        v-loading="loading"
+        :data="tableData.items"
         :header-cell-style="{background:'#FCFBFF',border:'0'}"
         fit
         style="width: 100%;"
@@ -56,67 +48,179 @@
           type="index"
           :label="$t('table.serial')"
           align="center"
-          width="150"
         />
+        <!--司机编号-->
         <el-table-column
-          prop="code"
+          prop="id"
           :label="$t('table.driver.id')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <!--司机姓名-->
         <el-table-column
-          prop="unit"
+          prop="name"
           :label="$t('table.driver.name')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <!--司机电话-->
         <el-table-column
           prop="updateTime"
           :label="$t('table.driver.phone')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.phone }}</span>
+          </template>
+        </el-table-column>
+        <!--所属机构-->
         <el-table-column
           prop="volume"
           :label="$t('table.driver.org')"
           align="center"
-          width="150"
-        />
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.defaultVolume }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="createTime"
-          :label="$t('table.goodsType.operate')"
+          :label="$t('table.operation')"
           fixed="right"
           align="center"
-          width="150"
         >
           <template slot-scope="scope">
             <el-button
               type="text"
               size="small"
-              @click="handleEdit(scope.$index, scope.row)"
+              @click="edit(scope.$index, scope.row)"
             >
-              编辑
-            </el-button>
-            <el-button
-              type="text"
-              size="small"
-              @click="handleDelete(scope.$index, scope.row)"
-            >
-              删除
+              查看详情
             </el-button>
           </template>
         </el-table-column>
       </el-table>
+      <pagination
+        v-show="true"
+        :limit.sync="pagination.size"
+        :page.sync="pagination.current"
+        :total="Number(tableData.counts)"
+        @pagination="fetch"
+      />
+      <edit-form
+        ref="edit"
+        :is-visible="dialog.isVisible"
+        :type="dialog.type"
+        @close="editClose"
+      />
     </el-card>
   </div>
 </template>
 <script>
+import GoodsInfoApi from '@/api/GoodsInfo'
+import EditForm from '@/views/dy/base/goods/EditForm.vue'
+import Pagination from '@/components/Pagination'
 export default {
+  components: {
+    EditForm, Pagination
+  },
   data() {
     return {
-      queryParams: {}
+      queryParams: {},
+      truckTypeOptions: [],
+      tableData: {
+        counts: '0'
+      },
+      loading: false,
+      pagination: {
+        size: 10,
+        current: 1
+      },
+      tableKey: 0,
+      dialog: {
+        isVisible: false,
+        type: 'add'
+      }
+    }
+  },
+  mounted() {
+    this.initOptions()
+    this.fetch()
+  },
+  methods: {
+    fetch(params = {}) {
+      this.loading = true
+      params.pageSize = this.pagination.size
+      params.page = this.pagination.current
+      // console.log(params)
+      GoodsInfoApi.page(params).then(response => {
+        const res = response.data
+        this.loading = false
+        this.tableData = res
+      })
+    },
+    editClose() {
+      this.dialog.isVisible = false
+    },
+    add() {
+      this.dialog.type = 'add'
+      this.dialog.isVisible = true
+    },
+
+    editSuccess() {
+      this.search()
+    },
+    search() {
+      this.fetch({
+        ...this.queryParams,
+        ...this.sort
+      })
+    },
+    handleDelete(index, row) {
+      this.$confirm('此操作将删除id为：' + row.id + '的货物类型, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          GoodsInfoApi.delete(row).then(response => {
+            const res = response.data
+            if (res.isSuccess) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+              this.search()
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
+            }
+          })
+        })
+        .catch(() => {})
+    },
+    edit(index, row) {
+      this.dialog.type = 'edit'
+      this.dialog.isVisible = true
+      this.$nextTick(() => {
+        this.$refs.edit.init(row)
+      })
     }
   }
 }
 </script>
-
+<style>
+.addtype-button {
+  padding-top: 10px;     /* 设置按钮的上边界宽度为 10px */
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+</style>
