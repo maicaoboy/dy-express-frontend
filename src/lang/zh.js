@@ -31,15 +31,21 @@ export default {
   },
   table: {
     transportline: {
+      lineNumber: '线路编号',
+      searchlineNumber: '请输入运输线路编号',
+      add: '新增线路',
       typeNumber: '类型编码',
-      searchtypeNumber: '请输入运输线路类型编码',
+      searchtypeNumber: '请选择运输线路类型编码',
       name: '线路名称',
       searchname: '请输入运输线路类型名称',
       agencyType: '机构类型',
-      startAgencyType: '起始机构类型',
-      endAgencyType: '目的机构类型',
-      searchagencyType: '请选择机构类型',
-      addtrasportlinetype: '新增运输线路类型'
+      startAgency: '起始机构',
+      endAgency: '目的机构',
+      addtrip: '新增车次',
+      transportlinetype: '运输线路类型',
+      distance: '距离',
+      cost: '成本',
+      estimatedTime: '预计时间'
     },
     transportlinetype: {
       typeNumber: '类型编码',

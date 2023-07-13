@@ -44,5 +44,11 @@ export default {
       url: `/base/base/transportLine/trips/${id}`,
       method: 'DELETE'
     })
+  },
+  listOrg(data) {
+    return axiosApi({
+      ...apiList.listorg,
+      data
+    })
   }
 }

@@ -12,14 +12,14 @@ const apiList = {
 }
 
 export default {
-  page (data) {
+  page(data) {
     return axiosApi({
       ...apiList.page,
       formData: true,
       data
     })
   },
-  delete (data) {
+  delete(data) {
     return axiosApi({
       ...apiList.delete,
       data
