@@ -2,15 +2,19 @@ import axiosApi from './AxiosApi.js'
 
 const apiList = {
   save: {
-    url: `/base/base/truck/type`,
+    url: `/base/base/truck`,
     method: 'POST'
   },
+  get: {
+    url: `/base/base/truck`,
+    method: 'GET'
+  },
   page: {
-    url: `/base/base/truck/type/page`,
+    url: `/base/base/truck/page`,
     method: 'GET'
   },
   delete: {
-    url: `/base/base/truck/type`,
+    url: `/base/base/truck`,
     method: 'DELETE'
   }
 }
@@ -21,20 +25,21 @@ export default {
       data
     })
   },
-  get(id) {
+  get(data) {
     return axiosApi({
-      url: `/base/base/truck/type/${id}`,
-      method: 'GET'
+      ...apiList.get,
+      data
     })
   },
   page(data) {
     return axiosApi({
       ...apiList.page,
-      data })
+      data
+    })
   },
   delete(id) {
     return axiosApi({
-      url: `/base/base/truck/type/${id}`,
+      url: `/base/base/truck/${id}`,
       method: 'DELETE'
     })
   }

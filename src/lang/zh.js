@@ -64,6 +64,17 @@ export default {
       id: '司机编号',
       org: '司机所属机构'
     },
+    truck: {
+      truckNumber: '车牌号',
+      truckType: '车辆类型',
+      truckid: '车辆编号',
+      allowableLoad: '准载重量（千克）',
+      allowableVolume: '准载体积（立方米）',
+      tripid: '车次编号',
+      status: '状态',
+      brand: '车辆品牌',
+      add: '新增车辆'
+    },
     order: {
       orderNo: '订单号',
       orderStatus: '订单状态',
