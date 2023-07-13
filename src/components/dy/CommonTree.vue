@@ -49,43 +49,43 @@ export default {
   props: {
     treeRef: {
       type: String,
-      default: "treeRef"
+      default: 'treeRef'
     },
     treeData: {
       type: Array,
       required: true,
-      default () {
+      default() {
         return []
       }
     },
     checkStrictly: {
       type: Boolean,
-      default () {
+      default() {
         return true
       }
     },
     opeBtns: {
       type: Array,
-      default () {
+      default() {
         return ['add', 'edit', 'remove']
       }
     }
   },
   methods: {
-    modify (type, data, node) {
+    modify(type, data, node) {
       window.event.stopPropagation()
       this.$emit(type, data, node)
     },
-    checkChange (data, checked, childrenChecked) {
+    checkChange(data, checked, childrenChecked) {
       this.$emit('checkChange', data, checked, childrenChecked)
     },
-    nodeClick (data, node, tree) {
+    nodeClick(data, node, tree) {
       this.$emit('nodeClick', data, node, tree)
     },
-    currentChange (data, node) {
+    currentChange(data, node) {
       this.$emit('currentChange', data, node)
     },
-    filterNodeMethod (value, data) {
+    filterNodeMethod(value, data) {
       // reutrn this.$emit('filterNodeMethod', value, data, node)
       if (!value) return true
       return data.label.indexOf(value) !== -1

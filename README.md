@@ -12,7 +12,7 @@ npm run dev
 
 ```
 npm run build:prod
-```
+```c 
 
 ### 运行测试
 
