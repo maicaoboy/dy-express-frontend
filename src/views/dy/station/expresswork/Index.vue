@@ -2,34 +2,52 @@
   <div>
     <!-- 搜索表单 -->
     <el-form :model="searchForm" label-width="120px" @submit.native.prevent>
-      <el-form-item label="快递员ID">
-        <el-input v-model="searchForm.courierId" placeholder="请输入快递员ID" />
-      </el-form-item>
-      <el-form-item label="任务分配状态">
-        <el-select v-model="searchForm.assignedStatus" placeholder="请选择">
-          <el-option v-for="item in assignedStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="任务类型">
-        <el-select v-model="searchForm.taskType" placeholder="请选择">
-          <el-option v-for="item in taskTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="任务状态">
-        <el-select v-model="searchForm.status" placeholder="请选择">
-          <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="签收状态">
-        <el-select v-model="searchForm.signStatus" placeholder="请选择">
-          <el-option v-for="item in signStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </el-form-item>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="快递员ID">
+            <el-input v-model="searchForm.courierId" placeholder="请输入快递员ID" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="任务分配状态">
+            <el-select v-model="searchForm.assignedStatus" placeholder="请选择">
+              <el-option v-for="item in assignedStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="任务类型">
+            <el-select v-model="searchForm.taskType" placeholder="请选择">
+              <el-option v-for="item in taskTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+<!--      </el-row>-->
+<!--      <el-row>-->
+        <el-col :span="8">
+          <el-form-item label="任务状态">
+            <el-select v-model="searchForm.status" placeholder="请选择">
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item label="签收状态">
+            <el-select v-model="searchForm.signStatus" placeholder="请选择">
+              <el-option v-for="item in signStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
       <el-form-item>
         <el-button type="primary" @click="search">
           搜索
         </el-button>
         <el-button @click="resetSearchForm">重置</el-button>
+        <!-- 添加快递作业的按钮，点击后弹出添加对话框 -->
+        <el-button type="primary" @click="addExpressWorkDialogVisible = true">添加快递作业</el-button>
       </el-form-item>
     </el-form>
 
@@ -67,6 +85,12 @@
       <el-table-column prop="cancelTime" label="取消时间" />
       <el-table-column prop="mark" label="备注" />
       <el-table-column prop="createTime" label="任务创建时间" />
+<!--      添加分配快递员按钮  -->
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button type="primary" size="mini" @click="handleAssignCourier(scope.row)">分配快递员</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <!-- 分页 -->
@@ -79,6 +103,146 @@
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+
+    <el-dialog
+      title="添加快递作业"
+      :visible.sync="addExpressWorkDialogVisible"
+      width="80%"
+      :before-close="resetAddExpressWorkForm">
+
+      <el-form :model="newExpressWorkForm" label-width="120px">
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="关联订单id">
+              <el-input v-model="newExpressWorkForm.orderId" placeholder="请输入关联订单id" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="任务类型">
+              <el-select v-model="newExpressWorkForm.taskType" placeholder="请选择">
+                <el-option v-for="item in taskTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="任务状态">
+              <el-select v-model="newExpressWorkForm.status" placeholder="请选择">
+                <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="任务分配状态">
+              <el-select v-model="newExpressWorkForm.assignedStatus" placeholder="请选择">
+                <el-option v-for="item in assignedStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="签收状态">
+              <el-select v-model="newExpressWorkForm.signStatus" placeholder="请选择">
+                <el-option v-for="item in signStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="网点ID">
+              <el-input v-model="newExpressWorkForm.agencyId" placeholder="请输入网点ID" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="快递员ID">
+              <el-input v-model="newExpressWorkForm.courierId" placeholder="请输入快递员ID" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="预计开始时间">
+              <el-date-picker
+                v-model="newExpressWorkForm.estimatedStartTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="实际开始时间">
+              <el-date-picker
+                v-model="newExpressWorkForm.actualStartTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="预计完成时间">
+              <el-date-picker
+                v-model="newExpressWorkForm.estimatedEndTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="实际完成时间">
+              <el-date-picker
+                v-model="newExpressWorkForm.actualEndTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="确认时间">
+              <el-date-picker
+                v-model="newExpressWorkForm.confirmTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="取消时间">
+              <el-date-picker
+                v-model="newExpressWorkForm.cancelTime"
+                type="datetime"
+                placeholder="选择日期时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="备注">
+              <el-input v-model="newExpressWorkForm.mark" placeholder="请输入备注" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-form-item>
+          <el-button type="primary" @click="addExpressWork">保存</el-button>
+          <el-button type="primary" @click="quitAddExpressWork">取消</el-button>
+        </el-form-item>
+
+      </el-form>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -120,7 +284,25 @@ export default {
         currentPage: 1,
         pageSize: 10,
         total: 0
-      }
+      },
+      // eslint-disable-next-line vue/no-dupe-keys
+      newExpressWorkForm: {
+        id: '',
+        courierId: '',
+        assignedStatus: '',
+        taskType: '',
+        status: '',
+        signStatus: '',
+        agencyId: '',
+        estimatedStartTime: '',
+        actualStartTime: '',
+        estimatedEndTime: '',
+        actualEndTime: '',
+        confirmTime: '',
+        cancelTime: '',
+        mark: ''
+      },
+      addExpressWorkDialogVisible: false
     }
   },
   created() {
