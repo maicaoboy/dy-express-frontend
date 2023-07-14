@@ -123,9 +123,10 @@
   </div>
 </template>
 <script>
-import GoodsInfoApi from '@/api/GoodsInfo'
+import DriverApi from '@/api/Driver'
 import EditForm from '@/views/dy/base/goods/EditForm.vue'
 import Pagination from '@/components/Pagination'
+
 export default {
   components: {
     EditForm, Pagination
@@ -159,7 +160,7 @@ export default {
       params.pageSize = this.pagination.size
       params.page = this.pagination.current
       // console.log(params)
-      GoodsInfoApi.page(params).then(response => {
+      DriverApi.page(params).then(response => {
         const res = response.data
         this.loading = false
         this.tableData = res
@@ -172,7 +173,6 @@ export default {
       this.dialog.type = 'add'
       this.dialog.isVisible = true
     },
-
     editSuccess() {
       this.search()
     },
@@ -189,7 +189,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          GoodsInfoApi.delete(row).then(response => {
+          DriverApi.delete(row).then(response => {
             const res = response.data
             if (res.isSuccess) {
               this.$message({
