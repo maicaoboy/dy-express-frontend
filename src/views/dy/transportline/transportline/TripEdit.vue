@@ -32,6 +32,38 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item v-show="type =='addTruck'" :label="$t('table.transportline.arrangetruck')" prop="arrangetruck">
+        <el-tree
+          ref="truckData"
+          :data="truckData"
+          show-checkbox
+          default-expand-all
+          node-key="id"
+          highlight-current
+        />
+      </el-form-item>
+      <el-form-item v-show="type =='addDriver'" :label="$t('table.transportline.arrangedriver')" prop="arrangedriver">
+        <el-table
+          ref="driverData"
+          :data="truckDataSelected"
+          style="width: 100%"
+        >
+          <el-table-column
+            prop="label"
+            label="车辆信息"
+          />
+          <el-table-column
+            prop="userId"
+            label="司机"
+          >
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.userId" :placeholder="$t('table.transportline.arrangedriver')">
+                <el-option v-for="item in driverData" :key="item.id" :label="item.label" :value="item.id" />
+              </el-select>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button plain type="warning" @click="isVisible = false">
@@ -61,10 +93,16 @@ export default {
     orgList: {
       type: Array,
       default: () => []
+    },
+    truckData: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
+      driverData: [],
+      truckDataSelected: [],
       transportrip: {},
       transportriptypeOptions: [],
       transportline: {},
@@ -145,8 +183,12 @@ export default {
       const that = this
       if (that.type === 'add') {
         that.save()
-      } else {
+      } else if (that.type === 'edit') {
         that.update()
+      } else if (that.type === 'addTruck') {
+        that.addTruck()
+      } else if (that.type === 'addDriver') {
+        that.addDriver()
       }
     },
     save() {
@@ -179,8 +221,62 @@ export default {
         }
       })
     },
+    addTruck() {
+      const that = this
+      const checkedKeys = this.$refs.truckData.getCheckedKeys()
+      console.log(checkedKeys)
+      var trucklinedto = []
+      for (var i = 0; i < checkedKeys.length; i++) {
+        trucklinedto.push({
+          truckId: checkedKeys[i],
+          transportLineId: this.transportline.id
+        })
+      }
+      transportripApi.save(this.transportrip.id, trucklinedto).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          that.isVisible = false
+          that.$message({
+            message: that.$t('tips.updateSuccess'),
+            type: 'success'
+          })
+          that.$emit('success')
+        }
+      })
+    },
     dsTypeChange(value) {
       this.orgHidden = value !== 'CUSTOMIZE'
+    },
+    setSeleted(seleted) {
+      this.$refs.truckData.setCheckedKeys(seleted)
+    },
+    settruckDataSelected(data) {
+      this.truckDataSelected = data
+    },
+    setDriverData(driverData) {
+      this.driverData = driverData
+    },
+    addDriver() {
+      const that = this
+      const relationshipDto = []
+      this.truckDataSelected.forEach(truck => {
+        const data = {}
+        data.id = that.transportrip.id
+        data.truckId = truck.id
+        data.userId = truck.userId
+        relationshipDto.push(data)
+      })
+      transportripApi.save(this.transportrip.id, relationshipDto).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          that.isVisible = false
+          that.$message({
+            message: that.$t('tips.updateSuccess'),
+            type: 'success'
+          })
+          that.$emit('success')
+        }
+      })
     }
   }
 }
