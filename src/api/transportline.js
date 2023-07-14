@@ -16,6 +16,10 @@ const apiList = {
   delete: {
     url: `/base/base/transportLine`,
     method: 'DELETE'
+  },
+  listorg: {
+    url: `/authority/org`,
+    method: 'GET'
   }
 }
 
@@ -34,7 +38,7 @@ export default {
   },
   update(data) {
     return axiosApi({
-      url: `/base/base/transportLine/${data.id}}`,
+      url: `/base/base/transportLine/${data.id}`,
       method: 'PUT',
       data
     })
@@ -43,6 +47,11 @@ export default {
     return axiosApi({
       url: `/base/base/transportLine/${id}`,
       method: 'DELETE'
+    })
+  },
+  listOrg() {
+    return axiosApi({
+      ...apiList.listorg
     })
   }
 }

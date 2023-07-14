@@ -1,7 +1,7 @@
 import axiosApi from './AxiosApi.js'
 
 const apiList = {
-  getByCode: function(code){
+  getByCode: function(code) {
     return `/authority/area/code/${code}`
   }
 }

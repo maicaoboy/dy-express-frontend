@@ -17,6 +17,14 @@ import request from '@/utils/request'
 
 import * as filters from './filters' // global filters
 import { hasPermission, hasNoPermission, hasAnyPermission } from './utils/permissionDirect'
+import BaiduMap from 'vue2-baidu-map'
+
+Vue.use(BaiduMap, {
+  // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
+  ak: 'U9u1roqcdMuofmIqs8Tl6Lk31ybdrUqC'
+  // v:'2.0',  // 默认使用3.0
+  // type: 'WebGL' // ||API 默认API  (使用此模式 BMap=BMapGL)
+})
 
 const Plugins = [
   hasPermission,

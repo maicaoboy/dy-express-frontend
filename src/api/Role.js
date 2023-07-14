@@ -29,62 +29,62 @@ const apiList = {
 }
 
 export default {
-  page (data) {
+  page(data) {
     return axiosApi({
       ...apiList.page,
       formData: true,
       data
     })
   },
-  save (data) {
+  save(data) {
     return axiosApi({
       ...apiList.save,
       data
     })
   },
-  update (data) {
+  update(data) {
     return axiosApi({
       ...apiList.update,
       data
     })
   },
-  delete (data) {
+  delete(data) {
     return axiosApi({
       ...apiList.delete,
       data
     })
   },
-  get (id) {
+  get(id) {
     return axiosApi({
       url: `/authority/role/${id}`,
       method: 'GET'
     })
   },
-  check (code) {
+  check(code) {
     return axiosApi({
       url: `/authority/role/check/${code}`,
       method: 'GET'
     })
   },
-  saveUserRole (data) {
+  saveUserRole(data) {
     return axiosApi({
       ...apiList.saveUserRole,
       data
     })
   },
-  findUserIdByRoleId (roleId) {
+  findUserIdByRoleId(roleId) {
     return axiosApi({
       url: `/authority/role/user/${roleId}`,
       method: 'GET'
     })
   },
-  findAuthorityIdByRoleId (roleId) {
+  findAuthorityIdByRoleId(roleId) {
     return axiosApi({
       url: `/authority/role/authority/${roleId}`,
       method: 'GET'
     })
   },
-  saveRoleAuthority (data) {
+  saveRoleAuthority(data) {
     return axiosApi({
       ...apiList.saveRoleAuthority,
       data
