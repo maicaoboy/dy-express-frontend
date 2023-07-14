@@ -30,6 +30,16 @@ export default {
     github: '项目地址'
   },
   table: {
+    transportrip: {
+      name: '车次名称',
+      searchname: '请输入车次名称',
+      departureTime: '发车时间',
+      searchdepartureTime: '请选择发车时间',
+      period: '周期',
+      searchperiod: '请选择周期',
+      add: '新增车次',
+      edit: '修改车次'
+    },
     transportline: {
       lineNumber: '线路编号',
       searchlineNumber: '请输入运输线路编号',
@@ -45,7 +55,9 @@ export default {
       transportlinetype: '运输线路类型',
       distance: '距离',
       cost: '成本',
-      estimatedTime: '预计时间'
+      estimatedTime: '预计时间',
+      arrangedriver: '安排司机',
+      arrangetruck: '安排车辆'
     },
     transportlinetype: {
       typeNumber: '类型编码',
@@ -63,6 +75,19 @@ export default {
       phone: '司机电话',
       id: '司机编号',
       org: '司机所属机构'
+    },
+    truck: {
+      truckNumber: '车牌号',
+      truckType: '车辆类型',
+      truckid: '车辆编号',
+      allowableLoad: '准载重量（千克）',
+      allowableVolume: '准载体积（立方米）',
+      tripid: '车次编号',
+      status: '状态',
+      brand: '车辆品牌',
+      add: '新增车辆',
+      edit: '修改车辆信息',
+      line: '所属线路'
     },
     order: {
       orderNo: '订单号',
@@ -124,7 +149,8 @@ export default {
       describe: '描述',
       operate: '操作',
       truckType: '运输车型',
-      add: '新增货物类型'
+      add: '新增货物类型',
+      status: '状态'
     },
     tenant: {
       code: '企业编码',

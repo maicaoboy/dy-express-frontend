@@ -16,6 +16,10 @@ const apiList = {
   delete: {
     method: 'DELETE',
     url: `/authority/org`
+  },
+  list: {
+    method: 'GET',
+    url: `/authority/org/list`
   }
 }
 
@@ -44,5 +48,12 @@ export default {
       ...apiList.delete,
       data
     })
+  },
+  list(data) {
+    return axiosApi({
+      ...apiList.list,
+      data
+    })
   }
+
 }

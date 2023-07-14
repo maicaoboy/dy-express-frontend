@@ -38,7 +38,7 @@ export default {
   },
   update(data) {
     return axiosApi({
-      url: `/base/base/transportLine/${data.id}}`,
+      url: `/base/base/transportLine/${data.id}`,
       method: 'PUT',
       data
     })

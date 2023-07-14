@@ -43,8 +43,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('table.transportline.lineNumber')" prop="typeNumber">
-        <el-input v-model="transportline.lineNumber">
+      <el-form-item :label="$t('table.transportline.distance')" prop="typeNumber">
+        <el-input v-model="transportline.distance">
           <template slot="append">
             千米
           </template>
@@ -135,12 +135,16 @@ export default {
   watch: {},
   methods: {
     initOptions() {
+      if (this.agencyOptions.length > 0 && this.transportlinetypeOptions.length > 0) {
+        return
+      }
       for (const item of this.orgList) {
         this.agencyOptions.push({
           value: item.id,
           label: item.name
         })
       }
+      this.transportlinetypeOptions = []
       for (const item of this.transportlinetypeList) {
         this.transportlinetypeOptions.push({
           value: item.id,
@@ -186,6 +190,7 @@ export default {
     },
     save() {
       const that = this
+      this.transportline.agencyId = this.transportline.startAgencyId
       transportlineApi.save(this.transportline).then(response => {
         const res = response.data
         if (res.isSuccess) {
@@ -199,7 +204,8 @@ export default {
       })
     },
     update() {
-      transportlineApi.update(this.transportline.id, this.transportline).then(response => {
+      this.transportline.agencyId = this.transportline.startAgencyId
+      transportlineApi.update(this.transportline).then(response => {
         const res = response.data
         console.log(res)
         if (res.isSuccess) {
