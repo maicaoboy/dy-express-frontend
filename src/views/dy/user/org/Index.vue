@@ -194,25 +194,6 @@ export default {
       var polygon = new BMap.Polygon(this.mutiPoints, { strokeColor: 'blue', strokeWeight: 2, strokeOpacity: 0.5 })
       map.addOverlay(polygon)
       map.enableScrollWheelZoom(true)
-      // 监听多边形的鼠标点击事件，获取点击顶点的经纬度坐标
-      var drawingManager = new BMapLib.DrawingManager(map, {
-        isOpen: false, // 是否开启绘制模式
-        // enableDrawingTool: true, //是否显示工具栏
-        drawingToolOptions: {
-          anchor: BMAP_ANCHOR_TOP_RIGHT, // 位置
-          offset: new BMap.Size(5, 5) // 偏离值
-        },
-        circleOptions: styleOptions, // 圆的样式
-        polylineOptions: styleOptions, // 线的样式
-        polygonOptions: styleOptions, // 多边形的样式
-        rectangleOptions: styleOptions // 矩形的样式
-      })
-      // 添加鼠标绘制工具监听事件，用于获取绘制结果
-      drawingManager.addEventListener('overlaycomplete', overlaycomplete)
-      polygon.addEventListener('click', event => {
-        this.mutiPoints.push(event.point)
-        console.log('点击的顶点经纬度：', event.point.lng, event.point.lat)
-      })
     },
     initOrgTree() {
       orgApi.allTree({}).then(response => {
@@ -247,7 +228,12 @@ export default {
       return data.label.indexOf(value) !== -1
     },
     nodeClick(data) {
+      console.log(data)
+      areaApi.getByCode(data.areaId).then(response=>{
+        console.log(response)
+      })
       this.org = { ...data }
+      this.initMap()
       this.$refs.form.clearValidate()
     },
     add() {
