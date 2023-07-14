@@ -230,9 +230,11 @@ export default {
     nodeClick(data) {
       console.log(data)
       areaApi.getByCode(data.areaId).then(response=>{
-        console.log(response)
+        this.lat = response.data.data.lat
+        this.lng = response.data.data.lng
       })
       this.org = { ...data }
+      this.selectedOptions = []
       this.initMap()
       this.$refs.form.clearValidate()
     },
