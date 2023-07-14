@@ -7,7 +7,7 @@ const apiList = {
   },
   update: {
     method: 'GET',
-    url: `/work/transport-order`
+    url: `/work/transport-order/{id}`
   },
   findbypage: {
     method: 'GET',

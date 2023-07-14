@@ -7,9 +7,9 @@ const apiList = {
   },
   updatebyid: {
     method: 'PUT',
-    url: `/work/transport-task`
+    url: `/work/transport-task/{id}`
   },
-  pageresponse: {
+  findByPage: {
     method: 'POST',
     url: `/work/transport-task/page`
   },
@@ -32,13 +32,14 @@ export default {
   },
   updatebyid(data) {
     return axiosApi({
-      ...apiList.updatebyid,
+      url: `/work/transport-task/${data.id}}`,
+      method: 'PUT',
       data
     })
   },
-  pageresponse(data) {
+  findByPage(data) {
     return axiosApi({
-      ...apiList.pageresponse,
+      ...apiList.findByPage,
       data
     })
   },

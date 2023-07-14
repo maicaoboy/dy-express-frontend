@@ -34,7 +34,7 @@
             <template>
               <el-select v-model="queryParams.assignedStatus" :placeholder="$t('table.select')">
                 <el-option
-                  v-for="item in transportTaskAssignSatusOptions"
+                  v-for="item in transportTaskAssignStatusOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
@@ -44,20 +44,6 @@
           </div>
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="8">
-          <div class="grid-content bg-purple">
-            <label style="color:#909399;font-weight:500;">{{ $t('table.transportTask.transportNo') }}: </label>
-            <el-input
-              v-model="queryParams.transportNo"
-              :placeholder="$t('table.transportTask.transportNo')"
-              class="filter-item search-item"
-              clearable
-            />
-          </div>
-        </el-col>
-      </el-row>
-
       <el-button
         style="background-color: #8dc149;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
         @click="search"
@@ -83,7 +69,7 @@
         :key="tableKey"
         ref="table"
         v-loading="loading"
-        :data="tableData.records"
+        :data="tableData.items"
         :header-cell-style="{background:'#FCFBFF',border:'0'}"
         fit
         style="width: 100%;"
@@ -94,18 +80,13 @@
             <span>{{ scope.row.id }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.transportTask.transportNo')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.transportNo }}</span>
-          </template>
-        </el-table-column>
         <el-table-column :label="$t('table.transportTask.createTime')" align="center" prop="code" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.createTime }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="status" :label="$t('table.transportTask.status')" :formatter="transportTaskStatusFormater" />
-        <el-table-column prop="assignStatus" :label="$t('table.transportTask.assignStatus')" :formatter="AssignStatusFormater" />
+        <el-table-column prop="assignStatus" :label="$t('table.transportTask.assignStatus')" :formatter="transportTaskAssignStatusFormater" />
         <el-table-column :label="$t('table.transportTask.startAgencyId')" align="center" prop="code" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.startAgencyId }}</span>
@@ -183,8 +164,8 @@
       <transportTask-edit
         ref="edit"
         :dialog-visible="dialog.isVisible"
-        :transportTask-status-options="transportTaskStatusOptions"
-        :transportTask-assign-status-options="transportTaskAssignSatusOptions"
+        :transport-task-status-options="transportTaskStatusOptions"
+        :transport-task-assign-status-options="transportTaskAssignStatusOptions"
         :type="dialog.type"
         @close="editClose"
         @success="editSuccess"
@@ -234,7 +215,7 @@ export default {
         current: 1
       },
       transportTaskStatusOptions: [],
-      transportTaskAssignSatusOptions: []
+      transportTaskAssignStatusOptions: []
     }
   },
   computed: {},
@@ -271,14 +252,18 @@ export default {
       this.$refs.edit.setRole(false)
     },
     fetch(params = {}) {
+      const that = this // 存储this
+      console.log(this)
+      console.log(that)
       this.loading = true
       params.pageSize = this.pagination.size
       params.page = this.pagination.current
       // console.log(params)
-      TransportTaskApi.pageresponse(params).then(response => {
+      TransportTaskApi.findByPage(params).then(response => {
         const res = response.data
+        console.log(res)
         this.loading = false
-        this.tableData = res.data
+        this.tableData = res
       })
     },
     handleEdit(row) {
@@ -322,7 +307,7 @@ export default {
       /**
      * 运输任务分配状态，1为待分配，2为已分配，3为待人工分配
      */
-      this.transportTaskAssignSatusOptions = [
+      this.transportTaskAssignStatusOptions = [
         {
           label: '待分配',
           value: 1
@@ -356,12 +341,12 @@ export default {
         return '未知'
       }
     },
-    AssignStatusFormater(row, column) {
-      if (row.status === 23000) {
+    transportTaskAssignStatusFormater(row, column) {
+      if (row.status === 1) {
         return '待分配'
-      } else if (row.status === 23001) {
+      } else if (row.status === 2) {
         return '已分配'
-      } else if (row.status === 23002) {
+      } else if (row.status === 3) {
         return '待人工分配'
       } else {
         return '未知'

@@ -10,7 +10,7 @@
       <el-form-item :label="$t('table.transport.transportNo')" prop="id">
         <el-input v-model="transport.id" :disabled="type==='edit'" />
       </el-form-item>
-      <el-form-item :label="$t('table.transport.orderId')" prop="id">
+      <el-form-item :label="$t('table.transport.orderNo')" prop="id">
         <el-input v-model="transport.orderId" :disabled="type==='edit'" />
       </el-form-item>
       <el-form-item :label="$t('table.transport.transportStatus')" prop="status">
@@ -32,38 +32,6 @@
             :value="item.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('table.transport.senderName')" prop="transportType">
-        <el-input v-model="transport.senderName" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transport.senderPhone')" prop="transportType">
-        <el-input v-model="transport.senderPhone" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transport.senderAddress')" prop="transportType">
-        <el-cascader
-          v-model="transport.senderAddress3id"
-          size="large"
-          :options="regionData"
-        />
-      </el-form-item>
-      <el-form-item :label="$t('table.transport.senderAddressDetail')" prop="transportType">
-        <el-input v-model="transport.senderAddress" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transport.receiverName')" prop="transportType">
-        <el-input v-model="transport.receiverName" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transport.receiverPhone')" prop="transportType">
-        <el-input v-model="transport.receiverPhone" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transport.receiverAddress')" prop="transportType">
-        <el-cascader
-          v-model="transport.receiverAddress3id"
-          size="large"
-          :options="regionData"
-        />
-      </el-form-item>
-      <el-form-item :label="$t('table.transport.receiverAddressDetail')" prop="transportType">
-        <el-input v-model="transport.receiverAddress" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -203,23 +171,7 @@ export default {
       })
     },
     update() {
-      // console.log(this.order)
-      if (this.transport.senderAddress3id.length === 0 || this.transport.receiverAddress3id.length === 0) {
-        this.$message({
-          message: '请选择省市区',
-          type: 'error'
-        })
-        return
-      }
-      this.transport.senderProvinceId = this.transport.senderAddress3id[0]
-      this.transport.senderCityId = this.transport.senderAddress3id[1]
-      this.transport.senderCountyId = this.transport.senderAddress3id[2]
-      this.transport.receiverProvinceId = this.transport.receiverAddress3id[0]
-      this.transport.receiverCityId = this.transport.receiverAddress3id[1]
-      this.transport.receiverCountyId = this.transport.receiverAddress3id[2]
-      // console.log(this.transport)
-      // console.log('edit')
-      transportApi.update(this.transport).then(response => {
+      transportApi.update(this.transport.id, this.transport).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.isVisible = false

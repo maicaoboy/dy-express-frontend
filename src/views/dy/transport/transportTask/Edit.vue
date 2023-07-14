@@ -10,9 +10,6 @@
       <el-form-item :label="$t('table.transportTask.transportTaskNo')" prop="id">
         <el-input v-model="transportTask.id" :disabled="type==='edit'" />
       </el-form-item>
-      <el-form-item :label="$t('table.transportTask.transportNo')" prop="id">
-        <el-input v-model="transportTask.transportNo" :disabled="type==='edit'" />
-      </el-form-item>
       <el-form-item :label="$t('table.transportTask.status')" prop="status">
         <el-select v-model="transportTask.status" :placeholder="$t('table.select')">
           <el-option
@@ -26,7 +23,7 @@
       <el-form-item :label="$t('table.transportTask.assignStatus')" prop="status">
         <el-select v-model="transportTask.assignedStatus" :placeholder="$t('table.select')">
           <el-option
-            v-for="item in transportTaskAssignSatusOptions"
+            v-for="item in transportTaskAssignStatusOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -88,7 +85,7 @@ export default {
   name: 'TransportTaskEdit',
   components: {},
   props: {
-    transportTaskAssignSatusOptions: {
+    transportTaskAssignStatusOptions: {
       type: Array,
       required: true
     },
@@ -143,10 +140,10 @@ export default {
       this.transportTask = {
         id: '',
         status: '',
+        assignedStatus: '',
         createTime: '',
         distance: '',
         remark: '',
-        assignedStatus: '',
         transportNo: '',
         startAgencyId: '',
         endAgencyId: '',
@@ -204,7 +201,7 @@ export default {
       })
     },
     update() {
-      TransportTaskApi.updatebyid(this.transportTask).then(response => {
+      TransportTaskApi.updatebyid(this.transportTask.id, this.transportTask).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.isVisible = false
