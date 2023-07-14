@@ -95,9 +95,7 @@ const constRouter = [
       component: () => import('@/views/iframe/index'),
       props: true
     }]
-
   }
-
 ]
 
 const router = new Router({

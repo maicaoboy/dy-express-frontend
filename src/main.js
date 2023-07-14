@@ -26,6 +26,9 @@ Vue.use(BaiduMap, {
   // type: 'WebGL' // ||API 默认API  (使用此模式 BMap=BMapGL)
 })
 
+import Vuex from 'vuex'
+Vue.use(Vuex)
+
 const Plugins = [
   hasPermission,
   hasNoPermission,

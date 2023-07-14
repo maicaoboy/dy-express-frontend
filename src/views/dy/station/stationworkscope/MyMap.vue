@@ -3,7 +3,7 @@
     <!-- 中间 -->
     <el-main>
       <!-- 地图 -->
-      <div id="map-container" />
+      <div id="map-container" style="z-index: 999"/>
       <div class="s-control-l">
         <el-button type="primary" size="small" style="margin-left:20px;" @click="clear">清空</el-button>
       </div>
@@ -18,7 +18,7 @@
 </template>
 <script>
 export default {
-  name: 'BaideMap',
+  name: 'MyMap',
 
   data() {
     return {
@@ -30,7 +30,8 @@ export default {
       drawingManager: null, // 鼠标绘制工具
       region: {}, // 行政区域
       polygon_marker: [],
-      fence_polygon: null
+      fence_polygon: null,
+      id: ''
     }
   },
 
@@ -105,10 +106,43 @@ export default {
         message: '保存成功',
         type: 'success'
       })
+      console.log(this.getPoints())
     },
     rollBack() {
       this.map.removeOverlay(this.polygon_marker.pop())
       this.show_polygon()
+    },
+    setPoints(points, id) {
+      var that = this
+      console.log(points, id)
+      this.id = id
+      this.clear()
+      // 取到所有makrer的点
+      console.log(this)
+      for (var i = 0; i < points.length; i++) {
+        // eslint-disable-next-line no-undef
+        var point = new BMap.Point(points[i][0], points[i][1])
+        console.log(points[i])
+        console.log(point)
+        // eslint-disable-next-line no-undef
+        var marker = new BMap.Marker(point, {
+          enableDragging: true
+        })
+        this.polygon_marker.push(marker)
+        this.map.addOverlay(marker)
+        // 可通过拖动marker，调整围栏的位置
+        marker.addEventListener('dragging', function(e) {
+          that.show_polygon()
+        })
+      }
+      this.show_polygon()
+    },
+    getPoints() {
+      var points = []
+      this.polygon_marker.map((item, index) => {
+        points.push([item.getPosition().lng, item.getPosition().lat])
+      })
+      return JSON.stringify(points)
     }
   }
 }

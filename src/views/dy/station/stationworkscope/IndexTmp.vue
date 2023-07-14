@@ -16,8 +16,7 @@
         <el-button type="primary" @click="addAgencyDialog = true">添加网点</el-button>
       </el-form-item>
     </el-form>
-    <!--换行-->
-    <br>
+
     <!-- 表格显示 -->
     <el-table :data="tableData" stripe style="width: 100%">
       <el-table-column prop="id" label="ID" />
@@ -31,8 +30,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <!--换行-->
-    <br>
+
     <!-- 分页 -->
     <el-pagination
       :current-page="pagination.page"
@@ -61,19 +59,21 @@
       </el-form>
     </el-dialog>
 
+<!--    点击查看电子围栏后，显示电子围栏地图  -->
     <el-dialog title="电子围栏地图" :visible.sync="editAgencyScopeDialog">
-      <MyMap ref="map" style="width: 100%;height: 500px"></MyMap>
+      <baidu-map></baidu-map>
     </el-dialog>
-
     <!--    <BaiduMap></BaiduMap>-->
   </div>
 </template>
 <script>
+import MyMap from './MyMap.vue'
 import AxiosApi from '@/api/AxiosApi'
-import MyMap from '@/views/dy/station/stationworkscope/MyMap.vue'
 export default {
   name: 'StationWorkScope',
-  components: { MyMap },
+  components: {
+    MyMap
+  },
   data() {
     return {
       searchForm: {
@@ -140,10 +140,7 @@ export default {
     showMap(row) {
       this.editAgencyScopeDialog = true
       this.editAgencyForm = row
-      this.$nextTick(() => {
-        console.log(this.$refs.map)
-        this.$refs.map.setPoints(JSON.parse(row.mutiPoints), row.id)
-      })
+      console.log(row)
     },
     addAgency() {
       AxiosApi({
@@ -161,22 +158,29 @@ export default {
       })
     },
     editAgency() {
-
+      AxiosApi({
+        url: '/base/scope/agency/update',
+        method: 'post',
+        data: this.editAgencyForm
+      }).then(res => {
+        console.log(res)
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.editAgencyDialog = false
+        this.search()
+      })
     },
-    resetAgencyForm(newAgencyForm) {
-      this.agencyForm = newAgencyForm || {
-        agencyId: '',
-        areaId: '',
-        mutiPoints: ''
-      }
+    resetAgencyForm() {
+      this.agencyForm.agencyId = ''
+      this.agencyForm.areaId = ''
+      this.agencyForm.mutiPoints = ''
     }
   }
 }
 </script>
 
 <style>
-.bm-view {
-  width: 100%;
-  height: 300px;
-}
+
 </style>
