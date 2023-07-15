@@ -126,6 +126,7 @@ export default {
       transportTripId: '车次id',
       startAgencyId: '起始机构',
       endAgencyId: '目标机构',
+      truckId: '车辆id',
       status: '运输任务单状态',
       assignStatus: '分配状态',
       planDepatureTime: '预计离开时间',
@@ -466,7 +467,8 @@ export default {
     updateTime: '修改时间',
     select: '请选择',
     serial: '序号',
-    edit: '编辑'
+    edit: '编辑',
+    details: '查看详情'
   },
   tagsView: {
     refresh: '刷新当前',

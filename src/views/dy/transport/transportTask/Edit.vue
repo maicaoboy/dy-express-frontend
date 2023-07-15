@@ -147,6 +147,7 @@ export default {
         transportNo: '',
         startAgencyId: '',
         endAgencyId: '',
+        truckId: '',
         transportTripsId: '',
         planDepatureTime: '',
         actualDepatureTime: '',

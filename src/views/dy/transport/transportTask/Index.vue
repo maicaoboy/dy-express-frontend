@@ -151,6 +151,9 @@
             <el-button type="text" size="small" @click="handleEdit(scope.row)">
               {{ $t('table.edit') }}
             </el-button>
+            <el-button type="text" size="small" @click="detail(scope.$index, scope.row)">
+              {{ $t('table.details') }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -170,19 +173,25 @@
         @close="editClose"
         @success="editSuccess"
       />
+      <transportTaskDetail
+        ref="transportTaskDetail"
+        :is-visible="detailForm.isVisible"
+        @close="editClose">
+      </transportTaskDetail>
     </el-card>
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Pagination'
-import TransportTaskEdit from './Edit'
+import TransportTaskEdit from '@/views/dy/transport/transportTask/Edit.vue'
+import TransportTaskDetail from '@/views/dy/transport/transportTask/Detail.vue'
 import TransportTaskApi from '@/api/TransportTask.js'
 import { provinceAndCityData, codeToText } from 'element-china-area-data'
 
 export default {
-  name: 'RoleManage',
-  components: { Pagination, TransportTaskEdit },
+  name: 'TransportTaskIndex',
+  components: { Pagination, TransportTaskEdit, TransportTaskDetail },
   filters: {
     statusFilter(status) {
       const map = {
@@ -209,6 +218,9 @@ export default {
       loading: false,
       tableData: {
         total: 0
+      },
+      detailForm: {
+        isVisible: false
       },
       pagination: {
         size: 10,
@@ -250,6 +262,11 @@ export default {
       this.dialog.type = 'add'
       this.dialog.isVisible = true
       this.$refs.edit.setRole(false)
+    },
+    detail(index, row) {
+      this.detailForm.isVisible = true
+      this.$refs.transportTaskDetail.setTransportTasks(row)
+      console.log(this.$refs)
     },
     fetch(params = {}) {
       const that = this // 存储this
