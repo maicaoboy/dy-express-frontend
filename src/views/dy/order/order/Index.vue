@@ -320,6 +320,16 @@ export default {
       this.dialog.isVisible = true
     },
     initOptions() {
+      this.payStatusOptions = [
+        {
+          label: '未支付',
+          value: 1
+        },
+        {
+          label: '已支付',
+          value: 2
+        }
+      ]
       /**
      * 订单状态: 23000为待取件,23001为已取件，23002为网点自寄，23003为网点入库，
      * 23004为待装车，23005为运输中，23006为网点出库，23007为待派送，23008为派送中，
@@ -376,26 +386,24 @@ export default {
         }
       ]
       /**
-     * 订单类型，1为同城订单，2为城际订单
+     * 订单类型，1:正常，2:退订，3:退货，4:换货
      */
       this.orderTypeOptions = [
         {
-          label: '同城订单',
+          label: '正常',
           value: 1
         },
         {
-          label: '城际订单',
+          label: '退订',
           value: 2
-        }
-      ]
-      this.payStatusOptions = [
-        {
-          label: '未支付',
-          value: 1
         },
         {
-          label: '已支付',
-          value: 2
+          label: '退货',
+          value: 3
+        },
+        {
+          label: '换货',
+          value: 4
         }
       ]
     },
