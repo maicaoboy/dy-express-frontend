@@ -208,6 +208,7 @@
         :order-status-options="orderStatusOptions"
         :order-type-options="orderTypeOptions"
         :pay-status-options="payStatusOptions"
+        :goods-data="goodsData"
         :type="dialog.type"
         @close="editClose"
         @success="editSuccess"
@@ -220,6 +221,7 @@
 import Pagination from '@/components/Pagination'
 import OrderEdit from './Edit'
 import orderApi from '@/api/Order.js'
+import cargoApi from '@/api/OrderCargo.js'
 import { provinceAndCityData, codeToText } from 'element-china-area-data'
 
 export default {
@@ -238,6 +240,8 @@ export default {
     return {
       provinceAndCityData,
       codeToText,
+      cargoData: [],
+      goodsData: [],
       dialog: {
         isVisible: false,
         type: 'add'
@@ -266,6 +270,7 @@ export default {
   computed: {},
   mounted() {
     this.initOptions()
+    this.initGoodData()
     this.fetch()
   },
   methods: {
@@ -307,6 +312,7 @@ export default {
         console.log(res.data)
         this.tableData = res.data
       })
+      cargoApi
     },
     handleEdit(row) {
       // console.log(row)
@@ -446,6 +452,46 @@ export default {
     },
     receiverAddressFormater(row, column) {
       return codeToText[row.receiverProvinceId] + codeToText[row.receiverCityId] + codeToText[row.receiverCountyId] + row.receiverAddress
+    },
+    initGoodData() {
+      this.goodsData = [
+        {
+          id: 1,
+          goodsTypeId: '719688175616',
+          goodsType: '耳机',
+          name: '索尼 WH-1000XM4',
+          unit: '个',
+          cargoValue: '2499.00000000',
+          cargoBarcode: '',
+          volume: 2.0000000000,
+          weight: 0.2500000000,
+          remark: '包装清单无线降噪立体声耳机（1） 便携盒（1） 耳机连接线（1） USB Type-C 连接线(1) 保修卡（1） 说明书（1）'
+        },
+        {
+          id: 2,
+          goodsTypeId: '719688175616',
+          goodsType: '耳机',
+          name: '索尼 WH-1000XM3',
+          unit: '个',
+          cargoValue: '1499.00000000',
+          cargoBarcode: '',
+          volume: 2.0000000000,
+          weight: 0.2500000000,
+          remark: '包装清单无线降噪立体声耳机（1） 便携盒（1） 耳机连接线（1） USB Type-C 连接线(1) 保修卡（1） 说明书（1）'
+        },
+        {
+          id: 3,
+          goodsTypeId: '719688175616',
+          goodsType: '耳机',
+          name: '索尼 WH-1000XM2',
+          unit: '个',
+          cargoValue: '499.00000000',
+          cargoBarcode: '',
+          volume: 2.0000000000,
+          weight: 0.2500000000,
+          remark: '包装清单无线降噪立体声耳机（1） 便携盒（1） 耳机连接线（1） USB Type-C 连接线(1) 保修卡（1） 说明书（1）'
+        }
+      ]
     }
   }
 }
