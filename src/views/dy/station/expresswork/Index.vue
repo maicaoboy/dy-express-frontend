@@ -373,6 +373,24 @@ export default {
         signStatus: null
       }
       this.search()
+    },
+    addExpressWork() {
+      AxiosApi({
+        url: '/work/pickup-dispatch-task/addOrder',
+        method: 'post',
+        data: this.newExpressWorkForm
+      }).then(response => {
+        if (response.data.code === 0) {
+          this.$message.success('添加成功')
+          this.addExpressWorkDialogVisible = false
+          this.search()
+        } else {
+          this.$message.error('添加失败')
+        }
+      })
+    },
+    quitAddExpressWork() {
+      this.addExpressWorkDialogVisible = false
     }
   }
 }
