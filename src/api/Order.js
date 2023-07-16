@@ -42,10 +42,10 @@ export default {
       data
     })
   },
-  findbyid(data) {
+  findbyid(id) {
     return axiosApi({
-      ...apiList.findbyid,
-      data
+      method: 'GET',
+      url: `/order/order/${id}`
     })
   },
   get(data) {

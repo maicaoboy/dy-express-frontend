@@ -17,7 +17,7 @@
           <div class="grid-content bg-purple">
             <label style="color:#909399;font-weight:500;">{{ $t('table.goodsType.truckType') }}</label>
             <template>
-              <el-select v-model="queryParams.truckTypeNames" :placeholder="$t('table.select')">
+              <el-select v-model="queryParams.truckTypeId" :placeholder="$t('table.select')">
                 <el-option
                   v-for="item in truckTypeOptions"
                   :key="item.value"
@@ -214,11 +214,6 @@ export default {
         this.loading = false
         this.tableData = res
       })
-    },
-    inittruckTypeOptions() {
-      const params = {}
-      params.page = 1
-      params.pageSize = 10
       truckTypeApi.page(params).then(response => {
         const res = response.data
         // 将res.item()数组中的每个对象的id和name属性取出来，组成一个新的数组
