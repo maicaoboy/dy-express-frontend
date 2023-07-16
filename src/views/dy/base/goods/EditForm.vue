@@ -11,7 +11,7 @@
         <el-input v-model="good.name" />
       </el-form-item>
       <el-form-item :label="$t('table.goodsType.truckType')" prop="status">
-        <el-select v-model="good.truckType" :placeholder="$t('table.select')">
+        <el-select v-model="good.truckTypeIds" multiple :placeholder="$t('table.select')">
           <el-option
             v-for="item in truckTypeOptions"
             :key="item.value"

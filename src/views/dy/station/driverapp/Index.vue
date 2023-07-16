@@ -84,8 +84,7 @@
           :label="$t('table.driverwork.driverName')"
           align="center"
           :formatter="getDriverName"
-        >
-        </el-table-column>
+        />
         <!--计划发车时间-->
         <el-table-column
           prop="id"
@@ -94,6 +93,16 @@
         >
           <template slot-scope="scope">
             <span>{{ scope.row.planDepartureTime }}</span>
+          </template>
+        </el-table-column>
+        <!--实际发车时间-->
+        <el-table-column
+          prop="id"
+          :label="$t('table.driverwork.actstartTime')"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <span>{{ scope.row.actualDepartureTime }}</span>
           </template>
         </el-table-column>
         <!--实际到达时间-->
@@ -123,7 +132,33 @@
           align="center"
         >
           <template slot-scope="scope">
-            <el-tag :type="getStatusTagType(scope.row.status)">{{ scope.row.status | statusText }} </el-tag>
+            <el-tag :type="getStatusTagType(scope.row.status)">
+              {{ scope.row.status | statusText }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column
+          :label="$t('table.operation')"
+          fixed="right"
+          align="center"
+        >
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.status ===1"
+              type="primary"
+              round
+              @click="handelGettask(scope.$index, scope.row)"
+            >
+              提货装车
+            </el-button>
+            <el-button
+              v-if="scope.row.status ===2"
+              type="primary"
+              round
+              @click="handelArrive(scope.$index, scope.row)"
+            >
+              送达
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -160,14 +195,6 @@ export default {
       }
     }
   },
-  created() {
-    this.fetch()
-  },
-  watch: {
-    driverName() {
-      this.getDriverId()
-    }
-  },
   data() {
     return {
       tableKey: 0,
@@ -198,6 +225,14 @@ export default {
         }
       ]
     }
+  },
+  watch: {
+    driverName() {
+      this.getDriverId()
+    }
+  },
+  created() {
+    this.fetch()
   },
   methods: {
     fetch(params = {}) {
@@ -250,6 +285,58 @@ export default {
     getDriverId() {
       const driver = this.driverUserData.find(item => item.name === this.driverName)
       this.queryParams.driverId = driver ? driver.id : ''
+    },
+    handelGettask(index, row) {
+      this.$confirm('确认提货装车' + row.id + '吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          row.status = 2
+          DriverWorkApi.update(row.id, row).then(response => {
+            const res = response.data
+            if (res.isSuccess) {
+              this.$message({
+                message: '提货装车成功',
+                type: 'success'
+              })
+              this.fetch()
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
+            }
+          })
+        })
+        .catch(() => {})
+    },
+    handelArrive(index, row) {
+      this.$confirm('确认送达' + row.id + '任务单吗？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          row.status = 3
+          DriverWorkApi.update(row.id, row).then(response => {
+            const res = response.data
+            if (res.isSuccess) {
+              this.$message({
+                message: '送达成功',
+                type: 'success'
+              })
+              this.fetch()
+            } else {
+              this.$message({
+                message: res.message,
+                type: 'error'
+              })
+            }
+          })
+        })
+        .catch(() => {})
     }
   }
 }

@@ -3,20 +3,28 @@
     <!-- 中间 -->
     <el-main>
       <!-- 地图 -->
-      <div id="map-container" style="z-index: 999"/>
+      <div id="map-container" style="z-index: 999" />
       <div class="s-control-l">
-        <el-button type="primary" size="small" style="margin-left:20px;" @click="clear">清空</el-button>
+        <el-button type="primary" size="small" style="margin-left:20px;" @click="clear">
+          清空
+        </el-button>
       </div>
       <div class="s-control-r">
-        <el-button type="primary" size="small" style="margin-left:20px;" @click="update">保存</el-button>
+        <el-button type="primary" size="small" style="margin-left:20px;" @click="update">
+          保存
+        </el-button>
       </div>
       <div class="s-control-ll">
-        <el-button type="primary" size="small" style="margin-left:20px;" @click="rollBack">撤回</el-button>
+        <el-button type="primary" size="small" style="margin-left:20px;" @click="rollBack">
+          撤回
+        </el-button>
       </div>
     </el-main>
   </el-container>
 </template>
 <script>
+import AxiosApi from '@/api/AxiosApi'
+
 export default {
   name: 'MyMap',
 
@@ -31,7 +39,11 @@ export default {
       region: {}, // 行政区域
       polygon_marker: [],
       fence_polygon: null,
-      id: ''
+      agencyForm: {
+        agencyId: '',
+        areaId: '',
+        mutiPoints: ''
+      }
     }
   },
 
@@ -96,26 +108,53 @@ export default {
       }
     },
     clear() {
+      for (var i = 0; i < this.polygon_marker.length; i++) this.map.removeOverlay(this.polygon_marker[i])
       this.polygon_marker = []
+      this.map.removeOverlay(this.fence_polygon)
       this.fence_polygon = null
-      this.map.clearOverlays()
     },
     update() {
-    //   提醒保存成功
-      this.$message({
-        message: '保存成功',
-        type: 'success'
+      // 保存围栏
+      var points = []
+      this.polygon_marker.map((item, index) => {
+        points.push([item.getPosition().lng, item.getPosition().lat])
       })
-      console.log(this.getPoints())
+      if (points.length < 3) {
+        this.$message({
+          message: '围栏点数不能少于3个',
+          type: 'warning'
+        })
+        return
+      }
+      this.agencyForm.mutiPoints = JSON.stringify(points)
+      AxiosApi({
+        method: 'post',
+        url: '/base/scope/agency/save',
+        data: this.agencyForm
+      }).then(res => {
+        console.log(res)
+        if (res.data.code === 0) {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '保存失败',
+            type: 'error'
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
     rollBack() {
       this.map.removeOverlay(this.polygon_marker.pop())
       this.show_polygon()
     },
-    setPoints(points, id) {
+    setPoints(points, row) {
       var that = this
-      console.log(points, id)
-      this.id = id
+      this.agencyForm = row
       this.clear()
       // 取到所有makrer的点
       console.log(this)
@@ -129,13 +168,27 @@ export default {
           enableDragging: true
         })
         this.polygon_marker.push(marker)
-        this.map.addOverlay(marker)
         // 可通过拖动marker，调整围栏的位置
         marker.addEventListener('dragging', function(e) {
           that.show_polygon()
         })
       }
-      this.show_polygon()
+      this.$nextTick(() => {
+        this.map.clearOverlays()
+      })
+      setTimeout(() => {
+        // 设置地图中心
+        this.map.centerAndZoom(
+          // eslint-disable-next-line no-undef
+          new BMap.Point(row.lng, row.lat),
+          this.zoom
+        )
+        that.polygon_marker.map((item, index) => {
+          that.map.addOverlay(item)
+        })
+        this.show_polygon()
+      }, 100)
+    //
     },
     getPoints() {
       var points = []

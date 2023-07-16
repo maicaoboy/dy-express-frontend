@@ -45,6 +45,7 @@ export default {
       driverName: '司机姓名',
       status: '作业状态',
       startTime: '计划发车时间',
+      actstartTime: '实际发车时间',
       endTime: '实际到达时间',
       taskTransportId: '运输任务单编号'
     },
