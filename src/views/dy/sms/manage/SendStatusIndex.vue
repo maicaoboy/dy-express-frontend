@@ -236,6 +236,8 @@ export default {
     sortChange(val) {
       this.sort.field = val.prop
       this.sort.order = val.order
+      this.sort.transport = val.transport
+      this.sort.transportTask = val.transportTask
       this.search()
     },
     filterChange(filters) {

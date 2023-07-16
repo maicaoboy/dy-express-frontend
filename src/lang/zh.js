@@ -113,6 +113,40 @@ export default {
       orderTime: '下单时间',
       transportNo: '运单号'
     },
+    transport: {
+      transportNo: '运单号',
+      orderNo: '订单号',
+      transportStatus: '运单状态',
+      schedulingStatus: '调度状态',
+      senderName: '发货人姓名',
+      senderPhone: '发货人电话',
+      senderAddress: '发货人地址',
+      senderAddressDetail: '发货人详细地址',
+      receiverName: '收货人姓名',
+      receiverPhone: '收货人电话',
+      receiverAddress: '收货人地址',
+      receiverAddressDetail: '收货人详细地址',
+      transportTime: '创建时间'
+    },
+    transportTask: {
+      transportTaskNo: '运输任务单号',
+      transportNo: '运单号',
+      transportTripId: '车次id',
+      startAgencyId: '起始机构',
+      endAgencyId: '目标机构',
+      truckId: '车辆id',
+      status: '运输任务单状态',
+      assignStatus: '分配状态',
+      planDepatureTime: '预计离开时间',
+      actualDepatureTime: '实际离开时间',
+      planArrivalTime: '预计到达时间',
+      actualArrivalTime: '实际到达时间',
+      planPickUpTime: '预计提货时间',
+      actualPickUpTime: '实际提货时间',
+      planDeliveryTime: '预计交付时间',
+      actualDeliveryTime: '实际交付时间',
+      createTime: '创建时间'
+    },
     goodsTypeSearch: {
       name: '货物类型名称'
     },
@@ -441,7 +475,8 @@ export default {
     updateTime: '修改时间',
     select: '请选择',
     serial: '序号',
-    edit: '编辑'
+    edit: '编辑',
+    details: '查看详情'
   },
   tagsView: {
     refresh: '刷新当前',
