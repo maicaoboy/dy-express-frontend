@@ -97,6 +97,7 @@ export default {
               })
             }
             this.$store.commit('account/setUser', this.user)
+            console.log('bbbbbbbbbb', this.user)
           })
         } else {
           return false

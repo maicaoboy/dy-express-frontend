@@ -30,6 +30,16 @@ export default {
     github: '项目地址'
   },
   table: {
+    deliverapp: {
+      id: '运单编号',
+      searchid: '请输入运单编号',
+      taskType: '任务类型',
+      searchtaskType: '请选择任务类型',
+      status: '运单状态',
+      searchstatus: '请选择运单状态',
+      signStatus: '签收状态',
+      searchsignStatus: '请选择签收状态'
+    },
     driverwork: {
       id: '作业编号',
       driverName: '司机姓名',
