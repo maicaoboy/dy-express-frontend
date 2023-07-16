@@ -64,20 +64,16 @@
           prop="name"
           :label="$t('table.driver.name')"
           align="center"
+          :formatter="getDriverName"
         >
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
         </el-table-column>
         <!--司机电话-->
         <el-table-column
           prop="updateTime"
           :label="$t('table.driver.phone')"
           align="center"
+          :formatter="getDriverPhone"
         >
-          <template slot-scope="scope">
-            <span>{{ scope.row.phone }}</span>
-          </template>
         </el-table-column>
         <!--所属机构-->
         <el-table-column
@@ -85,8 +81,8 @@
           :label="$t('table.driver.org')"
           align="center"
         >
-          <template slot-scope="scope">
-            <span>{{ scope.row.defaultVolume }}</span>
+          <template >
+            <span>运输部</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -126,6 +122,7 @@
 import DriverApi from '@/api/Driver'
 import EditForm from '@/views/dy/base/goods/EditForm.vue'
 import Pagination from '@/components/Pagination'
+import userApi from '@/api/User'
 
 export default {
   components: {
@@ -147,11 +144,11 @@ export default {
       dialog: {
         isVisible: false,
         type: 'add'
-      }
+      },
+      driverUserData: []
     }
   },
-  mounted() {
-    this.initOptions()
+  created() {
     this.fetch()
   },
   methods: {
@@ -165,6 +162,14 @@ export default {
         this.loading = false
         this.tableData = res
       })
+      userApi.list({
+        orgId: '1129427750227018145',
+        stationId: '1129427834431865377'
+      }) // 获取司机用户
+        .then(response => {
+          const res = response.data
+          this.driverUserData = res.data
+        })
     },
     editClose() {
       this.dialog.isVisible = false
@@ -183,7 +188,7 @@ export default {
       })
     },
     handleDelete(index, row) {
-      this.$confirm('此操作将删除id为：' + row.id + '的货物类型, 是否继续?', '提示', {
+      this.$confirm('此操作将删除id为：' + row.id + '的司机信息, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -213,6 +218,18 @@ export default {
       this.$nextTick(() => {
         this.$refs.edit.init(row)
       })
+    },
+    getDriverName(row) {
+      const driver = this.driverUserData.find(item => item.id === row.userId)
+      return driver ? driver.name : ''
+    },
+    getDriverPhone(row) {
+      const driver = this.driverUserData.find(item => item.id === row.userId)
+      return driver ? driver.mobile : ''
+    },
+    getDriverId() {
+      const driver = this.driverUserData.find(item => item.name === this.driverName)
+      this.queryParams.driverId = driver ? driver.id : ''
     }
   }
 }
