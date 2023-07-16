@@ -71,8 +71,6 @@
             <el-table v-if="props.row.children" :data="props.row.children" size="mini" style="width: 100%">
               <el-table-column prop="name" label="车次名称" />
               <el-table-column prop="departureTime" label="发车频次" />
-              <el-table-column prop="estimatedTime" label="到达时间" />
-              <el-table-column prop="oilGunCode" label="司机安排" />
               <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
                   <el-button
@@ -99,7 +97,7 @@
                   <el-button
                     type="text"
                     size="small"
-                    @click="handleArrangeDrier(scope.row)"
+                    @click="handleArrangeDriver(scope.row)"
                   >
                     {{ $t('table.transportline.arrangedriver') }}
                   </el-button>
@@ -171,6 +169,7 @@
         :trip-edit-visible="dialog.isTripEditVisible"
         :type="dialog.type"
         :org-list="orgList"
+        :truck-data="truckData"
         @close="editTripClose"
         @success="editSuccess"
       />
@@ -184,7 +183,7 @@
       <template>
         <div>
           <baidu-map class="map" style="overflow:auto" center="北京" :zoom="16">
-            <bm-driving :start="start" :end="end" :auto-viewport="true" :policy="BMAP_DRIVING_POLICY_LEAST_DISTANCE" :panel="true" location="北京" :waypoints="['西二旗']" />
+            <bm-driving :start="start" :end="end" :auto-viewport="true" :panel="true" location="北京" :waypoints="['西二旗']" />
           </baidu-map>
         </div>
       </template>
@@ -200,11 +199,17 @@ import Pagination from '@/components/Pagination'
 import transportlineEdit from './Edit'
 import tripEdit from './TripEdit'
 import areaApi from '@/api/Area'
+import truckApi from '@/api/Truck'
+import driverApi from '@/api/Driver'
+import userApi from '@/api/User'
 
 export default {
   components: { Pagination, transportlineEdit, tripEdit },
   data() {
     return {
+      driverUserData: {},
+      driverData: {},
+      truckData: [],
       start: {
         lng: 116.301934,
         lat: 39.977552
@@ -340,6 +345,40 @@ export default {
         that.loading = false
         that.tableData = res.data
       })
+      truckApi.get({}).then(response => {
+        const res = response.data
+        that.loading = false
+        console.log('truck', res)
+        res.forEach(item => {
+          item.label = item.licensePlate + ' ' + item.brand + ' 载重:' + item.allowableLoad + ' 容积: ' + item.allowableVolume
+        })
+        that.truckData = res
+      })
+      userApi.list({
+        orgId: '1129427750227018145',
+        stationId: '1129427834431865377'
+      }) // 获取司机用户
+        .then(response => {
+          const res = response.data
+          that.driverUserData = res.data
+          driverApi.page({
+            pageSize: 1000,
+            page: 1
+          }) // 获取司机
+            .then(response => {
+              const res = response.data
+              that.driverData = res.items
+              for (let i = 0; i < that.driverData.length; i++) {
+                for (let j = 0; j < that.driverUserData.length; j++) {
+                  if (that.driverData[i].userId === that.driverUserData[j].id) {
+                    that.driverData[i].user = that.driverUserData[j]
+                  }
+                }
+                this.driverData[i].label = this.driverData[i].user.name + ' ' + this.driverData[i].userId
+              }
+            })
+        })
+
       // this.loading = false
     },
     handleEdit(row) {
@@ -459,6 +498,54 @@ export default {
             this.$message.warning('取消删除')
           }
         })
+    },
+    handleArrangeTruck(row) {
+      this.$refs.tripEdit.settransportrip(row)
+      var line = this.tableData.items.find(item => item.id === row.transportLineId)
+      console.log('line', row, this.transportlinetypeList)
+      this.$refs.tripEdit.settransportline(line)
+      transporttripApi.relation(row.transportLineId).then(response => {
+        const res = response.data
+        console.log('relation', res)
+        var seleted = []
+        res.forEach(item => {
+          seleted.push(item.truckId)
+        })
+        this.$refs.tripEdit.setSeleted(seleted)
+        // this.$refs.tripEdit.settruckData(res)
+      })
+      this.dialog.type = 'addTruck'
+      this.dialog.isTripEditVisible = true
+    },
+    handleArrangeDriver(row) {
+      this.$refs.tripEdit.settransportrip(row)
+      var line = this.tableData.items.find(item => item.id === row.transportLineId)
+      console.log('line', row, this.transportlinetypeList)
+      this.$refs.tripEdit.settransportline(line)
+      transporttripApi.relation(row.transportLineId).then(response => {
+        const res = response.data
+        console.log('relation', res)
+        var seleted = []
+        res.forEach(item => {
+          seleted.push(item.truckId)
+          this.truckData.forEach(truck => {
+            if (truck.id === item.truckId) {
+              truck.userId = item.userId
+            }
+          })
+        })
+        this.$refs.tripEdit.setSeleted(seleted)
+        var truckDataSelected = []
+        this.truckData.forEach(truck => {
+          if (seleted.find(item => item === truck.id)) {
+            truckDataSelected.push(truck)
+          }
+        })
+        this.$refs.tripEdit.settruckDataSelected(truckDataSelected)
+        this.$refs.tripEdit.setDriverData(this.driverData)
+      })
+      this.dialog.type = 'addDriver'
+      this.dialog.isTripEditVisible = true
     }
   }
 }

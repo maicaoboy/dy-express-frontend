@@ -28,6 +28,10 @@ const apiList = {
   updatePassword: {
     method: 'PUT',
     url: `/authority/user/password`
+  },
+  list: {
+    method: 'GET',
+    url: `/authority/user/list`
   }
 }
 
@@ -73,6 +77,18 @@ export default {
     return axiosApi({
       ...apiList.avatar,
       data
+    })
+  },
+  list(data) {
+    return axiosApi({
+      ...apiList.list,
+      data
+    })
+  },
+  getdrivername(driverId) {
+    return axiosApi({
+      url: `/authority/user/${driverId}`,
+      method: 'GET'
     })
   }
 }

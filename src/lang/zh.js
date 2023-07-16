@@ -30,6 +30,14 @@ export default {
     github: '项目地址'
   },
   table: {
+    driverwork: {
+      id: '作业编号',
+      driverName: '司机姓名',
+      status: '作业状态',
+      startTime: '计划发车时间',
+      endTime: '实际到达时间',
+      taskTransportId: '运输任务单编号'
+    },
     transportrip: {
       name: '车次名称',
       searchname: '请输入车次名称',
@@ -91,8 +99,8 @@ export default {
     },
     order: {
       orderNo: '订单号',
-      orderStatus: '订单状态',
-      orderType: '订单类型',
+      orderStatus: '运输状态',
+      orderType: '订单状态',
       payStatus: '支付状态',
       senderName: '发货人姓名',
       senderPhone: '发货人电话',

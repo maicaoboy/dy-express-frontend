@@ -95,7 +95,7 @@
 
     <!-- 分页 -->
     <el-pagination
-      :current-page="pagination.currentPage"
+      :current-page="pagination.page"
       :page-sizes="[10, 20, 30, 40]"
       :page-size="pagination.pageSize"
       layout="total, sizes, prev, pager, next, jumper"
@@ -281,7 +281,7 @@ export default {
         { value: 2, label: '拒收' }
       ],
       pagination: {
-        currentPage: 1,
+        page: 1,
         pageSize: 10,
         total: 0
       },
@@ -343,7 +343,7 @@ export default {
         method: 'post',
         data: {
           ...this.searchForm,
-          pageNum: this.pagination.currentPage,
+          pageNum: this.pagination.page,
           pageSize: this.pagination.pageSize
         }
       }).then(response => {
@@ -361,7 +361,7 @@ export default {
       this.search()
     },
     handleCurrentChange(val) {
-      this.pagination.currentPage = val
+      this.pagination.page = val
       this.search()
     },
     resetSearchForm() {

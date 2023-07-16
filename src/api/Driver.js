@@ -12,6 +12,10 @@ const apiList = {
   page: {
     url: '/base/sys/driver/page',
     method: 'GET'
+  },
+  get: {
+    url: '/base/sys/driver',
+    method: 'GET'
   }
 }
 
@@ -31,6 +35,12 @@ export default {
   page(data) {
     return axiosApi({
       ...apiList.page,
+      data
+    })
+  },
+  update(data) {
+    return axiosApi({
+      ...apiList.update,
       data
     })
   }

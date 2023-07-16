@@ -107,21 +107,21 @@
         <!--准载重量-->
         <el-table-column
           prop="name"
-          :label="$t('table.truck.allowableLoad')"
+          :label="$t('table.truck.allowableLoad')+ '(吨)'"
           align="center"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.allowableLoad }}</span>
+            <span>{{ scope.row.allowableLoad }} </span>
           </template>
         </el-table-column>
         <!--准载体积-->
         <el-table-column
           prop="name"
-          :label="$t('table.truck.allowableVolume')"
+          :label="$t('table.truck.allowableVolume')+ '(立方米)'"
           align="center"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.allowableVolume }}</span>
+            <span>{{ scope.row.allowableVolume }} </span>
           </template>
         </el-table-column>
         <!--车次编号-->
@@ -131,7 +131,9 @@
           align="center"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
+            <el-tooltip :content="scope.row.transportTripsId.join(', ')">
+              <span>{{ scope.row.transportTripsId.slice(0, 3).join(', ') }}{{ scope.row.transportTripsId.length > 3 ? '...' : '' }}</span>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column
@@ -175,8 +177,9 @@
       <detail
         ref="detail"
         :is-visible="detailForm.isVisible"
-        @close="editClose">
-      </detail>
+        @close="editClose"
+        @handelEdit="handelEdit"
+      />
     </el-card>
   </div>
 </template>
@@ -291,6 +294,24 @@ export default {
     },
     handelAdd(truck) {
       TruckApi.save(truck).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+          this.dialog.isVisible = false
+          this.search()
+        } else {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
+        }
+      })
+    },
+    handelEdit(truck) {
+      TruckApi.update(truck).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.$message({

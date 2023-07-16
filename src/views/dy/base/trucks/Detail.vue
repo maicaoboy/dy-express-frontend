@@ -15,7 +15,6 @@
           active-text-color="#fff8eb"
           @select="handelSelect"
           @open="handleOpen"
-          @close="handleClose"
         >
           <el-menu-item index="truckdetail">
             <i class="el-icon-truck" />
@@ -62,14 +61,14 @@
             </el-radio-group>
           </el-form-item>
         </el-form>
-        <el-button
-          class="addtype-button"
-          style="background-color: #6a8d6d;color: #fff;border-radius: 5px;border-color: #DCDFE6;"
-          v-if="truckisVisible"
-          @click="submitForm"
-        >
-          {{ $t('table.truck.edit') }}
-        </el-button>
+        <div slot="footer" class="dialog-footer">
+          <el-button plain type="warning" @click="closeForm">
+            {{ $t('common.cancel') }}
+          </el-button>
+          <el-button plain type="primary" @click="submitForm">
+            {{ $t('common.confirm') }}
+          </el-button>
+        </div>
         <el-form ref="lineform" :model="truck"  label-position="right" label-width="100px" v-if="lineisVisible">
           <el-form-item :label="$t('table.truck.line')" prop="status">
             <el-input v-model="truck.lineName" />
@@ -79,14 +78,15 @@
           </el-form-item>
         </el-form>
         <template v-if="lineisVisible">
-          <baidu-map class="map" center="北京" zoom="10" ></baidu-map>
+          <baidu-map class="map" center="北京" zoom="10" style="overflow:auto">
+            <bm-driving :start="start" :end="end" :auto-viewport="true" :policy="BMAP_DRIVING_POLICY_LEAST_DISTANCE"/>
+          </baidu-map>
         </template>
       </el-main>
     </el-container>
   </el-dialog>
 </template>
 <script>
-
 export default {
   props: {
     type: {
@@ -122,7 +122,7 @@ export default {
     submitForm() {
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.$emit('submit', this.truck)
+          this.$emit('handelEdit', this.truck)
         }
       })
     },
@@ -143,7 +143,8 @@ export default {
 </script>
 
 <style>
-.map {
+.map{
+  margin: 0 auto;
   width: 100%;
   height: 400px;
 }

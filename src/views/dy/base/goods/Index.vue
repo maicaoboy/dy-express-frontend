@@ -92,7 +92,9 @@
           align="center"
         >
           <template slot-scope="scope">
-            <span>{{ scope.row.truckTypeNames }}</span>
+            <div  class="tag-list">
+              <el-tag v-for="(item, index) in scope.row.truckTypeNames" :key="index" type="success">{{ item }} </el-tag>
+            </div>
           </template>
         </el-table-column>
         <!--货物的默认体积-->
@@ -325,5 +327,10 @@ export default {
   padding-top: 10px;     /* 设置按钮的上边界宽度为 10px */
   padding-bottom: 10px;
   margin-bottom: 10px;
+}
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px; /* 设置标签之间的间隔 */
 }
 </style>

@@ -16,13 +16,18 @@ const apiList = {
   delete: {
     url: `/base/base/transportLine/trips`,
     method: 'DELETE'
+  },
+  relation: {
+    url: `/base/base/transportLine/trips/truckDriver`,
+    method: 'GET'
   }
 }
 
 export default {
-  save(data) {
+  save(id, data) {
     return axiosApi({
-      ...apiList.save,
+      url: `/base/base/transportLine/trips/${id}/truckDriver`,
+      method: 'POST',
       data
     })
   },
@@ -48,6 +53,12 @@ export default {
   listOrg(data) {
     return axiosApi({
       ...apiList.listorg,
+      data
+    })
+  },
+  relation(data) {
+    return axiosApi({
+      ...apiList.relation,
       data
     })
   }

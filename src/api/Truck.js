@@ -16,6 +16,10 @@ const apiList = {
   delete: {
     url: `/base/base/truck`,
     method: 'DELETE'
+  },
+  update: {
+    url: `/base/base/truck`,
+    method: 'POST'
   }
 }
 export default {

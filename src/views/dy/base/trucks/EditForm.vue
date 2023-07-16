@@ -24,10 +24,18 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('table.truck.allowableLoad')" prop="id">
-        <el-input v-model="truck.allowableLoad" />
+        <el-input v-model="truck.allowableLoad" >
+          <template slot="append">
+            吨
+          </template>
+        </el-input>
       </el-form-item>
       <el-form-item :label="$t('table.truck.allowableVolume')" prop="status">
-        <el-input v-model="truck.allowableVolume" />
+        <el-input v-model="truck.allowableVolume" >
+          <template slot="append">
+            立方米
+          </template>
+        </el-input>
       </el-form-item>
       <el-form-item :label="$t('table.goodsType.status')" prop="status">
         <el-radio-group v-model="truck.status">
