@@ -39,11 +39,11 @@
       <el-form-item :label="$t('table.transportTask.endAgencyId')" prop="transportTaskType">
         <el-input v-model="transportTask.endAgencyId" />
       </el-form-item>
-      <el-form-item :label="$t('table.transportTask.planDepatureTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.planDepatureTime" />
+      <el-form-item :label="$t('table.transportTask.planDepartureTime')" prop="transportTaskType">
+        <el-input v-model="transportTask.planDepartureTime" />
       </el-form-item>
-      <el-form-item :label="$t('table.transportTask.actualDepatureTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.actualDepatureTime" />
+      <el-form-item :label="$t('table.transportTask.actualDepartureTime')" prop="transportTaskType">
+        <el-input v-model="transportTask.actualDepartureTime" />
       </el-form-item>
       <el-form-item :label="$t('table.transportTask.planArrivalTime')" prop="transportTaskType">
         <el-input v-model="transportTask.actualArrivalTime" />
@@ -140,6 +140,7 @@ export default {
       this.transportTask = {
         id: '',
         status: '',
+        transportOrderId: '',
         assignedStatus: '',
         createTime: '',
         distance: '',
@@ -149,8 +150,8 @@ export default {
         endAgencyId: '',
         truckId: '',
         transportTripsId: '',
-        planDepatureTime: '',
-        actualDepatureTime: '',
+        planDepartureTime: '',
+        actualDepartureTime: '',
         planArrivalTime: '',
         actualArrivalTime: '',
         planPickUpGoodsTime: '',

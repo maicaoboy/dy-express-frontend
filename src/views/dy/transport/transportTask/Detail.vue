@@ -15,8 +15,6 @@
           text-color="#fff"
           active-text-color="#fff8eb"
           @select="handelSelect"
-          @open="handleOpen"
-          @close="handleClose"
         >
           <el-menu-item index="transportTaskDetail">
             <i class="el-icon-transportTask" />
@@ -33,77 +31,157 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <el-form ref="form" :model="transportTask" :rules="rules" label-position="right" label-width="100px" v-if="transportTaskisVisible">
+        <el-form v-if="transportTaskisVisible" ref="form" :model="transportTask" :rules="rules" label-position="right" label-width="100px">
           <el-form-item :label="$t('table.transportTask.transportTaskNo')" prop="id">
-            <el-input v-model="transportTask.id" />
+            <el-input v-model="transportTask.id" :disabled="true" />
           </el-form-item>
           <el-form-item :label="$t('table.transportTask.truckId')" prop="id">
-            <el-input v-model="transportTask.truckId" />
+            <el-input v-model="transportTask.truckId" :disabled="true" />
           </el-form-item>
           <el-form-item :label="$t('table.transportTask.status')" prop="status">
-            <el-input v-model="transportTask.status"/>
+            <el-input v-model="transportTask.status" :disabled="true" />
           </el-form-item>
           <el-form-item :label="$t('table.transportTask.assignStatus')" prop="status">
-            <el-input v-model="transportTask.assignedStatus"/>
+            <el-input v-model="transportTask.assignedStatus" :disabled="true" />
           </el-form-item>
           <el-form-item :label="$t('table.transportTask.startAgencyId')" prop="transportTaskType">
-            <el-input v-model="transportTask.startAgencyId"/>
+            <el-input v-model="transportTask.startAgencyId" :disabled="true" />
           </el-form-item>
           <el-form-item :label="$t('table.transportTask.endAgencyId')" prop="transportTaskType">
-            <el-input v-model="transportTask.endAgencyId"/>
+            <el-input v-model="transportTask.endAgencyId" :disabled="true" />
           </el-form-item>
         </el-form>
-        <el-form ref="lineform" :model="transportTask"  label-position="right" label-width="100px" v-if="transportLineisVisible">
+        <el-form v-if="transportOrderisVisible" ref="orderform" :model="transportTask" label-position="right" label-width="100px">
+          <el-table
+            :key="tableKey"
+            ref="table"
+            v-loading="loading"
+            :data="tableData"
+            :header-cell-style="{background:'#FCFBFF',border:'0'}"
+            fit
+            style="width: 100%;"
+          >
+            <el-table-column type="index" width="50" :label="$t('table.serial')" />
+            <el-table-column :label="$t('table.transportTask.transportTaskNo')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.transportNo')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.transportOrderId }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.createTime')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.createTime }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="status" :label="$t('table.transportTask.status')" :formatter="transportTaskStatusFormater" />
+            <el-table-column prop="assignStatus" :label="$t('table.transportTask.assignStatus')" :formatter="transportTaskAssignStatusFormater" />
+            <el-table-column :label="$t('table.transportTask.startAgencyId')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.startAgencyId }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.endAgencyId')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.endAgencyId }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.transportTripId')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.transportTripsId }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.planDepartureTime')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.planDepartureTime }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.actualDepartureTime')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.actualDepartureTime }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.planArrivalTime')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.planArrivalTime }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.actualArrivalTime')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.actualArrivalTime }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.planPickUpTime')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row. planPickUpGoodsTime }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.actualPickUpTime')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.actualPickUpGoodsTime }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.planDeliveryTime')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.planDeliveryTime }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column :label="$t('table.transportTask.actualDeliveryTime')" align="center" prop="code" width="200">
+              <template slot-scope="scope">
+                <span>{{ scope.row.actualDeliveryTime }}</span>
+              </template>
+            </el-table-column>
+          </el-table>
+          <pagination
+            v-show="tableData.total>0"
+            :limit.sync="pagination.size"
+            :page.sync="pagination.current"
+            :total="Number(tableData.total)"
+            @pagination="fetch"
+          />
+        </el-form>
+        <el-form v-if="transportLineisVisible" ref="lineform" :model="transportTask" label-position="right" label-width="100px">
           <el-form-item :label="$t('table.transportTask.transportTripId')" prop="id">
-            <el-input v-model="transportTask.transportTripsId" />
+            <el-input v-model="transportTask.transportTripsId" :disabled="true" />
           </el-form-item>
           <el-form-item :label="$t('table.transportTask.truckId')" prop="id">
-            <el-input v-model="transportTask.truckId" />
+            <el-input v-model="transportTask.truckId" :disabled="true" />
           </el-form-item>
-          <el-form-item :label="$t('table.transportTask.planDepatureTime')" prop="transportTaskType">
-            <el-input v-model="transportTask.planDepatureTime" />
+          <el-form-item :label="$t('table.transportTask.planDepartureTime')" prop="transportTaskType">
+            <el-input v-model="transportTask.planDepartureTime" :disabled="true" />
           </el-form-item>
-          <el-form-item :label="$t('table.transportTask.actualDepatureTime')" prop="transportTaskType">
-            <el-input v-model="transportTask.actualDepatureTime" />
+          <el-form-item :label="$t('table.transportTask.actualDepartureTime')" prop="transportTaskType">
+            <el-input v-model="transportTask.actualDepartureTime" :disabled="true" />
           </el-form-item>
           <el-form-item :label="$t('table.transportTask.planArrivalTime')" prop="transportTaskType">
-            <el-input v-model="transportTask.actualArrivalTime" />
+            <el-input v-model="transportTask.actualArrivalTime" :disabled="true" />
           </el-form-item>
           <el-form-item :label="$t('table.transportTask.actualArrivalTime')" prop="transportTaskType">
-            <el-input v-model="transportTask.actualArrivalTime" />
+            <el-input v-model="transportTask.actualArrivalTime" :disabled="true" />
           </el-form-item>
         </el-form>
         <template v-if="transportLineisVisible">
-          <baidu-map class="map" center="北京" zoom="10" ></baidu-map>
+          <baidu-map class="map" center="北京" zoom="10">
+            <bm-driving :start="start" :end="end" :auto-viewport="true" :policy="BMAP_DRIVING_POLICY_LEAST_DISTANCE" />
+          </baidu-map>
         </template>
-        <el-form ref="orderform" :model="transportTask"  label-position="right" label-width="100px" v-if="transportLineisVisible">
-          <el-form-item :label="$t('table.transportTask.transportTripId')" prop="id">
-            <el-input v-model="transportTask.transportTripsId" />
-          </el-form-item>
-          <el-form-item :label="$t('table.transportTask.truckId')" prop="id">
-            <el-input v-model="transportTask.truckId" />
-          </el-form-item>
-          <el-form-item :label="$t('table.transportTask.planDepatureTime')" prop="transportTaskType">
-            <el-input v-model="transportTask.planDepatureTime" />
-          </el-form-item>
-          <el-form-item :label="$t('table.transportTask.actualDepatureTime')" prop="transportTaskType">
-            <el-input v-model="transportTask.actualDepatureTime" />
-          </el-form-item>
-          <el-form-item :label="$t('table.transportTask.planArrivalTime')" prop="transportTaskType">
-            <el-input v-model="transportTask.actualArrivalTime" />
-          </el-form-item>
-          <el-form-item :label="$t('table.transportTask.actualArrivalTime')" prop="transportTaskType">
-            <el-input v-model="transportTask.actualArrivalTime" />
-          </el-form-item>
-        </el-form>
       </el-main>
     </el-container>
   </el-dialog>
 </template>
 <script>
 
+import TransportTaskApi from '@/api/TransportTask'
+import Pagination from '@/components/Pagination'
+
 export default {
   name: 'TransportTaskDetail',
+  components: {
+    Pagination
+  },
   props: {
     type: {
       type: String,
@@ -116,6 +194,7 @@ export default {
   },
   data() {
     return {
+      title: '查看详情',
       transportTask: {},
       transportTaskisVisible: true,
       transportLineisVisible: false,
@@ -124,9 +203,25 @@ export default {
         lng: 116.301934,
         lat: 39.977552
       },
+      loading: false,
+      tableData: {
+        total: 0
+      },
+      tableKey: 0,
       end: {
         lng: 116.508328,
         lat: 39.919141
+      },
+      rules: {
+        status: {
+          required: true,
+          message: this.$t('rules.require'),
+          trigger: 'blur'
+        }
+      },
+      pagination: {
+        size: 10,
+        current: 1
       },
       BaiduMapAK: 'BaiduMapAK'
     }
@@ -145,6 +240,22 @@ export default {
     setTransportTasks(transportTask) {
       this.transportTask = { ...transportTask }
     },
+    detailFetch(params = {}) {
+      const that = this // 存储this
+      console.log(this)
+      console.log(that)
+      this.loading = true
+      params.id = this.transportTask.id
+      params.pageSize = this.pagination.size
+      params.page = this.pagination.current
+      // console.log(params)
+      TransportTaskApi.findAll(params).then(response => {
+        const res = response.data
+        console.log(res)
+        this.loading = false
+        this.tableData = res.data
+      })
+    },
     handelSelect(index) {
       if (index === 'transportTaskDetail') {
         this.transportTaskisVisible = true
@@ -158,6 +269,33 @@ export default {
         this.transportTaskisVisible = false
         this.transportLineisVisible = false
         this.transportOrderisVisible = true
+        this.detailFetch()
+      }
+    },
+    transportTaskStatusFormater(row, column) {
+      if (row.status === 1) {
+        return '待执行'
+      } else if (row.status === 2) {
+        return '进行中'
+      } else if (row.status === 3) {
+        return '待确认'
+      } else if (row.status === 4) {
+        return '已完成'
+      } else if (row.status === 5) {
+        return '已取消'
+      } else {
+        return '未知'
+      }
+    },
+    transportTaskAssignStatusFormater(row, column) {
+      if (row.status === 1) {
+        return '待分配'
+      } else if (row.status === 2) {
+        return '已分配'
+      } else if (row.status === 3) {
+        return '待人工分配'
+      } else {
+        return '未知'
       }
     }
   }
@@ -170,3 +308,4 @@ export default {
   height: 400px;
 }
 </style>
+

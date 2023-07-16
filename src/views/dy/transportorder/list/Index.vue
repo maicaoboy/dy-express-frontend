@@ -92,29 +92,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="status" :label="$t('table.transport.transportStatus')" :formatter="transportStatusFormater" />
-        <el-table-column prop="schedulingStatus" :label="$t('table.transport.schedulingStatus')" :formatter="transportSchedulingStatusFormater" />
-        <el-table-column :label="$t('table.transport.senderName')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.senderName }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('table.transport.senderPhone')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.senderPhone }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('table.transport.senderAddress')" :formatter="senderAddressFormater" align="center" prop="code" width="200" />
-        <el-table-column :label="$t('table.transport.receiverName')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.receiverName }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('table.transport.receiverPhone')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.receiverPhone }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('table.transport.receiverAddress')" :formatter="receiverAddressFormater" align="center" prop="code" width="200" />
+        <el-table-column prop="status" :label="$t('table.transport.schedulingStatus')" :formatter="transportSchedulingStatusFormater" />
         <el-table-column
           fixed="right"
           label="操作"
@@ -308,11 +286,11 @@ export default {
     },
 
     transportSchedulingStatusFormater(row, column) {
-      if (row.status === 1) {
+      if (row.schedulingStatus === 1) {
         return '待调度'
-      } else if (row.status === 2) {
+      } else if (row.schedulingStatus === 2) {
         return '未匹配线路'
-      } else if (row.status === 3) {
+      } else if (row.schedulingStatus === 3) {
         return '已调度'
       } else {
         return '未知'

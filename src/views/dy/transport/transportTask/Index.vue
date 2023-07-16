@@ -173,11 +173,11 @@
         @close="editClose"
         @success="editSuccess"
       />
-      <transportTaskDetail
+      <transportTask-detail
         ref="transportTaskDetail"
         :is-visible="detailForm.isVisible"
         @close="editClose">
-      </transportTaskDetail>
+      </transportTask-detail>
     </el-card>
   </div>
 </template>
@@ -216,6 +216,8 @@ export default {
       selection: [],
       // 以下已修改
       loading: false,
+      transportTaskListisVisible: true,
+      transportTaskDetailisVisible: false,
       tableData: {
         total: 0
       },
@@ -359,11 +361,11 @@ export default {
       }
     },
     transportTaskAssignStatusFormater(row, column) {
-      if (row.status === 1) {
+      if (row.assignedStatus === 1) {
         return '待分配'
-      } else if (row.status === 2) {
+      } else if (row.assignedStatus === 2) {
         return '已分配'
-      } else if (row.status === 3) {
+      } else if (row.assignedStatus === 3) {
         return '待人工分配'
       } else {
         return '未知'

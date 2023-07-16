@@ -7,14 +7,14 @@ const apiList = {
   },
   updatebyid: {
     method: 'PUT',
-    url: `/work/transport-task/{id}`
+    url: `/work/transport-task`
   },
   findByPage: {
     method: 'POST',
     url: `/work/transport-task/page`
   },
   findAll: {
-    method: 'Post',
+    method: 'POST',
     url: `/work/transport-task/list`
   },
   findAllByOrderIdOrTaskId: {
@@ -30,9 +30,9 @@ export default {
       data
     })
   },
-  updatebyid(data) {
+  updatebyid(id, data) {
     return axiosApi({
-      url: `/work/transport-task/${data.id}}`,
+      url: `/work/transport-task/${id}`,
       method: 'PUT',
       data
     })
