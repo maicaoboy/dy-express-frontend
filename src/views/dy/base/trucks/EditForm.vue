@@ -93,9 +93,6 @@ export default {
       this.intiGoods()
       this.$emit('close')
     },
-    setGood(truck) {
-      this.truck = { ...truck }
-    },
     intiGoods() {
       this.truck = {
         licensePlate: '',

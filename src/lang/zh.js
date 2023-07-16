@@ -85,12 +85,14 @@ export default {
       tripid: '车次编号',
       status: '状态',
       brand: '车辆品牌',
-      add: '新增车辆'
+      add: '新增车辆',
+      edit: '修改车辆信息',
+      line: '所属线路'
     },
     order: {
       orderNo: '订单号',
-      orderStatus: '订单状态',
-      orderType: '订单类型',
+      orderStatus: '运输状态',
+      orderType: '订单状态',
       payStatus: '支付状态',
       senderName: '发货人姓名',
       senderPhone: '发货人电话',

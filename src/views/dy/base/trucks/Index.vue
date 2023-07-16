@@ -143,7 +143,7 @@
             <el-button
               type="text"
               size="small"
-              @click="edit(scope.$index, scope.row)"
+              @click="detail(scope.$index, scope.row)"
             >
               查看详情
             </el-button>
@@ -172,6 +172,11 @@
         @close="editClose"
         @handelAdd="handelAdd"
       />
+      <detail
+        ref="detail"
+        :is-visible="detailForm.isVisible"
+        @close="editClose">
+      </detail>
     </el-card>
   </div>
 </template>
@@ -180,9 +185,11 @@ import Pagination from '@/components/Pagination'
 import TruckApi from '@/api/Truck'
 import TruckTypeApi from '@/api/TruckType'
 import EditForm from '@/views/dy/base/trucks/EditForm.vue'
+import Detail from '@/views/dy/base/trucks/Detail.vue'
 export default {
   name: 'TruckIndex',
   components: {
+    Detail,
     EditForm,
     Pagination
   },
@@ -204,6 +211,17 @@ export default {
       dialog: {
         isVisible: false,
         type: 'add'
+      },
+      detailForm: {
+        isVisible: false
+      },
+      start: {
+        lng: 116.301934,
+        lat: 39.977552
+      },
+      end: {
+        lng: 116.508328,
+        lat: 39.919141
       }
     }
   },
@@ -241,6 +259,10 @@ export default {
     add() {
       this.dialog.type = 'add'
       this.dialog.isVisible = true
+    },
+    detail(index, row) {
+      this.detailForm.isVisible = true
+      this.$refs.detail.setTruck(row)
     },
     handleDelete(index, row) {
       this.$confirm('此操作将删除id为：' + row.id + '的车辆数据, 是否继续?', '提示', {

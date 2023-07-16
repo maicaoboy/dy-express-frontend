@@ -76,6 +76,27 @@
         <el-input v-model="order.receiverAddress" />
       </el-form-item>
     </el-form>
+    <div>
+      <el-table
+        ref="singleTable"
+        :data="goodsData"
+        border
+        stripe
+        style="width: 100%"
+        highlight-current-row
+        @current-change="handleCurrentChange"
+      >
+        <el-table-column prop="id" label="ID" />
+        <el-table-column prop="goodsType" label="商品类型" />
+        <el-table-column prop="name" label="商品名称" />
+        <el-table-column prop="unit" label="单位" />
+        <el-table-column prop="cargoValue" label="货值" />
+        <el-table-column prop="cargoBarcode" label="货物条码" />
+        <el-table-column prop="volume" label="体积" />
+        <el-table-column prop="weight" label="重量" />
+        <el-table-column prop="remark" label="备注" />
+      </el-table>
+    </div>
     <div slot="footer" class="dialog-footer">
       <el-button plain type="warning" @click="isVisible = false">
         {{ $t('common.cancel') }}
@@ -113,11 +134,17 @@ export default {
     type: {
       type: String,
       default: 'add'
+    },
+    goodsData: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
       regionData,
+      selectedGoods: null,
+      currentRow: null,
       order: {},
       rules: {
         status: {
@@ -203,6 +230,19 @@ export default {
     },
     save() {
       const that = this
+      if (this.order.senderAddress3id.length === 0 || this.order.receiverAddress3id.length === 0) {
+        this.$message({
+          message: '请选择省市区',
+          type: 'error'
+        })
+        return
+      }
+      this.order.senderProvinceId = this.order.senderAddress3id[0]
+      this.order.senderCityId = this.order.senderAddress3id[1]
+      this.order.senderCountyId = this.order.senderAddress3id[2]
+      this.order.receiverProvinceId = this.order.receiverAddress3id[0]
+      this.order.receiverCityId = this.order.receiverAddress3id[1]
+      this.order.receiverCountyId = this.order.receiverAddress3id[2]
       orderApi.save(this.order).then(response => {
         const res = response.data
         if (res.isSuccess) {
@@ -246,6 +286,17 @@ export default {
     },
     dsTypeChange(value) {
       this.orgHidden = value !== 'CUSTOMIZE'
+    },
+    setCurrent(row) {
+      this.$refs.singleTable.setCurrentRow(row)
+    },
+    handleCurrentChange(val) {
+      this.currentRow = val
+      this.order.orderCargoDto = { ...val }
+      this.order.orderCargoDto.id = ''
+      this.order.orderCargoDto.orderId = this.order.id
+      this.order.orderCargoDto.totalVolume = val.volume
+      this.order.orderCargoDto.totalWeight = val.weight
     }
   }
 }

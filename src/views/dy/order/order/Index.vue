@@ -208,6 +208,7 @@
         :order-status-options="orderStatusOptions"
         :order-type-options="orderTypeOptions"
         :pay-status-options="payStatusOptions"
+        :goods-data="goodsData"
         :type="dialog.type"
         @close="editClose"
         @success="editSuccess"
@@ -220,6 +221,7 @@
 import Pagination from '@/components/Pagination'
 import OrderEdit from './Edit'
 import orderApi from '@/api/Order.js'
+import cargoApi from '@/api/OrderCargo.js'
 import { provinceAndCityData, codeToText } from 'element-china-area-data'
 
 export default {
@@ -238,6 +240,8 @@ export default {
     return {
       provinceAndCityData,
       codeToText,
+      cargoData: [],
+      goodsData: [],
       dialog: {
         isVisible: false,
         type: 'add'
@@ -266,6 +270,7 @@ export default {
   computed: {},
   mounted() {
     this.initOptions()
+    this.initGoodData()
     this.fetch()
   },
   methods: {
@@ -307,6 +312,7 @@ export default {
         console.log(res.data)
         this.tableData = res.data
       })
+      cargoApi
     },
     handleEdit(row) {
       // console.log(row)
@@ -320,6 +326,16 @@ export default {
       this.dialog.isVisible = true
     },
     initOptions() {
+      this.payStatusOptions = [
+        {
+          label: '未支付',
+          value: 1
+        },
+        {
+          label: '已支付',
+          value: 2
+        }
+      ]
       /**
      * 订单状态: 23000为待取件,23001为已取件，23002为网点自寄，23003为网点入库，
      * 23004为待装车，23005为运输中，23006为网点出库，23007为待派送，23008为派送中，
@@ -376,26 +392,24 @@ export default {
         }
       ]
       /**
-     * 订单类型，1为同城订单，2为城际订单
+     * 订单类型，1:正常，2:退订，3:退货，4:换货
      */
       this.orderTypeOptions = [
         {
-          label: '同城订单',
+          label: '正常',
           value: 1
         },
         {
-          label: '城际订单',
+          label: '退订',
           value: 2
-        }
-      ]
-      this.payStatusOptions = [
-        {
-          label: '未支付',
-          value: 1
         },
         {
-          label: '已支付',
-          value: 2
+          label: '退货',
+          value: 3
+        },
+        {
+          label: '换货',
+          value: 4
         }
       ]
     },
@@ -438,6 +452,46 @@ export default {
     },
     receiverAddressFormater(row, column) {
       return codeToText[row.receiverProvinceId] + codeToText[row.receiverCityId] + codeToText[row.receiverCountyId] + row.receiverAddress
+    },
+    initGoodData() {
+      this.goodsData = [
+        {
+          id: 1,
+          goodsTypeId: '719688175616',
+          goodsType: '耳机',
+          name: '索尼 WH-1000XM4',
+          unit: '个',
+          cargoValue: '2499.00000000',
+          cargoBarcode: '',
+          volume: 2.0000000000,
+          weight: 0.2500000000,
+          remark: '包装清单无线降噪立体声耳机（1） 便携盒（1） 耳机连接线（1） USB Type-C 连接线(1) 保修卡（1） 说明书（1）'
+        },
+        {
+          id: 2,
+          goodsTypeId: '719688175616',
+          goodsType: '耳机',
+          name: '索尼 WH-1000XM3',
+          unit: '个',
+          cargoValue: '1499.00000000',
+          cargoBarcode: '',
+          volume: 2.0000000000,
+          weight: 0.2500000000,
+          remark: '包装清单无线降噪立体声耳机（1） 便携盒（1） 耳机连接线（1） USB Type-C 连接线(1) 保修卡（1） 说明书（1）'
+        },
+        {
+          id: 3,
+          goodsTypeId: '719688175616',
+          goodsType: '耳机',
+          name: '索尼 WH-1000XM2',
+          unit: '个',
+          cargoValue: '499.00000000',
+          cargoBarcode: '',
+          volume: 2.0000000000,
+          weight: 0.2500000000,
+          remark: '包装清单无线降噪立体声耳机（1） 便携盒（1） 耳机连接线（1） USB Type-C 连接线(1) 保修卡（1） 说明书（1）'
+        }
+      ]
     }
   }
 }
