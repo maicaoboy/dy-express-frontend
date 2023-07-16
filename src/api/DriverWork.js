@@ -12,5 +12,12 @@ export default {
       ...apiList.page,
       data
     })
+  },
+  update(id, data) {
+    return axiosApi({
+      url: `/work/driver-job/${id}`,
+      method: 'PUT',
+      data
+    })
   }
 }

@@ -517,6 +517,7 @@ export default {
     },
     saveUserInfo(user, permissionsList) {
       this.$store.commit('account/setUser', user)
+      console.log('aaaaaaaaaaa', user)
       // TODO 从后台拉取权限列表
       // const permissions = [
       //   "org:view",
