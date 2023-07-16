@@ -309,6 +309,7 @@ export default {
     },
     save() {
       this.org.areaId = this.selectedOptions[2]
+      console.log(this.org.areaId)
       orgApi.save({ ...this.org }).then(response => {
         const res = response.data
         if (res.isSuccess) {
@@ -322,6 +323,7 @@ export default {
       })
     },
     update() {
+      this.org.areaId = this.selectedOptions[2]
       orgApi.update({ ...this.org }).then(response => {
         const res = response.data
         if (res.isSuccess) {
