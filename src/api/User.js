@@ -84,5 +84,11 @@ export default {
       ...apiList.list,
       data
     })
+  },
+  getdrivername(driverId) {
+    return axiosApi({
+      url: `/authority/user/${driverId}`,
+      method: 'GET'
+    })
   }
 }
