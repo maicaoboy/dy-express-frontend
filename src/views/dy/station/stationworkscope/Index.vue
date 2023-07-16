@@ -3,7 +3,7 @@
     <!-- 搜索表单 -->
     <el-form :model="searchForm" label-width="120px" @submit.native.prevent>
       <el-form-item label="网点id">
-        <el-input v-model="searchForm.agencyId" placeholder="请输入快递员ID" />
+        <el-input v-model="searchForm.agencyId" placeholder="请输入网点ID" />
       </el-form-item>
       <el-form-item label="地址id">
         <el-input v-model="searchForm.areaId" placeholder="请输入地址id"/>
@@ -23,6 +23,7 @@
       <el-table-column prop="id" label="ID" />
       <el-table-column prop="agencyId" label="网点ID" />
       <el-table-column prop="areaId" label="地区ID" />
+      <el-table-column prop="location" label="地址" />
       <el-table-column prop="mutiPoints" label="电子围栏点" />
       <!--      查看地图   -->
       <el-table-column label="操作">
@@ -71,6 +72,7 @@
 <script>
 import AxiosApi from '@/api/AxiosApi'
 import MyMap from '@/views/dy/station/stationworkscope/MyMap.vue'
+import areaApi from '@/api/Area'
 export default {
   name: 'StationWorkScope',
   components: { MyMap },
@@ -102,6 +104,7 @@ export default {
       key: ''
     }
   },
+
   created() {
     this.key = this.$route.query.key
   },
@@ -112,8 +115,8 @@ export default {
     search() {
       AxiosApi({
         url: '/base/scope/agency/page',
-        method: 'get',
-        params: {
+        method: 'post',
+        data: {
           agencyId: this.searchForm.agencyId,
           areaId: this.searchForm.areaId,
           page: this.pagination.page,
@@ -121,8 +124,23 @@ export default {
         }
       }).then(res => {
         console.log(res)
-        this.tableData = res.data.data.records
         this.pagination.total = +res.data.data.total
+        const table = res.data.data.records
+        //   获取地址
+        for (let i = 0; i < table.length; i++) {
+          console.log(table)
+          areaApi.getByCode(table[i].areaId).then(res => {
+            table[i].location = res.data.data.mergerName
+            table[i].lng = res.data.data.lng
+            table[i].lat = res.data.data.lat
+            if (i === table.length - 1) {
+              this.tableData = table
+            }
+          })
+        }
+        if (table.length === 0) {
+          this.tableData = []
+        }
       })
     },
     resetSearchForm() {
@@ -142,7 +160,7 @@ export default {
       this.editAgencyForm = row
       this.$nextTick(() => {
         console.log(this.$refs.map)
-        this.$refs.map.setPoints(JSON.parse(row.mutiPoints), row.id)
+        this.$refs.map.setPoints(JSON.parse(row.mutiPoints), row)
       })
     },
     addAgency() {
@@ -169,7 +187,7 @@ export default {
         areaId: '',
         mutiPoints: ''
       }
-    }
+    },
   }
 }
 </script>
