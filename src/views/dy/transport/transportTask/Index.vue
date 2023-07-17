@@ -102,14 +102,14 @@
             <span>{{ scope.row.transportTripsId }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.transportTask.planDepatureTime')" align="center" prop="code" width="200">
+        <el-table-column :label="$t('table.transportTask.planDepartureTime')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.planDepatureTime }}</span>
+            <span>{{ scope.row.planDepartureTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.transportTask.actualDepatureTime')" align="center" prop="code" width="200">
+        <el-table-column :label="$t('table.transportTask.actualDepartureTime')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.actualDepatureTime }}</span>
+            <span>{{ scope.row.actualDepartureTime }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.transportTask.planArrivalTime')" align="center" prop="code" width="200">
@@ -277,7 +277,6 @@ export default {
       this.loading = true
       params.pageSize = this.pagination.size
       params.page = this.pagination.current
-      // console.log(params)
       TransportTaskApi.findByPage(params).then(response => {
         const res = response.data
         console.log(res)

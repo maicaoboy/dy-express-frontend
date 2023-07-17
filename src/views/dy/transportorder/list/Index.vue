@@ -295,12 +295,6 @@ export default {
       } else {
         return '未知'
       }
-    },
-    senderAddressFormater(row, column) {
-      return codeToText[row.senderProvinceId] + codeToText[row.senderCityId] + codeToText[row.receiverCountyId] + row.senderAddress
-    },
-    receiverAddressFormater(row, column) {
-      return codeToText[row.receiverProvinceId] + codeToText[row.receiverCityId] + codeToText[row.receiverCountyId] + row.receiverAddress
     }
   }
 }

@@ -56,7 +56,7 @@
             :key="tableKey"
             ref="table"
             v-loading="loading"
-            :data="tableData"
+            :data="tableData.items"
             :header-cell-style="{background:'#FCFBFF',border:'0'}"
             fit
             style="width: 100%;"
@@ -69,7 +69,7 @@
             </el-table-column>
             <el-table-column :label="$t('table.transportTask.transportNo')" align="center" prop="code" width="200">
               <template slot-scope="scope">
-                <span>{{ scope.row.transportOrderId }}</span>
+                <span>{{ scope.row.transportOrderIds }}</span>
               </template>
             </el-table-column>
             <el-table-column :label="$t('table.transportTask.createTime')" align="center" prop="code" width="200">
@@ -176,6 +176,7 @@
 
 import TransportTaskApi from '@/api/TransportTask'
 import Pagination from '@/components/Pagination'
+import AreaApi from '@/api/Area'
 
 export default {
   name: 'TransportTaskDetail',
@@ -240,6 +241,24 @@ export default {
     setTransportTasks(transportTask) {
       this.transportTask = { ...transportTask }
     },
+    setStart() {
+      AreaApi.get(this.transportTask.startAgencyId).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.start.lat = res.data.lat
+          this.start.lng = res.data.lng
+        }
+      })
+    },
+    setEnd() {
+      AreaApi.get(this.transportTask.endAgencyId).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.end.lat = res.data.lat
+          this.end.lng = res.data.lng
+        }
+      })
+    },
     detailFetch(params = {}) {
       const that = this // 存储this
       console.log(this)
@@ -249,11 +268,11 @@ export default {
       params.pageSize = this.pagination.size
       params.page = this.pagination.current
       // console.log(params)
-      TransportTaskApi.findAll(params).then(response => {
+      TransportTaskApi.findByPage(params).then(response => {
         const res = response.data
         console.log(res)
         this.loading = false
-        this.tableData = res.data
+        this.tableData = res
       })
     },
     handelSelect(index) {
@@ -265,6 +284,8 @@ export default {
         this.transportTaskisVisible = false
         this.transportLineisVisible = true
         this.transportOrderisVisible = false
+        this.setStart()
+        this.setEnd()
       } else if (index === 'transportOrderDetail') {
         this.transportTaskisVisible = false
         this.transportLineisVisible = false
