@@ -208,6 +208,7 @@
         :order-status-options="orderStatusOptions"
         :order-type-options="orderTypeOptions"
         :pay-status-options="payStatusOptions"
+        :pickup-type-options="pickupTypeOptions"
         :goods-data="goodsData"
         :type="dialog.type"
         @close="editClose"
@@ -263,6 +264,7 @@ export default {
       orderTypeOptions: [],
       orderStatusOptions: [],
       payStatusOptions: [],
+      pickupTypeOptions: [],
       selectedSenderAddress: [],
       selectedReceiverAddress: []
     }
@@ -326,6 +328,17 @@ export default {
       this.dialog.isVisible = true
     },
     initOptions() {
+      // "取件类型，1为网点自寄，2为上门取件"
+      this.pickupTypeOptions = [
+        {
+          label: '网点自寄',
+          value: 1
+        },
+        {
+          label: '上门取件',
+          value: 2
+        }
+      ]
       this.payStatusOptions = [
         {
           label: '未支付',
