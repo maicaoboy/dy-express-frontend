@@ -20,10 +20,20 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('table.transportTask.assignStatus')" prop="status">
+      <el-form-item :label="$t('table.transportTask.assignStatus')" prop="assignStatus">
         <el-select v-model="transportTask.assignedStatus" :placeholder="$t('table.select')">
           <el-option
             v-for="item in transportTaskAssignStatusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item :label="$t('table.transportTask.loadStatus')" prop="loadStatus">
+        <el-select v-model="transportTask.loadingStatus" :placeholder="$t('table.select')">
+          <el-option
+            v-for="item in transportTaskLoadStatusOptions"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -38,33 +48,6 @@
       </el-form-item>
       <el-form-item :label="$t('table.transportTask.endAgencyId')" prop="transportTaskType">
         <el-input v-model="transportTask.endAgencyId" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transportTask.planDepartureTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.planDepartureTime" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transportTask.actualDepartureTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.actualDepartureTime" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transportTask.planArrivalTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.actualArrivalTime" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transportTask.actualArrivalTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.actualArrivalTime" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transportTask.planPickUpTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.planPickUpGoodsTime" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transportTask.actualPickUpTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.actualPickUpGoodsTime" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transportTask.planDeliveryTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.planDeliveryTime" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transportTask.actualDeliveryTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.actualDeliveryTime" />
-      </el-form-item>
-      <el-form-item :label="$t('table.transportTask.createTime')" prop="transportTaskType">
-        <el-input v-model="transportTask.createTime" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -90,6 +73,10 @@ export default {
       required: true
     },
     transportTaskStatusOptions: {
+      type: Array,
+      required: true
+    },
+    transportTaskLoadStatusOptions: {
       type: Array,
       required: true
     },
@@ -146,6 +133,7 @@ export default {
         distance: '',
         remark: '',
         transportNo: '',
+        loadingStatus: '',
         startAgencyId: '',
         endAgencyId: '',
         truckId: '',

@@ -170,6 +170,11 @@
         </template>
       </el-main>
     </el-container>
+    <div slot="footer" class="dialog-footer">
+      <el-button plain type="warning" @click="isVisible = false">
+        {{ $t('common.confirm') }}
+      </el-button>
+    </div>
   </el-dialog>
 </template>
 <script>
@@ -200,13 +205,14 @@ export default {
       transportTaskisVisible: true,
       transportLineisVisible: false,
       transportOrderisVisible: false,
-      start: {
-        lng: 116.301934,
-        lat: 39.977552
-      },
       loading: false,
       tableData: {
         total: 0
+      },
+      // 默认经纬度
+      start: {
+        lng: 116.301934,
+        lat: 39.977552
       },
       tableKey: 0,
       end: {
@@ -228,15 +234,8 @@ export default {
     }
   },
   methods: {
-    closeForm() {
+    close() {
       this.$emit('close')
-    },
-    submitForm() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.$emit('submit', this.transportTask)
-        }
-      })
     },
     setTransportTasks(transportTask) {
       this.transportTask = { ...transportTask }

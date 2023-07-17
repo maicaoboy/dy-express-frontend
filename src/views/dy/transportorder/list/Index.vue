@@ -28,6 +28,19 @@
             </template>
           </div>
         </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.transport.orderNo') }}: </label>
+            <el-input
+              v-model="queryParams.orderId"
+              :placeholder="$t('table.transport.orderNo')"
+              class="filter-item search-item"
+              clearable
+            />
+          </div>
+        </el-col>
         <el-col :span="8">
           <div class="grid-content bg-purple">
             <label style="color:#909399;font-weight:500;">{{ $t('table.transport.schedulingStatus') }}: </label>

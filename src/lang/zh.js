@@ -148,6 +148,7 @@ export default {
       truckId: '车辆id',
       status: '运输任务单状态',
       assignStatus: '分配状态',
+      loadStatus: '满载状态',
       planDepartureTime: '预计离开时间',
       actualDepartureTime: '实际离开时间',
       planArrivalTime: '预计到达时间',

@@ -87,6 +87,7 @@
         </el-table-column>
         <el-table-column prop="status" :label="$t('table.transportTask.status')" :formatter="transportTaskStatusFormater" />
         <el-table-column prop="assignStatus" :label="$t('table.transportTask.assignStatus')" :formatter="transportTaskAssignStatusFormater" />
+        <el-table-column prop="loadStatus" :label="$t('table.transportTask.loadStatus')" :formatter="transportTaskLoadStatusFormater" />
         <el-table-column :label="$t('table.transportTask.startAgencyId')" align="center" prop="code" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.startAgencyId }}</span>
@@ -169,6 +170,7 @@
         :dialog-visible="dialog.isVisible"
         :transport-task-status-options="transportTaskStatusOptions"
         :transport-task-assign-status-options="transportTaskAssignStatusOptions"
+        :transport-task-load-status-options="transportTaskLoadStatusOptions"
         :type="dialog.type"
         @close="editClose"
         @success="editSuccess"
@@ -229,7 +231,8 @@ export default {
         current: 1
       },
       transportTaskStatusOptions: [],
-      transportTaskAssignStatusOptions: []
+      transportTaskAssignStatusOptions: [],
+      transportTaskLoadStatusOptions: []
     }
   },
   computed: {},
@@ -339,6 +342,20 @@ export default {
           value: 3
         }
       ]
+      this.transportTaskLoadStatusOptions = [
+        {
+          label: '半载',
+          value: 1
+        },
+        {
+          label: '满载',
+          value: 2
+        },
+        {
+          label: '空载',
+          value: 3
+        }
+      ]
     },
     /**
      * 运输任务单状态: 1为待执行,2为进行中，23002为待确认，
@@ -355,6 +372,17 @@ export default {
         return '已完成'
       } else if (row.status === 5) {
         return '已取消'
+      } else {
+        return '未知'
+      }
+    },
+    transportTaskLoadStatusFormater(row, column) {
+      if (row.loadingStatus === 1) {
+        return '半载'
+      } else if (row.loadingStatus === 2) {
+        return '满载'
+      } else if (row.loadingStatus === 3) {
+        return '空载'
       } else {
         return '未知'
       }
