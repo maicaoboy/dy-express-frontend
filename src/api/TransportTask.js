@@ -43,6 +43,12 @@ export default {
       data
     })
   },
+  findbyId(id) {
+    return axiosApi({
+      url: `/work/transport-task/${id}`,
+      method: 'GET'
+    })
+  },
   findAll(data) {
     return axiosApi({
       ...apiList.findAll,

@@ -176,6 +176,7 @@
 import Pagination from '@/components/Pagination/index.vue'
 import DriverWorkApi from '@/api/DriverWork'
 import userApi from '@/api/User'
+import OrderApi from '@/api/Order'
 export default {
   components: {
     Pagination
@@ -204,6 +205,8 @@ export default {
         driverId: ''
       },
       driverUserData: [],
+      Orders: [],
+      transportOrderList: [],
       driverName: '',
       pagination: {
         current: 1,
@@ -233,6 +236,7 @@ export default {
   },
   created() {
     this.fetch()
+    this.getAllOrder()
   },
   methods: {
     fetch(params = {}) {
@@ -310,7 +314,8 @@ export default {
             }
           })
         })
-        .catch(() => {})
+        .catch(() => {
+        })
     },
     handelArrive(index, row) {
       this.$confirm('确认送达' + row.id + '任务单吗？', '提示', {
@@ -319,24 +324,59 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          row.status = 3
-          DriverWorkApi.update(row.id, row).then(response => {
-            const res = response.data
-            if (res.isSuccess) {
-              this.$message({
-                message: '送达成功',
-                type: 'success'
-              })
-              this.fetch()
-            } else {
-              this.$message({
-                message: res.message,
-                type: 'error'
-              })
-            }
-          })
+          this.driverGetTransportOrderList(row)
+          row.status = 2
+          this.driverUpdate(row)
         })
-        .catch(() => {})
+        .catch(() => {
+        })
+    },
+    driverUpdate(row) {
+      DriverWorkApi.update(row.id, row).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.$message({
+            message: '送达成功',
+            type: 'success'
+          })
+          this.fetch()
+        } else {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
+        }
+      })
+    },
+    driverGetTransportOrderList(row) {
+      DriverWorkApi.getOrderIds(row).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.transportOrderList = res.data
+          this.getAllOrder()
+          this.handelOrders(row)
+        } else {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          })
+        }
+      })
+    },
+    async getAllOrder() {
+      const params = {}
+      params.pageSize = this.pagination.size
+      params.page = this.pagination.current
+      const response = await OrderApi.page(params)
+      const res = response.data
+      this.Orders = res.data.records
+    },
+    handelOrders(row) {
+      this.transportOrderList.forEach(item => {
+        const order = this.Orders.find(order => order.id === item.orderId)
+        order.currentAgencyId = row.endAgencyId
+        OrderApi.update(order)
+      })
     }
   }
 }
