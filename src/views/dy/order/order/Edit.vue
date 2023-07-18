@@ -33,6 +33,16 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item :label="$t('table.order.pickupType')" prop="status">
+        <el-select v-model="order.pickupType" :placeholder="$t('table.select')">
+          <el-option
+            v-for="item in pickupTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item :label="$t('table.order.orderType')" prop="status">
         <el-select v-model="order.orderType" :placeholder="$t('table.select')">
           <el-option
@@ -74,6 +84,7 @@
       </el-form-item>
       <el-form-item :label="$t('table.order.receiverAddressDetail')" prop="orderType">
         <el-input v-model="order.receiverAddress" />
+      </el-form-item>
       </el-form-item>
     </el-form>
     <div>
@@ -136,6 +147,10 @@ export default {
       default: 'add'
     },
     goodsData: {
+      type: Array,
+      default: () => []
+    },
+    pickupTypeOptions: {
       type: Array,
       default: () => []
     }

@@ -122,7 +122,8 @@ export default {
       receiverAddress: '收货人地址',
       receiverAddressDetail: '收货人详细地址',
       orderTime: '下单时间',
-      transportNo: '运单号'
+      transportNo: '运单号',
+      pickupType: '提货方式'
     },
     transport: {
       transportNo: '运单号',
