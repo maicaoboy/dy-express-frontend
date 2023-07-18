@@ -9,7 +9,7 @@
         <template>
           <div id="app">
             <el-cascader
-              v-model="searchForm.areaId"
+              v-model="searchOptions"
               size="large"
               :options="regionData"
             />
@@ -23,9 +23,9 @@
         <el-button @click="resetSearchForm">
           重置
         </el-button>
-        <el-button type="primary" @click="addAgencyDialog = true">
-          添加网点
-        </el-button>
+<!--        <el-button type="primary" @click="addAgencyDialog = true">-->
+<!--          添加网点-->
+<!--        </el-button>-->
       </el-form-item>
     </el-form>
     <!--换行-->
@@ -35,9 +35,8 @@
       <el-table-column prop="name" label="网点名称" />
       <el-table-column prop="areaId" label="地区ID" />
       <el-table-column prop="location" label="地址" />
-      <el-table-column prop="mutiPoints" label="电子围栏点" />
       <!--            查看地图   -->
-      <el-table-column label="查看和修改操作">
+      <el-table-column label="作业范围">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="showMap(scope.row)">
             查看/修改电子围栏
@@ -87,7 +86,7 @@
     <!--    </el-dialog>-->
 
     <el-dialog title="电子围栏地图" :visible.sync="editAgencyScopeDialog">
-      <MyMap ref="map" style="width: 100%;height: 500px" />
+      <MyMap :close-map="closeMap" ref="map" style="width: 100%;height: 500px" />
     </el-dialog>
 
     <!--    <BaiduMap></BaiduMap>-->
@@ -129,7 +128,8 @@ export default {
       },
       key: '',
       regionData,
-      selectedOptions: []
+      selectedOptions: [null],
+      searchOptions: []
     }
   },
 
@@ -141,6 +141,12 @@ export default {
   },
   methods: {
     search() {
+      console.log(this.searchOptions)
+      if (this.searchOptions.length > 0) {
+        this.searchForm.areaId = this.searchOptions[this.searchOptions.length - 1]
+      }else {
+        this.searchForm.areaId = ''
+      }
       AxiosApi({
         url: '/authority/org/page',
         method: 'get',
@@ -174,11 +180,10 @@ export default {
                   agencyId: table[i].id
                 }
               }).then(res => {
-                console.log('HHH', res)
                 if (res.data.data.records.length > 0) {
                   table[i].mutiPoints = res.data.data.records[0].mutiPoints
                 } else {
-                  table[i].mutiPoints = '[[]]'
+                  table[i].mutiPoints = [[]]
                 }
                 cnt += 1
                 if (cnt === table.length) {
@@ -199,6 +204,7 @@ export default {
         areaId: '',
         orgType: ''
       }
+      this.searchOptions = []
     },
     handleSizeChange(val) {
       this.pagination.pageSize = val
@@ -212,8 +218,7 @@ export default {
       this.editAgencyScopeDialog = true
       this.editAgencyForm = row
       this.$nextTick(() => {
-        console.log(this.$refs.map)
-        this.$refs.map.setPoints(JSON.parse(row.mutiPoints)[0], row)
+        this.$refs.map.setPoints(row.mutiPoints[0], row)
       })
     },
     addAgency() {
@@ -224,7 +229,6 @@ export default {
         method: 'post',
         data: this.agencyForm
       }).then(res => {
-        console.log(res)
         this.$message({
           message: '添加成功',
           type: 'success'
@@ -239,7 +243,6 @@ export default {
 
     },
     resetAgencyForm(newAgencyForm) {
-      console.log(this.selectedOptions)
       this.agencyForm = newAgencyForm || {
         agencyId: '',
         areaId: '',
@@ -264,6 +267,9 @@ export default {
           this.search()
         }, 500)
       })
+    },
+    closeMap() {
+      this.editAgencyScopeDialog = false
     }
 
   }
