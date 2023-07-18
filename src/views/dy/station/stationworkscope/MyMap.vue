@@ -126,7 +126,7 @@ export default {
         })
         return
       }
-      this.agencyForm.mutiPoints = JSON.stringify(points)
+      this.agencyForm.mutiPoints = '[' + JSON.stringify(points) + ']'
       AxiosApi({
         method: 'post',
         url: '/base/scope/agency/save',

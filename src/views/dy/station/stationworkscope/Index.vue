@@ -2,79 +2,92 @@
   <div>
     <!-- 搜索表单 -->
     <el-form :model="searchForm" label-width="120px" @submit.native.prevent>
-      <el-form-item label="网点id">
-        <el-input v-model="searchForm.agencyId" placeholder="请输入网点ID" />
+      <el-form-item label="网点名称">
+        <el-input v-model="searchForm.name" placeholder="请输入网点ID" />
       </el-form-item>
-      <el-form-item label="地址id">
-        <el-input v-model="searchForm.areaId" placeholder="请输入地址id"/>
+      <el-form-item label="地址">
+        <template>
+          <div id="app">
+            <el-cascader
+              v-model="searchForm.areaId"
+              size="large"
+              :options="regionData"
+            />
+          </div>
+        </template>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="search">
           搜索
         </el-button>
-        <el-button @click="resetSearchForm">重置</el-button>
-        <el-button type="primary" @click="addAgencyDialog = true">添加网点</el-button>
+        <el-button @click="resetSearchForm">
+          重置
+        </el-button>
+        <el-button type="primary" @click="addAgencyDialog = true">
+          添加网点
+        </el-button>
       </el-form-item>
     </el-form>
     <!--换行-->
     <br>
     <!-- 表格显示 -->
     <el-table :data="tableData" stripe style="width: 100%">
-      <el-table-column prop="id" label="ID" />
-      <el-table-column prop="agencyId" label="网点名称    " />
+      <el-table-column prop="name" label="网点名称" />
       <el-table-column prop="areaId" label="地区ID" />
       <el-table-column prop="location" label="地址" />
       <el-table-column prop="mutiPoints" label="电子围栏点" />
-      <!--      查看地图   -->
+      <!--            查看地图   -->
       <el-table-column label="查看和修改操作">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="showMap(scope.row)">查看/修改电子围栏</el-button>
+          <el-button type="primary" size="mini" @click="showMap(scope.row)">
+            查看/修改电子围栏
+          </el-button>
         </template>
       </el-table-column>
-<!--      删除操作    -->
-      <el-table-column label="删除操作">
-        <template slot-scope="scope">
-          <el-button type="danger" size="mini" @click="deleteAgency(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
+      <!--&lt;!&ndash;      删除操作    &ndash;&gt;-->
+      <!--      <el-table-column label="删除操作">-->
+      <!--        <template slot-scope="scope">-->
+      <!--          <el-button type="danger" size="mini" @click="deleteAgency(scope.row)">删除</el-button>-->
+      <!--        </template>-->
+      <!--      </el-table-column>-->
     </el-table>
     <!--换行-->
     <br>
     <!-- 分页 -->
     <el-pagination
-      :current-page="pagination.page"
+      :current-page="pagination.current"
       :page-sizes="[10, 20, 30, 40]"
-      :page-size="pagination.pageSize"
+      :page-size="pagination.size"
       layout="total, sizes, prev, pager, next, jumper"
       :total="pagination.total"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
-    <el-dialog title="添加网点范围" :visible.sync="addAgencyDialog">
-      <el-form :model="agencyForm" label-width="120px" @submit.native.prevent>
-        <el-form-item label="网点名称">
-          <el-input v-model="agencyForm.agencyId" placeholder="请输入网点ID" />
-        </el-form-item>
-        <el-form-item label="设置网点地址">
-          <template>
-            <div id="app">
-              <el-cascader
-                size="large"
-                :options="regionData"
-                v-model="selectedOptions">
-              </el-cascader>
-            </div>
-          </template>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="addAgency">添加</el-button>
-          <el-button @click="resetAgencyForm">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+    <!--    <el-dialog title="添加网点范围" :visible.sync="addAgencyDialog">-->
+    <!--      <el-form :model="agencyForm" label-width="120px" @submit.native.prevent>-->
+    <!--        <el-form-item label="网点名称">-->
+    <!--          <el-input v-model="agencyForm.agencyId" placeholder="请输入网点ID" />-->
+    <!--        </el-form-item>-->
+    <!--        <el-form-item label="设置网点地址">-->
+    <!--          <template>-->
+    <!--            <div id="app">-->
+    <!--              <el-cascader-->
+    <!--                size="large"-->
+    <!--                :options="regionData"-->
+    <!--                v-model="selectedOptions">-->
+    <!--              </el-cascader>-->
+    <!--            </div>-->
+    <!--          </template>-->
+    <!--        </el-form-item>-->
+    <!--        <el-form-item>-->
+    <!--          <el-button type="primary" @click="addAgency">添加</el-button>-->
+    <!--          <el-button @click="resetAgencyForm">重置</el-button>-->
+    <!--        </el-form-item>-->
+    <!--      </el-form>-->
+    <!--    </el-dialog>-->
 
     <el-dialog title="电子围栏地图" :visible.sync="editAgencyScopeDialog">
-      <MyMap ref="map" style="width: 100%;height: 500px"></MyMap>
+      <MyMap ref="map" style="width: 100%;height: 500px" />
     </el-dialog>
 
     <!--    <BaiduMap></BaiduMap>-->
@@ -84,20 +97,21 @@
 import AxiosApi from '@/api/AxiosApi'
 import MyMap from '@/views/dy/station/stationworkscope/MyMap.vue'
 import areaApi from '@/api/Area'
-import {   codeToText, regionData } from 'element-china-area-data'
+import { codeToText, regionData } from 'element-china-area-data'
 export default {
   name: 'StationWorkScope',
   components: { MyMap },
   data() {
     return {
       searchForm: {
-        agencyId: '',
-        areaId: ''
+        name: '',
+        areaId: '',
+        orgType: ''
       },
       tableData: [],
       pagination: {
-        page: 1,
-        pageSize: 10,
+        current: 1,
+        size: 10,
         total: 0
       },
       addAgencyDialog: false,
@@ -128,28 +142,50 @@ export default {
   methods: {
     search() {
       AxiosApi({
-        url: '/base/scope/agency/page',
-        method: 'post',
+        url: '/authority/org/page',
+        method: 'get',
         data: {
-          agencyId: this.searchForm.agencyId,
+          name: this.searchForm.name,
           areaId: this.searchForm.areaId,
-          page: this.pagination.page,
-          pageSize: this.pagination.pageSize
+          orgType: this.searchForm.orgType,
+          current: this.pagination.current,
+          size: this.pagination.size
         }
       }).then(res => {
         console.log(res)
         this.pagination.total = +res.data.data.total
         const table = res.data.data.records
         //   获取地址
+        let cnt = 0
         for (let i = 0; i < table.length; i++) {
-          console.log(table)
+          table[i].agencyId = table[i].id
           areaApi.getByCode(table[i].areaId).then(res => {
             table[i].location = res.data.data.mergerName
             table[i].lng = res.data.data.lng
             table[i].lat = res.data.data.lat
-            if (i === table.length - 1) {
-              this.tableData = table
-            }
+            areaApi.getByCode(table[i].areaId).then(res => {
+              table[i].location = res.data.data.mergerName
+              table[i].lng = res.data.data.lng
+              table[i].lat = res.data.data.lat
+              AxiosApi({
+                url: '/base/scope/agency/page',
+                method: 'post',
+                data: {
+                  agencyId: table[i].id
+                }
+              }).then(res => {
+                console.log('HHH', res)
+                if (res.data.data.records.length > 0) {
+                  table[i].mutiPoints = res.data.data.records[0].mutiPoints
+                } else {
+                  table[i].mutiPoints = '[[]]'
+                }
+                cnt += 1
+                if (cnt === table.length) {
+                  this.tableData = table
+                }
+              })
+            })
           })
         }
         if (table.length === 0) {
@@ -158,15 +194,18 @@ export default {
       })
     },
     resetSearchForm() {
-      this.searchForm.agencyId = ''
-      this.searchForm.areaId = ''
+      this.searchForm = {
+        name: '',
+        areaId: '',
+        orgType: ''
+      }
     },
     handleSizeChange(val) {
       this.pagination.pageSize = val
       this.search()
     },
     handleCurrentChange(val) {
-      this.pagination.page = val
+      this.pagination.current = val
       this.search()
     },
     showMap(row) {
@@ -174,7 +213,7 @@ export default {
       this.editAgencyForm = row
       this.$nextTick(() => {
         console.log(this.$refs.map)
-        this.$refs.map.setPoints(JSON.parse(row.mutiPoints), row)
+        this.$refs.map.setPoints(JSON.parse(row.mutiPoints)[0], row)
       })
     },
     addAgency() {
