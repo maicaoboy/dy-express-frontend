@@ -1,6 +1,9 @@
 <template>
   <div class="dashboard-container">
-    <el-row :gutter="20" style="margin-top:20px;margin-bottom:20px">
+    <div class="img-container">
+      <img src="../../assets/main.png">
+    </div>
+    <!-- <el-row :gutter="20" style="margin-top:20px;margin-bottom:20px">
       <el-col :xs="24" :sm="12" :span="6">
         <el-card class="box-card" :body-style="{ padding: '5px 20px' , minHeight: '60px' }">
           <div style="float:left;margin-left:-10px">
@@ -69,9 +72,9 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
+    </el-row> -->
     <!-- 订单总量  订单分布-->
-    <el-row :gutter="20" style="margin-bottom:20px">
+    <!-- <el-row :gutter="20" style="margin-bottom:20px">
       <el-col :xs="24" :sm="12">
         <el-card class="hots">
           <div slot="header" class="header">
@@ -92,10 +95,10 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
+    </el-row> -->
     <!-- 订单总量 订单分布 /-->
     <!-- 作业信息 -->
-    <el-card class="hots">
+    <!-- <el-card class="hots">
       <div slot="header" class="header">
         <span>作业信息</span>
       </div>
@@ -159,7 +162,7 @@
       <div style="width:420px;margin:20px 5px;float: left;">
         <div id="chart_example2" />
       </div>
-    </el-card>
+    </el-card> -->
 
     <!-- 作业信息 /-->
   </div>
@@ -507,4 +510,10 @@ export default {
     height: 300px;
   }
 }
+.img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
 </style>
