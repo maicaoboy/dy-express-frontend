@@ -4,36 +4,32 @@
     <el-form :model="searchForm" label-width="120px" @submit.native.prevent>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="快递员ID">
-            <el-input v-model="searchForm.courierId" placeholder="请输入快递员ID" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
           <el-form-item label="任务分配状态">
             <el-select v-model="searchForm.assignedStatus" placeholder="请选择">
               <el-option v-for="item in assignedStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8">
+        <el-col :span="12">
           <el-form-item label="任务类型">
             <el-select v-model="searchForm.taskType" placeholder="请选择">
               <el-option v-for="item in taskTypeOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
         </el-col>
+      </el-row>
+      <el-row>
+
 <!--      </el-row>-->
 <!--      <el-row>-->
-        <el-col :span="8">
+        <el-col :span="12">
           <el-form-item label="任务状态">
             <el-select v-model="searchForm.status" placeholder="请选择">
               <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="12">
           <el-form-item label="签收状态">
             <el-select v-model="searchForm.signStatus" placeholder="请选择">
               <el-option v-for="item in signStatusOptions" :key="item.value" :label="item.label" :value="item.value" />
@@ -75,8 +71,8 @@
           <span>{{ getSignStatusLabel(scope.row.signStatus) }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="agencyId" label="网点ID" />
-      <el-table-column prop="courierId" label="快递员ID" />
+      <el-table-column prop="agencyName" label="网点名称" />
+      <el-table-column prop="courierName" label="快递员" />
       <el-table-column prop="estimatedStartTime" label="预计开始时间" />
       <el-table-column prop="actualStartTime" label="实际开始时间" />
       <el-table-column prop="estimatedEndTime" label="预计完成时间" />
@@ -159,16 +155,23 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="网点ID">
-              <el-input v-model="newExpressWorkForm.agencyId" placeholder="请输入网点ID" />
+<!--            下拉框选择网点     -->
+            <el-form-item label="网点">
+<!--              网点为树状态结构，数据存在orgList当中    -->
+              <el-select v-model="newExpressWorkForm.agencyId" placeholder="请选择">
+                <el-option v-for="item in orgList" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
 
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="快递员ID">
-              <el-input v-model="newExpressWorkForm.courierId" placeholder="请输入快递员ID" />
+<!--            下拉框选择快递员    -->
+            <el-form-item label="快递员">
+              <el-select v-model="newExpressWorkForm.courierId" placeholder="请选择">
+                <el-option v-for="item in courierList" :key="item.id" :label="item.name" :value="item.id" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -257,6 +260,8 @@
 // import axios from 'axios' // assuming you have axios installed
 import AxiosApi from '@/api/AxiosApi'
 import moment from 'moment'
+import menuApi from '@/api/Menu'
+import orgApi from '@/api/Org'
 export default {
   data() {
     return {
@@ -334,10 +339,29 @@ export default {
         cancelTime: '',
         mark: ''
       },
-      addExpressWorkDialogVisible: false
+      addExpressWorkDialogVisible: false,
+      agencyIdOptions: [],
+      orgList: null,
+      orgMap: {},
+      courierList: [{
+        id: '12341324124',
+        name: '张三'
+      }, {
+        id: '3214132432',
+        name: '李四'
+      }, {
+        id: '12344124',
+        name: '王五'
+      }],
+      courierMap: {
+        '12341324124': '张三',
+        '3214132432': '李四',
+        '12344124': '王五'
+      }
     }
   },
   watch: {
+
   },
   created() {
     this.search()
@@ -372,19 +396,39 @@ export default {
       //     this.$message.error('获取数据失败')
       //   }
       // })
-      AxiosApi({
-        url: '/work/pickup-dispatch-task/page',
-        method: 'post',
-        data: {
-          ...this.searchForm,
-          pageNum: this.pagination.page,
-          pageSize: this.pagination.pageSize
-        }
-      }).then(response => {
-        console.log(response)
+      orgApi.list().then(response => {
         if (response.data.code === 0) {
-          this.tableData = response.data.data.records
-          this.pagination.total = +response.data.data.total
+          this.orgList = response.data.data
+          this.orgMap = new Map()
+          this.orgList.forEach(item => {
+            this.agencyIdOptions.push({
+              value: item.id,
+              label: item.name
+            })
+            this.orgMap.set(item.id, item.name)
+          })
+          AxiosApi({
+            url: '/work/pickup-dispatch-task/page',
+            method: 'post',
+            data: {
+              ...this.searchForm,
+              pageNum: this.pagination.page,
+              pageSize: this.pagination.pageSize
+            }
+          }).then(response => {
+            console.log(response)
+            if (response.data.code === 0) {
+              this.tableData = response.data.data.records
+              this.pagination.total = +response.data.data.total
+              //   对tableData中插入agencyName
+              this.tableData.forEach(item => {
+                item.agencyName = this.orgMap.get(item.agencyId)
+                item.courierName = this.courierMap[item.courierId]
+              })
+            } else {
+              this.$message.error('获取数据失败')
+            }
+          })
         } else {
           this.$message.error('获取数据失败')
         }
@@ -452,6 +496,29 @@ export default {
       console.log(this.newExpressWorkForm)
       this.newExpressWorkForm = this.blankForm
       this.addExpressWorkDialogVisible = false
+    },
+    getCourierList() {
+      // AxiosApi({
+      //   url: '/authority/user/courier/listByStationId/?stationId=' + this.newExpressWorkForm.agencyId,
+      //   method: 'get',
+      // }).then(response => {
+      //   console.log("con:  ", response)
+      //   if (response.data.code === 0) {
+      //     this.$message.success('查询成功')
+      //     //   将查询到的数据放入courierList中
+      //     const tmp = []
+      //     response.data.data.forEach(item => {
+      //       tmp.push({
+      //         value: item.id,
+      //         label: item.name
+      //       })
+      //     })
+      //     this.courierList = tmp
+      //     console.log("courier", this.courierList)
+      //   } else {
+      //     this.$message.error('查询失败')
+      //   }
+      // })
     }
   }
 }
