@@ -361,7 +361,10 @@ export default {
     }
   },
   watch: {
-
+    'newExpressWorkForm.agencyId': function() {
+      this.newExpressWorkForm.courierId = ''
+      this.getCourierList()
+    }
   },
   created() {
     this.search()
@@ -407,27 +410,56 @@ export default {
             })
             this.orgMap.set(item.id, item.name)
           })
+          console.log("orgMap", this.orgMap)
+
+          this.courierList = []
+          this.courierMap = {}
           AxiosApi({
-            url: '/work/pickup-dispatch-task/page',
-            method: 'post',
-            data: {
-              ...this.searchForm,
-              pageNum: this.pagination.page,
-              pageSize: this.pagination.pageSize
-            }
+            url: '/authority/user/courier/listByStationId',
+            method: 'get'
           }).then(response => {
-            console.log(response)
+            console.log("con: ", response)
             if (response.data.code === 0) {
-              this.tableData = response.data.data.records
-              this.pagination.total = +response.data.data.total
-              //   对tableData中插入agencyName
-              this.tableData.forEach(item => {
-                item.agencyName = this.orgMap.get(item.agencyId)
-                item.courierName = this.courierMap[item.courierId]
+              this.$message.success('查询成功')
+              //   将查询到的数据放入courierList中
+              const tmp = []
+              response.data.data.forEach(item => {
+                tmp.push({
+                  id: item.id,
+                  name: item.name
+                })
               })
+              this.courierList = tmp
+              this.courierList.forEach(item => {
+                this.courierMap[item.id] = item.name
+              })
+              console.log("courier", this.courierList)
             } else {
-              this.$message.error('获取数据失败')
+              this.$message.error('查询失败')
             }
+
+            AxiosApi({
+              url: '/work/pickup-dispatch-task/page',
+              method: 'post',
+              data: {
+                ...this.searchForm,
+                pageNum: this.pagination.page,
+                pageSize: this.pagination.pageSize
+              }
+            }).then(response => {
+              console.log(response)
+              if (response.data.code === 0) {
+                this.tableData = response.data.data.records
+                this.pagination.total = +response.data.data.total
+                //   对tableData中插入agencyName
+                this.tableData.forEach(item => {
+                  item.agencyName = this.orgMap.get(item.agencyId)
+                  item.courierName = this.courierMap[item.courierId]
+                })
+              } else {
+                this.$message.error('获取数据失败')
+              }
+            })
           })
         } else {
           this.$message.error('获取数据失败')
@@ -498,27 +530,28 @@ export default {
       this.addExpressWorkDialogVisible = false
     },
     getCourierList() {
-      // AxiosApi({
-      //   url: '/authority/user/courier/listByStationId/?stationId=' + this.newExpressWorkForm.agencyId,
-      //   method: 'get',
-      // }).then(response => {
-      //   console.log("con:  ", response)
-      //   if (response.data.code === 0) {
-      //     this.$message.success('查询成功')
-      //     //   将查询到的数据放入courierList中
-      //     const tmp = []
-      //     response.data.data.forEach(item => {
-      //       tmp.push({
-      //         value: item.id,
-      //         label: item.name
-      //       })
-      //     })
-      //     this.courierList = tmp
-      //     console.log("courier", this.courierList)
-      //   } else {
-      //     this.$message.error('查询失败')
-      //   }
-      // })
+      console.log("????getCourier", this.newExpressWorkForm.agencyId)
+      AxiosApi({
+        url: '/authority/user/courier/listByStationId/?stationId=' + this.newExpressWorkForm.agencyId,
+        method: 'get'
+      }).then(response => {
+        console.log("con: ", response)
+        if (response.data.code === 0) {
+          this.$message.success('查询成功')
+          //   将查询到的数据放入courierList中
+          const tmp = []
+          response.data.data.forEach(item => {
+            tmp.push({
+              id: item.id,
+              name: item.name
+            })
+          })
+          this.courierList = tmp
+          console.log("courier", this.courierList)
+        } else {
+          this.$message.error('查询失败')
+        }
+      })
     }
   }
 }
