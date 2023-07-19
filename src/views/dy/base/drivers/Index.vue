@@ -156,7 +156,6 @@ export default {
       this.loading = true
       params.pageSize = this.pagination.size
       params.page = this.pagination.current
-      // console.log(params)
       DriverApi.page(params).then(response => {
         const res = response.data
         this.loading = false

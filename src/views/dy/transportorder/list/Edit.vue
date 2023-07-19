@@ -109,21 +109,7 @@ export default {
         status: '',
         schedulingStatus: '',
         orderId: '',
-        createTime: '',
-        distance: '',
-        remark: '',
-        paymentMethod: '',
-        paymentStatus: '',
-        senderName: '',
-        senderPhone: '',
-        senderAddress: '',
-        senderAddress3id: [],
-        senderAddressDetail: '',
-        receiverName: '',
-        receiverPhone: '',
-        receiverAddress: '',
-        receiverAddress3id: [],
-        receiverAddressDetail: ''
+        createTime: ''
       }
     },
     setTransport(transport) {
@@ -171,7 +157,7 @@ export default {
       })
     },
     update() {
-      transportApi.update(this.transport.id, this.transport).then(response => {
+      transportApi.update(this.transport).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.isVisible = false

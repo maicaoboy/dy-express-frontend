@@ -9,6 +9,10 @@ const apiList = {
     method: 'POST',
     url: `/authority/org`
   },
+  get: {
+    method: 'GET',
+    url: '/authority/org'
+  },
   update: {
     method: 'PUT',
     url: `/authority/org`
@@ -35,6 +39,12 @@ export default {
     return axiosApi({
       ...apiList.save,
       data
+    })
+  },
+  get(id) {
+    return axiosApi({
+      url: `/authority/org/${id}`,
+      method: 'GET'
     })
   },
   update(data) {

@@ -30,6 +30,16 @@ export default {
     github: '项目地址'
   },
   table: {
+    deliverapp: {
+      id: '运单编号',
+      searchid: '请输入运单编号',
+      taskType: '任务类型',
+      searchtaskType: '请选择任务类型',
+      status: '运单状态',
+      searchstatus: '请选择运单状态',
+      signStatus: '签收状态',
+      searchsignStatus: '请选择签收状态'
+    },
     driverwork: {
       id: '作业编号',
       driverName: '司机姓名',
@@ -112,7 +122,8 @@ export default {
       receiverAddress: '收货人地址',
       receiverAddressDetail: '收货人详细地址',
       orderTime: '下单时间',
-      transportNo: '运单号'
+      transportNo: '运单号',
+      pickupType: '提货方式'
     },
     transport: {
       transportNo: '运单号',
@@ -124,6 +135,8 @@ export default {
       senderAddress: '发货人地址',
       senderAddressDetail: '发货人详细地址',
       receiverName: '收货人姓名',
+      startAgencyName: '开始网点名称',
+      endAgencyName: '目标网点名称',
       receiverPhone: '收货人电话',
       receiverAddress: '收货人地址',
       receiverAddressDetail: '收货人详细地址',
@@ -138,8 +151,9 @@ export default {
       truckId: '车辆id',
       status: '运输任务单状态',
       assignStatus: '分配状态',
-      planDepatureTime: '预计离开时间',
-      actualDepatureTime: '实际离开时间',
+      loadStatus: '满载状态',
+      planDepartureTime: '预计离开时间',
+      actualDepartureTime: '实际离开时间',
       planArrivalTime: '预计到达时间',
       actualArrivalTime: '实际到达时间',
       planPickUpTime: '预计提货时间',

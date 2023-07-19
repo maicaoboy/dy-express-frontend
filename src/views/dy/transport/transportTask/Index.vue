@@ -87,6 +87,7 @@
         </el-table-column>
         <el-table-column prop="status" :label="$t('table.transportTask.status')" :formatter="transportTaskStatusFormater" />
         <el-table-column prop="assignStatus" :label="$t('table.transportTask.assignStatus')" :formatter="transportTaskAssignStatusFormater" />
+        <el-table-column prop="loadStatus" :label="$t('table.transportTask.loadStatus')" :formatter="transportTaskLoadStatusFormater" />
         <el-table-column :label="$t('table.transportTask.startAgencyId')" align="center" prop="code" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.startAgencyId }}</span>
@@ -102,14 +103,14 @@
             <span>{{ scope.row.transportTripsId }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.transportTask.planDepatureTime')" align="center" prop="code" width="200">
+        <el-table-column :label="$t('table.transportTask.planDepartureTime')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.planDepatureTime }}</span>
+            <span>{{ scope.row.planDepartureTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.transportTask.actualDepatureTime')" align="center" prop="code" width="200">
+        <el-table-column :label="$t('table.transportTask.actualDepartureTime')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.actualDepatureTime }}</span>
+            <span>{{ scope.row.actualDepartureTime }}</span>
           </template>
         </el-table-column>
         <el-table-column :label="$t('table.transportTask.planArrivalTime')" align="center" prop="code" width="200">
@@ -158,10 +159,10 @@
         </el-table-column>
       </el-table>
       <pagination
-        v-show="tableData.total>0"
+        v-show="tableData.counts>0"
         :limit.sync="pagination.size"
         :page.sync="pagination.current"
-        :total="Number(tableData.total)"
+        :total="Number(tableData.counts)"
         @pagination="fetch"
       />
       <transportTask-edit
@@ -169,15 +170,16 @@
         :dialog-visible="dialog.isVisible"
         :transport-task-status-options="transportTaskStatusOptions"
         :transport-task-assign-status-options="transportTaskAssignStatusOptions"
+        :transport-task-load-status-options="transportTaskLoadStatusOptions"
         :type="dialog.type"
         @close="editClose"
         @success="editSuccess"
       />
-      <transportTaskDetail
+      <transportTask-detail
         ref="transportTaskDetail"
         :is-visible="detailForm.isVisible"
         @close="editClose">
-      </transportTaskDetail>
+      </transportTask-detail>
     </el-card>
   </div>
 </template>
@@ -188,6 +190,7 @@ import TransportTaskEdit from '@/views/dy/transport/transportTask/Edit.vue'
 import TransportTaskDetail from '@/views/dy/transport/transportTask/Detail.vue'
 import TransportTaskApi from '@/api/TransportTask.js'
 import { provinceAndCityData, codeToText } from 'element-china-area-data'
+import { Message } from 'element-ui'
 
 export default {
   name: 'TransportTaskIndex',
@@ -216,6 +219,8 @@ export default {
       selection: [],
       // 以下已修改
       loading: false,
+      transportTaskListisVisible: true,
+      transportTaskDetailisVisible: false,
       tableData: {
         total: 0
       },
@@ -227,7 +232,8 @@ export default {
         current: 1
       },
       transportTaskStatusOptions: [],
-      transportTaskAssignStatusOptions: []
+      transportTaskAssignStatusOptions: [],
+      transportTaskLoadStatusOptions: []
     }
   },
   computed: {},
@@ -275,7 +281,6 @@ export default {
       this.loading = true
       params.pageSize = this.pagination.size
       params.page = this.pagination.current
-      // console.log(params)
       TransportTaskApi.findByPage(params).then(response => {
         const res = response.data
         console.log(res)
@@ -285,9 +290,15 @@ export default {
     },
     handleEdit(row) {
       // console.log(row)
-      this.$refs.edit.setTransportTask(row)
-      this.dialog.type = 'edit'
-      this.dialog.isVisible = true
+      if (row.assignedStatus === 2) {
+        this.dialog.type = 'edit'
+        this.dialog.isVisible = false
+        Message.error('运输任务单状态为已分配，无法修改')
+      } else {
+        this.$refs.edit.setTransportTask(row)
+        this.dialog.type = 'edit'
+        this.dialog.isVisible = true
+      }
     },
     handleAdd() {
       this.$refs.edit.initTransportTask()
@@ -338,6 +349,20 @@ export default {
           value: 3
         }
       ]
+      this.transportTaskLoadStatusOptions = [
+        {
+          label: '半载',
+          value: 1
+        },
+        {
+          label: '满载',
+          value: 2
+        },
+        {
+          label: '空载',
+          value: 3
+        }
+      ]
     },
     /**
      * 运输任务单状态: 1为待执行,2为进行中，23002为待确认，
@@ -358,12 +383,23 @@ export default {
         return '未知'
       }
     },
+    transportTaskLoadStatusFormater(row, column) {
+      if (row.loadingStatus === 1) {
+        return '半载'
+      } else if (row.loadingStatus === 2) {
+        return '满载'
+      } else if (row.loadingStatus === 3) {
+        return '空载'
+      } else {
+        return '未知'
+      }
+    },
     transportTaskAssignStatusFormater(row, column) {
-      if (row.status === 1) {
+      if (row.assignedStatus === 1) {
         return '待分配'
-      } else if (row.status === 2) {
+      } else if (row.assignedStatus === 2) {
         return '已分配'
-      } else if (row.status === 3) {
+      } else if (row.assignedStatus === 3) {
         return '待人工分配'
       } else {
         return '未知'

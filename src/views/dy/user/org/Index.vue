@@ -214,7 +214,7 @@ export default {
       this.org.sortValue = val
     },
     handleCityChange() {
-      console.log(this.selectedOptions[1])
+      console.log('aaa', this.selectedOptions)
       length = this.selectedOptions.length - 1
       areaApi.getByCode(this.selectedOptions[length]).then(response => {
         this.lng = response.data.data.lng
@@ -229,9 +229,20 @@ export default {
     },
     nodeClick(data) {
       console.log(data)
-      areaApi.getByCode(data.areaId).then(response=>{
+      areaApi.getByCode(data.areaId).then(response => {
         this.lat = response.data.data.lat
         this.lng = response.data.data.lng
+        if (response.data.data.areaCode) {
+          const arr = [
+            response.data.data.areaCode.slice(0, 2),
+            response.data.data.areaCode.slice(0, 4),
+            response.data.data.areaCode
+          ]
+          console.log('bb', arr)
+          this.selectedOptions = arr
+        } else {
+          this.selectedOptions = []
+        }
       })
       this.org = { ...data }
       this.selectedOptions = []

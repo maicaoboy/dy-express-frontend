@@ -66,7 +66,7 @@
         <img :src="imageCode" alt="codeImage" class="code-image" @click="getCodeImage">
         <el-button
           :loading="loading"
-          style="width:100%;margin-bottom:14px;background-image: linear-gradient(to right, #D92E2C,#F86E2B);border:0px"
+          style="width:100%;margin-bottom:14px;background-image: linear-gradient(to right, #8dc149,#8dc149);border:0px"
           type="primary"
           @click.native.prevent="handleLogin"
         >{{ $t("login.logIn") }}</el-button>
@@ -517,6 +517,7 @@ export default {
     },
     saveUserInfo(user, permissionsList) {
       this.$store.commit('account/setUser', user)
+      // console.log('aaaaaaaaaaa', user)
       // TODO 从后台拉取权限列表
       // const permissions = [
       //   "org:view",

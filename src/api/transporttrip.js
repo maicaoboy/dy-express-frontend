@@ -24,6 +24,12 @@ const apiList = {
 }
 
 export default {
+  savetrip(data) {
+    return axiosApi({
+      ...apiList.save,
+      data
+    })
+  },
   save(id, data) {
     return axiosApi({
       url: `/base/base/transportLine/trips/${id}/truckDriver`,

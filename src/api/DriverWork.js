@@ -4,6 +4,10 @@ const apiList = {
   page: {
     url: '/work/driver-job/page',
     method: 'POST'
+  },
+  getOrderIds: {
+    url: '/work/driver-job/getorderids',
+    method: 'POST'
   }
 }
 export default {
@@ -17,6 +21,12 @@ export default {
     return axiosApi({
       url: `/work/driver-job/${id}`,
       method: 'PUT',
+      data
+    })
+  },
+  getOrderIds(data) {
+    return axiosApi({
+      ...apiList.getOrderIds,
       data
     })
   }

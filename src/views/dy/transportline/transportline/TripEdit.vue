@@ -195,7 +195,7 @@ export default {
       const that = this
       this.transportrip.transportLineId = this.transportline.id
       console.log(this.transportrip)
-      transportripApi.save(this.transportrip).then(response => {
+      transportripApi.savetrip(this.transportrip).then(response => {
         const res = response.data
         if (res.isSuccess) {
           that.isVisible = false
