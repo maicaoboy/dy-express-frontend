@@ -58,7 +58,7 @@
           >
             <template slot-scope="scope">
               <el-select v-model="scope.row.userId" :placeholder="$t('table.transportline.arrangedriver')">
-                <el-option v-for="item in driverData" :key="item.id" :label="item.label" :value="item.id" />
+                <el-option v-for="item in driverData" :key="item.userId" :label="item.label" :value="item.userId" />
               </el-select>
             </template>
           </el-table-column>
