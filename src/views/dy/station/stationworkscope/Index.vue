@@ -3,7 +3,7 @@
     <!-- 搜索表单 -->
     <el-form :model="searchForm" label-width="120px" @submit.native.prevent>
       <el-form-item label="网点名称">
-        <el-input v-model="searchForm.name" placeholder="请输入网点ID" />
+        <el-input v-model="searchForm.name" placeholder="请输入网点名称模糊查询" />
       </el-form-item>
       <el-form-item label="地址">
         <template>
