@@ -224,7 +224,7 @@ export default {
       })
     },
     filterNode(value, data) {
-      if (!value) return true
+      if (!value) return true12
       return data.label.indexOf(value) !== -1
     },
     nodeClick(data) {
