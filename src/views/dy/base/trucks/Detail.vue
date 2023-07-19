@@ -14,7 +14,6 @@
           text-color="#fff"
           active-text-color="#fff8eb"
           @select="handelSelect"
-          @open="handleOpen"
         >
           <el-menu-item index="truckdetail">
             <i class="el-icon-truck" />
@@ -27,7 +26,7 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <el-form ref="form" :model="truck" :rules="rules" label-position="right" label-width="100px" v-if="truckisVisible">
+        <el-form v-if="truckisVisible" ref="form" :model="truck" :rules="rules" label-position="right" label-width="100px">
           <el-form-item :label="$t('table.truck.truckNumber')" prop="status">
             <el-input v-model="truck.licensePlate" />
           </el-form-item>
@@ -45,10 +44,18 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('table.truck.allowableLoad')" prop="id">
-            <el-input v-model="truck.allowableLoad" />
+            <el-input v-model="truck.allowableLoad">
+              <template slot="append">
+                吨
+              </template>
+            </el-input>
           </el-form-item>
           <el-form-item :label="$t('table.truck.allowableVolume')" prop="status">
-            <el-input v-model="truck.allowableVolume" />
+            <el-input v-model="truck.allowableVolume">
+              <template slot="append">
+                立方米
+              </template>
+            </el-input>
           </el-form-item>
           <el-form-item :label="$t('table.goodsType.status')" prop="status">
             <el-radio-group v-model="truck.status">
@@ -61,29 +68,29 @@
             </el-radio-group>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button plain type="warning" @click="closeForm">
-            {{ $t('common.cancel') }}
-          </el-button>
-          <el-button plain type="primary" @click="submitForm">
-            {{ $t('common.confirm') }}
-          </el-button>
-        </div>
-        <el-form ref="lineform" :model="truck"  label-position="right" label-width="100px" v-if="lineisVisible">
+        <el-form v-if="lineisVisible" ref="lineform" :model="truck" label-position="right" label-width="100px">
           <el-form-item :label="$t('table.truck.line')" prop="status">
             <el-input v-model="truck.lineName" />
           </el-form-item>
           <el-form-item :label="$t('table.truck.tripid')" prop="status">
-            <el-input v-model="truck.tripid" />
+            <el-input v-model="truck.transportTripsId" />
           </el-form-item>
         </el-form>
         <template v-if="lineisVisible">
           <baidu-map class="map" center="北京" zoom="10" style="overflow:auto">
-            <bm-driving :start="start" :end="end" :auto-viewport="true" :policy="BMAP_DRIVING_POLICY_LEAST_DISTANCE"/>
+            <bm-driving :start="start" :end="end" :auto-viewport="true" :policy="BMAP_DRIVING_POLICY_LEAST_DISTANCE" />
           </baidu-map>
         </template>
       </el-main>
     </el-container>
+    <div slot="footer" class="dialog-footer">
+      <el-button plain type="warning" @click="closeForm">
+        {{ $t('common.cancel') }}
+      </el-button>
+      <el-button plain type="primary" @click="submitForm">
+        {{ $t('common.confirm') }}
+      </el-button>
+    </div>
   </el-dialog>
 </template>
 <script>
@@ -96,6 +103,10 @@ export default {
     isVisible: {
       type: Boolean,
       default: false
+    },
+    truckTypeOptions: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -120,9 +131,10 @@ export default {
       this.$emit('close')
     },
     submitForm() {
-      this.$refs.form.validate(valid => {
+      const temp = this
+      temp.$refs.form.validate(valid => {
         if (valid) {
-          this.$emit('handelEdit', this.truck)
+          this.$emit('handelEdittruck', this.truck)
         }
       })
     },

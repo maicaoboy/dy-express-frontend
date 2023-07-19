@@ -177,8 +177,9 @@
       <detail
         ref="detail"
         :is-visible="detailForm.isVisible"
+        :truck-type-options="truckTypeOptions"
         @close="editClose"
-        @handelEdit="handelEdit"
+        @handelEdittruck="handelEdittruck"
       />
     </el-card>
   </div>
@@ -310,7 +311,7 @@ export default {
         }
       })
     },
-    handelEdit(truck) {
+    handelEdittruck(truck) {
       TruckApi.update(truck).then(response => {
         const res = response.data
         if (res.isSuccess) {
@@ -318,7 +319,7 @@ export default {
             message: '保存成功',
             type: 'success'
           })
-          this.dialog.isVisible = false
+          this.detailForm.isVisible = false
           this.search()
         } else {
           this.$message({
@@ -330,6 +331,7 @@ export default {
     },
     editClose() {
       this.dialog.isVisible = false
+      this.detailForm.isVisible = false
     },
     inittruckTypeOptions() {
       const params = {}

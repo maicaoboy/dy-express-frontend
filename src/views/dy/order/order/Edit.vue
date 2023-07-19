@@ -85,7 +85,6 @@
       <el-form-item :label="$t('table.order.receiverAddressDetail')" prop="orderType">
         <el-input v-model="order.receiverAddress" />
       </el-form-item>
-      </el-form-item>
     </el-form>
     <div>
       <el-table

@@ -325,7 +325,7 @@ export default {
       })
         .then(() => {
           this.driverGetTransportOrderList(row)
-          row.status = 2
+          row.status = 3
           this.driverUpdate(row)
         })
         .catch(() => {

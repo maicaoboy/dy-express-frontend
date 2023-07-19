@@ -92,8 +92,10 @@
           align="center"
         >
           <template slot-scope="scope">
-            <div  class="tag-list">
-              <el-tag v-for="(item, index) in scope.row.truckTypeNames" :key="index" type="success">{{ item }} </el-tag>
+            <div class="tag-list">
+              <el-tag v-for="(item, index) in scope.row.truckTypeNames" :key="index" type="success">
+                {{ item }}
+              </el-tag>
             </div>
           </template>
         </el-table-column>
@@ -174,7 +176,7 @@
 import GoodsInfoApi from '@/api/GoodsInfo'
 import EditForm from '@/views/dy/base/goods/EditForm.vue'
 import Pagination from '@/components/Pagination'
-import truckTypeApi from '@/api/TruckType'
+import TruckTypeApi from '@/api/TruckType'
 export default {
   components: {
     EditForm, Pagination
@@ -199,7 +201,7 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.fetch()
     this.inittruckTypeOptions()
   },
@@ -213,16 +215,6 @@ export default {
         const res = response.data
         this.loading = false
         this.tableData = res
-      })
-      truckTypeApi.page(params).then(response => {
-        const res = response.data
-        // 将res.item()数组中的每个对象的id和name属性取出来，组成一个新的数组
-        this.truckTypeOptions = res.items.map(item => {
-          return {
-            label: item.name,
-            value: item.id
-          }
-        })
       })
     },
     editClose() {
@@ -312,6 +304,21 @@ export default {
             type: 'error'
           })
         }
+      })
+    },
+    inittruckTypeOptions() {
+      const params = {}
+      params.page = 1
+      params.pageSize = 10
+      TruckTypeApi.page(params).then(response => {
+        const res = response.data
+        // 将res.item()数组中的每个对象的id和name属性取出来，组成一个新的数组
+        this.truckTypeOptions = res.items.map(item => {
+          return {
+            label: item.name,
+            value: item.id
+          }
+        })
       })
     }
   }

@@ -179,7 +179,6 @@ import db from '@/utils/localstorage'
 import { randomNum } from '@/utils'
 import { socialLoginUrl } from '@/settings'
 import loginApi from '@/api/Login.js'
-import commonApi from '@/api/Common.js'
 
 export default {
   name: 'Login',
@@ -575,7 +574,6 @@ export default {
     },
     loginSuccessCallback(user) {
       console.log(user)
-	    return
     }
   }
 }

@@ -18,7 +18,7 @@ const apiList = {
     method: 'DELETE'
   },
   update: {
-    url: `/base/base/truck`,
+    url: `/base/base/truck/update`,
     method: 'POST'
   }
 }
@@ -45,6 +45,12 @@ export default {
     return axiosApi({
       url: `/base/base/truck/${id}`,
       method: 'DELETE'
+    })
+  },
+  update(data) {
+    return axiosApi({
+      ...apiList.update,
+      data
     })
   }
 }
