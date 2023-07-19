@@ -19,6 +19,9 @@ import * as filters from './filters' // global filters
 import { hasPermission, hasNoPermission, hasAnyPermission } from './utils/permissionDirect'
 import BaiduMap from 'vue2-baidu-map'
 
+import moment from 'moment'
+Vue.prototype.$moment = moment
+
 Vue.use(BaiduMap, {
   // ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
   ak: 'U9u1roqcdMuofmIqs8Tl6Lk31ybdrUqC'
