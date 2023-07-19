@@ -134,6 +134,8 @@ export default {
       senderAddress: '发货人地址',
       senderAddressDetail: '发货人详细地址',
       receiverName: '收货人姓名',
+      startAgencyName: '开始网点名称',
+      endAgencyName: '目标网点名称',
       receiverPhone: '收货人电话',
       receiverAddress: '收货人地址',
       receiverAddressDetail: '收货人详细地址',

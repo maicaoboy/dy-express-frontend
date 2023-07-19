@@ -159,10 +159,10 @@
         </el-table-column>
       </el-table>
       <pagination
-        v-show="tableData.total>0"
+        v-show="tableData.counts>0"
         :limit.sync="pagination.size"
         :page.sync="pagination.current"
-        :total="Number(tableData.total)"
+        :total="Number(tableData.counts)"
         @pagination="fetch"
       />
       <transportTask-edit
@@ -190,6 +190,7 @@ import TransportTaskEdit from '@/views/dy/transport/transportTask/Edit.vue'
 import TransportTaskDetail from '@/views/dy/transport/transportTask/Detail.vue'
 import TransportTaskApi from '@/api/TransportTask.js'
 import { provinceAndCityData, codeToText } from 'element-china-area-data'
+import { Message } from 'element-ui'
 
 export default {
   name: 'TransportTaskIndex',
@@ -289,9 +290,15 @@ export default {
     },
     handleEdit(row) {
       // console.log(row)
-      this.$refs.edit.setTransportTask(row)
-      this.dialog.type = 'edit'
-      this.dialog.isVisible = true
+      if (row.assignedStatus === 2) {
+        this.dialog.type = 'edit'
+        this.dialog.isVisible = false
+        Message.error('运输任务单状态为已分配，无法修改')
+      } else {
+        this.$refs.edit.setTransportTask(row)
+        this.dialog.type = 'edit'
+        this.dialog.isVisible = true
+      }
     },
     handleAdd() {
       this.$refs.edit.initTransportTask()

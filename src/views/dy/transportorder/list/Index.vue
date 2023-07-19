@@ -106,6 +106,16 @@
         </el-table-column>
         <el-table-column prop="status" :label="$t('table.transport.transportStatus')" :formatter="transportStatusFormater" />
         <el-table-column prop="status" :label="$t('table.transport.schedulingStatus')" :formatter="transportSchedulingStatusFormater" />
+        <el-table-column :label="$t('table.transport.startAgencyName')" align="center" prop="code" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.orderId }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('table.transport.endAgencyName')" align="center" prop="code" width="200">
+          <template slot-scope="scope">
+            <span>{{ scope.row.orderId }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
@@ -143,6 +153,7 @@ import Pagination from '@/components/Pagination'
 import TransportEdit from './Edit'
 import transportApi from '@/api/TransportOrder.js'
 import { provinceAndCityData, codeToText } from 'element-china-area-data'
+import { Message } from 'element-ui'
 
 export default {
   name: 'RoleManage',
@@ -173,6 +184,10 @@ export default {
       loading: false,
       tableData: {
         total: 0
+      },
+      agencyName: {
+        startAgencyName: 11,
+        endAgencyName: 11
       },
       pagination: {
         size: 10,
@@ -229,10 +244,15 @@ export default {
       })
     },
     handleEdit(row) {
-      // console.log(row)
-      this.$refs.edit.setTransport(row)
-      this.dialog.type = 'edit'
-      this.dialog.isVisible = true
+      if (row.schedulingStatus === 3) {
+        this.dialog.type = 'edit'
+        this.dialog.isVisible = false
+        Message.error('运单状态为已调度，无法修改')
+      } else {
+        this.$refs.edit.setTransport(row)
+        this.dialog.type = 'edit'
+        this.dialog.isVisible = true
+      }
     },
     handleAdd() {
       this.$refs.edit.initTransport()

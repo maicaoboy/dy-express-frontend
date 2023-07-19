@@ -22,7 +22,7 @@
           </el-menu-item>
           <el-menu-item index="transportTaskLineDetail">
             <i class="el-icon-location" />
-            <span slot="title">运输任务线轨迹详情</span>
+            <span slot="title">运输任务单轨迹详情</span>
           </el-menu-item>
           <el-menu-item index="transportOrderDetail">
             <i class="el-icon-location" />
@@ -181,6 +181,7 @@
 
 import TransportTaskApi from '@/api/TransportTask'
 import Pagination from '@/components/Pagination'
+import OrgApi from '@/api/Org'
 import AreaApi from '@/api/Area'
 
 export default {
@@ -214,6 +215,10 @@ export default {
         lng: 116.301934,
         lat: 39.977552
       },
+      areaId: {
+        areaStartId: 131024,
+        areaEndId: 131024
+      },
       tableKey: 0,
       end: {
         lng: 116.508328,
@@ -241,7 +246,14 @@ export default {
       this.transportTask = { ...transportTask }
     },
     setStart() {
-      AreaApi.get(this.transportTask.startAgencyId).then(response => {
+      OrgApi.get(this.transportTask.startAgencyId).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.areaId.areaStartId = res.data.areaId
+          console.log(this.areaId.areaStartId)
+        }
+      })
+      AreaApi.getByCode(this.areaId.areaStartId).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.start.lat = res.data.lat
@@ -250,7 +262,14 @@ export default {
       })
     },
     setEnd() {
-      AreaApi.get(this.transportTask.endAgencyId).then(response => {
+      OrgApi.get(this.transportTask.endAgencyId).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.areaId.areaEndId = res.data.areaId
+          console.log(this.areaId.areaEndId)
+        }
+      })
+      AreaApi.getByCode(this.areaId.areaEndId).then(response => {
         const res = response.data
         if (res.isSuccess) {
           this.end.lat = res.data.lat
