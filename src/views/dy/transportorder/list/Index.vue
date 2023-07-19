@@ -28,6 +28,19 @@
             </template>
           </div>
         </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">
+          <div class="grid-content bg-purple">
+            <label style="color:#909399;font-weight:500;">{{ $t('table.transport.orderNo') }}: </label>
+            <el-input
+              v-model="queryParams.orderId"
+              :placeholder="$t('table.transport.orderNo')"
+              class="filter-item search-item"
+              clearable
+            />
+          </div>
+        </el-col>
         <el-col :span="8">
           <div class="grid-content bg-purple">
             <label style="color:#909399;font-weight:500;">{{ $t('table.transport.schedulingStatus') }}: </label>
@@ -92,29 +105,17 @@
           </template>
         </el-table-column>
         <el-table-column prop="status" :label="$t('table.transport.transportStatus')" :formatter="transportStatusFormater" />
-        <el-table-column prop="schedulingStatus" :label="$t('table.transport.schedulingStatus')" :formatter="transportSchedulingStatusFormater" />
-        <el-table-column :label="$t('table.transport.senderName')" align="center" prop="code" width="200">
+        <el-table-column prop="status" :label="$t('table.transport.schedulingStatus')" :formatter="transportSchedulingStatusFormater" />
+        <el-table-column :label="$t('table.transport.startAgencyName')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.senderName }}</span>
+            <span>{{ scope.row.orderId }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.transport.senderPhone')" align="center" prop="code" width="200">
+        <el-table-column :label="$t('table.transport.endAgencyName')" align="center" prop="code" width="200">
           <template slot-scope="scope">
-            <span>{{ scope.row.senderPhone }}</span>
+            <span>{{ scope.row.orderId }}</span>
           </template>
         </el-table-column>
-        <el-table-column :label="$t('table.transport.senderAddress')" :formatter="senderAddressFormater" align="center" prop="code" width="200" />
-        <el-table-column :label="$t('table.transport.receiverName')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.receiverName }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('table.transport.receiverPhone')" align="center" prop="code" width="200">
-          <template slot-scope="scope">
-            <span>{{ scope.row.receiverPhone }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('table.transport.receiverAddress')" :formatter="receiverAddressFormater" align="center" prop="code" width="200" />
         <el-table-column
           fixed="right"
           label="操作"
@@ -152,6 +153,7 @@ import Pagination from '@/components/Pagination'
 import TransportEdit from './Edit'
 import transportApi from '@/api/TransportOrder.js'
 import { provinceAndCityData, codeToText } from 'element-china-area-data'
+import { Message } from 'element-ui'
 
 export default {
   name: 'RoleManage',
@@ -182,6 +184,10 @@ export default {
       loading: false,
       tableData: {
         total: 0
+      },
+      agencyName: {
+        startAgencyName: 11,
+        endAgencyName: 11
       },
       pagination: {
         size: 10,
@@ -238,10 +244,15 @@ export default {
       })
     },
     handleEdit(row) {
-      // console.log(row)
-      this.$refs.edit.setTransport(row)
-      this.dialog.type = 'edit'
-      this.dialog.isVisible = true
+      if (row.schedulingStatus === 3) {
+        this.dialog.type = 'edit'
+        this.dialog.isVisible = false
+        Message.error('运单状态为已调度，无法修改')
+      } else {
+        this.$refs.edit.setTransport(row)
+        this.dialog.type = 'edit'
+        this.dialog.isVisible = true
+      }
     },
     handleAdd() {
       this.$refs.edit.initTransport()
@@ -308,21 +319,15 @@ export default {
     },
 
     transportSchedulingStatusFormater(row, column) {
-      if (row.status === 1) {
+      if (row.schedulingStatus === 1) {
         return '待调度'
-      } else if (row.status === 2) {
+      } else if (row.schedulingStatus === 2) {
         return '未匹配线路'
-      } else if (row.status === 3) {
+      } else if (row.schedulingStatus === 3) {
         return '已调度'
       } else {
         return '未知'
       }
-    },
-    senderAddressFormater(row, column) {
-      return codeToText[row.senderProvinceId] + codeToText[row.senderCityId] + codeToText[row.receiverCountyId] + row.senderAddress
-    },
-    receiverAddressFormater(row, column) {
-      return codeToText[row.receiverProvinceId] + codeToText[row.receiverCityId] + codeToText[row.receiverCountyId] + row.receiverAddress
     }
   }
 }
