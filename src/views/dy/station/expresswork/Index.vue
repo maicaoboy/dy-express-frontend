@@ -47,7 +47,7 @@
         </el-button>
         <el-button @click="resetSearchForm">重置</el-button>
         <!-- 添加快递作业的按钮，点击后弹出添加对话框 -->
-        <el-button type="primary" @click="addExpressWorkDialogVisible = true">添加快递作业</el-button>
+        <el-button type="primary" @click="handleAddWork">添加快递作业</el-button>
       </el-form-item>
     </el-form>
 
@@ -86,9 +86,15 @@
       <el-table-column prop="mark" label="备注" />
       <el-table-column prop="createTime" label="任务创建时间" />
 <!--      添加分配快递员按钮  -->
+<!--      <el-table-column label="分配快递员">-->
+<!--        <template slot-scope="scope">-->
+<!--          <el-button type="primary" size="mini" @click="handleAssignCourier(scope.row)">分配快递员</el-button>-->
+<!--        </template>-->
+<!--      </el-table-column>-->
+<!--      编辑操作   -->
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleAssignCourier(scope.row)">分配快递员</el-button>
+          <el-button type="primary" size="mini" @click="handleEdit(scope.row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -168,7 +174,7 @@
           <el-col :span="12">
             <el-form-item label="预计开始时间">
               <el-date-picker
-                v-model="newExpressWorkForm.estimatedStartTime"
+                v-model="dateStore.estimatedStartTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -179,8 +185,9 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="实际开始时间">
+<!--              pattern = "yyyy-MM-dd HH:mm:ss"  -->
               <el-date-picker
-                v-model="newExpressWorkForm.actualStartTime"
+                v-model="dateStore.actualStartTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -189,7 +196,7 @@
           <el-col :span="12">
             <el-form-item label="预计完成时间">
               <el-date-picker
-                v-model="newExpressWorkForm.estimatedEndTime"
+                v-model="dateStore.estimatedEndTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -201,7 +208,7 @@
           <el-col :span="12">
             <el-form-item label="实际完成时间">
               <el-date-picker
-                v-model="newExpressWorkForm.actualEndTime"
+                v-model="dateStore.actualEndTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -210,7 +217,7 @@
           <el-col :span="12">
             <el-form-item label="确认时间">
               <el-date-picker
-                v-model="newExpressWorkForm.confirmTime"
+                v-model="dateStore.confirmTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -222,7 +229,7 @@
           <el-col :span="12">
             <el-form-item label="取消时间">
               <el-date-picker
-                v-model="newExpressWorkForm.cancelTime"
+                v-model="dateStore.cancelTime"
                 type="datetime"
                 placeholder="选择日期时间">
               </el-date-picker>
@@ -249,6 +256,7 @@
 <script>
 // import axios from 'axios' // assuming you have axios installed
 import AxiosApi from '@/api/AxiosApi'
+import moment from 'moment'
 export default {
   data() {
     return {
@@ -285,6 +293,14 @@ export default {
         pageSize: 10,
         total: 0
       },
+      dateStore: {
+        estimatedStartTime: '',
+        actualStartTime: '',
+        estimatedEndTime: '',
+        actualEndTime: '',
+        confirmTime: '',
+        cancelTime: ''
+      },
       // eslint-disable-next-line vue/no-dupe-keys
       newExpressWorkForm: {
         id: '',
@@ -302,8 +318,26 @@ export default {
         cancelTime: '',
         mark: ''
       },
+      blankForm: {
+        id: '',
+        courierId: '',
+        assignedStatus: '',
+        taskType: '',
+        status: '',
+        signStatus: '',
+        agencyId: '',
+        estimatedStartTime: '',
+        actualStartTime: '',
+        estimatedEndTime: '',
+        actualEndTime: '',
+        confirmTime: '',
+        cancelTime: '',
+        mark: ''
+      },
       addExpressWorkDialogVisible: false
     }
+  },
+  watch: {
   },
   created() {
     this.search()
@@ -375,6 +409,13 @@ export default {
       this.search()
     },
     addExpressWork() {
+      // 将dateStore中的数据转化为Date格式并放入到newExpressWorkForm中
+      for (const key in this.dateStore) {
+        if (this.dateStore.hasOwnProperty(key)) {
+          this.newExpressWorkForm[key] = this.dateStore[key] ? moment(this.dateStore[key]).format('YYYY-MM-DD HH:mm:ss') : ''
+        }
+      }
+      console.log(this.newExpressWorkForm)
       AxiosApi({
         url: '/work/pickup-dispatch-task/addOrder',
         method: 'post',
@@ -390,6 +431,26 @@ export default {
       })
     },
     quitAddExpressWork() {
+      this.addExpressWorkDialogVisible = false
+    },
+    handleEdit(row) {
+      this.addExpressWorkDialogVisible = true
+      this.newExpressWorkForm = row
+      //   更新dataStore中数据
+      for (const key in this.dateStore) {
+        if (this.dateStore.hasOwnProperty(key)) {
+        //   转化为Date格式
+          this.dateStore[key] = this.newExpressWorkForm[key] ? moment(this.newExpressWorkForm[key], 'YYYY-MM-DD HH:mm:ss').toDate() : ''
+        }
+      }
+    },
+    handleAddWork() {
+      this.addExpressWorkDialogVisible = true
+      this.newExpressWorkForm = this.blankForm
+    },
+    resetAddExpressWorkForm() {
+      console.log(this.newExpressWorkForm)
+      this.newExpressWorkForm = this.blankForm
       this.addExpressWorkDialogVisible = false
     }
   }

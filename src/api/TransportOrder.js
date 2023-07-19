@@ -6,8 +6,8 @@ const apiList = {
     url: `/work/transport-order`
   },
   update: {
-    method: 'GET',
-    url: `/work/transport-order/{id}`
+    method: 'POST',
+    url: `/work/transport-order/update`
   },
   findbypage: {
     method: 'GET',
