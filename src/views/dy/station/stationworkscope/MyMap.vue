@@ -27,7 +27,10 @@ import AxiosApi from '@/api/AxiosApi'
 
 export default {
   name: 'MyMap',
-
+  props: {
+    // eslint-disable-next-line vue/require-default-prop
+    closeMap: null
+  },
   data() {
     return {
       name: 'draw',
@@ -115,18 +118,11 @@ export default {
     },
     update() {
       // 保存围栏
-      var points = []
+      var points = [[]]
       this.polygon_marker.map((item, index) => {
-        points.push([item.getPosition().lng, item.getPosition().lat])
+        points[0].push({ 'lng': item.getPosition().lng, 'lat': item.getPosition().lat })
       })
-      if (points.length < 3) {
-        this.$message({
-          message: '围栏点数不能少于3个',
-          type: 'warning'
-        })
-        return
-      }
-      this.agencyForm.mutiPoints = '[' + JSON.stringify(points) + ']'
+      this.agencyForm.mutiPoints = points
       AxiosApi({
         method: 'post',
         url: '/base/scope/agency/save',
@@ -138,6 +134,7 @@ export default {
             message: '保存成功',
             type: 'success'
           })
+          this.closeMap()
         } else {
           this.$message({
             message: '保存失败',
@@ -160,7 +157,7 @@ export default {
       console.log(this)
       for (var i = 0; i < points.length; i++) {
         // eslint-disable-next-line no-undef
-        var point = new BMap.Point(points[i][0], points[i][1])
+        var point = new BMap.Point(points[i].lng, points[i].lat)
         console.log(points[i])
         console.log(point)
         // eslint-disable-next-line no-undef
