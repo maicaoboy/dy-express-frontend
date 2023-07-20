@@ -1,462 +1,510 @@
 <template>
-  <div class="main">
-    <el-card>
-      <el-row :gutter="10">
-        <el-col :sm="24" :xs="24">
-          <div class="app-container user-container">
-            <el-row :gutter="10">
-              <el-col :sm="12" :xs="24">
-                <div class="user-wrapper">
-                  <div class="user-header">
-                    <el-avatar :size="60" :src="avatar" fit="fill">
-                      <el-avatar :size="60">{{ user.name | userAvatarFilter }}</el-avatar>
-                    </el-avatar>
-                  </div>
-                  <div class="user-info">
-                    <div class="random-message">{{ welcomeMessage }}</div>
-                    <div class="user-dept">
-                      <span>{{ user.workDescribe ? user.workDescribe : $t('common.noWorkDescribe') }}</span>
-                    </div>
-                    <div class="user-login-info">
-                      {{ $t('common.lastLoginTime') }}：
-                      <span
-                        id="last-login-time"
-                      >{{ user.lastLoginTime ? user.lastLoginTime : $t('common.firstLogin') }}</span>
-                    </div>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :sm="12" :xs="24">
-                <div class="user-visits">
-                  <el-row style="margin-bottom: 5px;">
-                    <el-col :offset="4" :span="4" class="num">
-                      <el-link type="primary" style="color: #F04B30;font-size: 18px;">
-                        <countTo :duration="3000" :end-val="todayIp" :start-val="0" />
-                      </el-link>
-                    </el-col>
-                    <el-col :offset="4" :span="4" class="num">
-                      <el-link type="primary" style="color: #F04B30;font-size: 18px;">
-                        <countTo :duration="3000" :end-val="todayVisit" :start-val="0" />
-                      </el-link>
-                    </el-col>
-                    <el-col :offset="4" :span="4" class="num">
-                      <el-link type="primary" style="color: #F04B30;font-size: 18px;">
-                        <countTo :duration="3000" :end-val="totalVisit" :start-val="0" />
-                      </el-link>
-                    </el-col>
-                  </el-row>
-                  <el-row style="margin-bottom: .7rem">
-                    <el-col :offset="4" :span="4">{{ $t('common.todayIp') }}</el-col>
-                    <el-col :offset="4" :span="4">{{ $t('common.todayVisit') }}</el-col>
-                    <el-col :offset="4" :span="4">{{ $t('common.TotalVisit') }}</el-col>
-                  </el-row>
-                </div>
-              </el-col>
-            </el-row>
+  <div class="dashboard-container">
+    <el-row :gutter="20" style="margin-top:20px;margin-bottom:20px">
+      <el-col :xs="24" :sm="12" :span="6">
+        <el-card class="box-card" :body-style="{ padding: '5px 20px' , minHeight: '60px' }">
+          <div style="float:left;margin-left:-10px">
+            <img src="../../assets/wd.png">
           </div>
-        </el-col>
-      </el-row>
-    </el-card>
-    <el-card style="margin-top: 10px;width: 50%;float: left;">
-      <el-row :gutter="5">
-        <div class="app-container">
-          <div id="visit-count-chart" style="width: 100%;height: 20rem" />
+          <div style="margin:15px;float:left;">
+            <div style="color:#333333">
+              昌平网点
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              北京省/北京市/昌平区/金燕龙
+            </div>
+          </div>
+          <div style="margin:10px;float:left">
+            <div style="color:#3681FF;text-align:center">
+              0
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              下属机构
+            </div>
+          </div>
+          <div style="margin:10px 15px;float:left;">
+            <div style="color:#3681FF;text-align:center">
+              120
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              系统员工
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="12" :span="6">
+        <el-card class="box-card" :body-style="{ padding: '5px 20px' , minHeight: '60px' }">
+          <div style="float:left;margin-left:-10px;margin-top:10px">
+            <img src="../../assets/dfpzy.png">
+          </div>
+          <div style="margin:15px 10px;float:left;">
+            <div style="color:#F04B30">
+              65
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              待分配作业范围
+            </div>
+          </div>
+          <div style="float:left;margin-top:10px">
+            <img src="../../assets/qjdb.png">
+          </div>
+          <div style="margin:15px;float:left">
+            <div style="color:#F04B30;text-align:center">
+              3456
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              取件待办
+            </div>
+          </div>
+          <div style="float:left;margin-top:10px">
+            <img src="../../assets/pjdb.png">
+          </div>
+          <div style="margin:15px 20px;float:left;">
+            <div style="color:#F04B30;text-align:center">
+              120
+            </div>
+            <div style="color:#999999;font-size:14px;margin-top:5px">
+              派件待办
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <!-- 订单总量  订单分布-->
+    <el-row :gutter="20" style="margin-bottom:20px">
+      <el-col :xs="24" :sm="12">
+        <el-card class="hots">
+          <div slot="header" class="header">
+            <span>订单总量</span>
+          </div>
+          <div>
+            <div id="chart_example" />
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="12">
+        <el-card class="hots">
+          <div slot="header" class="header">
+            <span>订单分布</span>
+          </div>
+          <div>
+            <div id="chart_example1" />
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+    <!-- 订单总量 订单分布 /-->
+    <!-- 作业信息 -->
+    <el-card class="hots">
+      <div slot="header" class="header">
+        <span>作业信息</span>
+      </div>
+      <el-card class="box-card" style="width:120px;margin:20px 1px;float: left;">
+        <div>
+          <label style="color: #F04B30;">300</label>
+          <br>取件任务
         </div>
-      </el-row>
-    </el-card>
-    <el-card style="margin-top: 10px;width:48%;float: left;margin-left: 15px;">
-      <el-row :gutter="5">
-        <div class="app-container project-wrapper">
-          <table>
-            <template v-for="(project, index) in projects">
-              <tr v-if="index % 2 == 0" :key="index">
-                <td>
-                  <div class="project-avatar-wrapper">
-                    <el-avatar class="project-avatar">{{ projects[index].avatar }}</el-avatar>
-                  </div>
-                  <div class="project-detail">
-                    <div class="project-name">{{ projects[index].name }}</div>
-                    <div class="project-desc">
-                      <p>{{ projects[index].des }}</p>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="project-avatar-wrapper">
-                    <el-avatar class="project-avatar">{{ projects[index + 1].avatar }}</el-avatar>
-                  </div>
-                  <div class="project-detail">
-                    <div class="project-name">{{ projects[index + 1].name }}</div>
-                    <div class="project-desc">
-                      <p>{{ projects[index + 1].des }}</p>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            </template>
-          </table>
+        <div style="margin-top:20px;">
+          <label style="color: #F04B30;">300</label>
+          <br>仓库任务
         </div>
-      </el-row>
-    </el-card>
-    <el-card style="margin-top: 10px;width: 50%;float: left;">
-      <el-row :gutter="5">
-        <div class="app-container">
-          <div id="browser-count-chart" style="width: 100%;height: 20rem" />
+        <div style="margin-top:20px;">
+          <label style="color: #F04B30;">300</label>
+          <br>派件任务
         </div>
-      </el-row>
-    </el-card>
-    <el-card style="margin-top: 10px;width: 48%;float: left;margin-left: 15px;">
-      <el-row :gutter="5">
-        <div class="app-container">
-          <div id="operating-system-count-chart" style="width: 100%;height: 20rem" />
+      </el-card>
+      <el-card class="box-card" style="width:120px;margin:20px 5px;float: left;" shadow="hover">
+        <div>
+          <label style="color: #F04B30;">300</label>
+          <br>取件任务待派遣
         </div>
-      </el-row>
+        <div style="margin-top:20px;">
+          <label style="color: #F04B30;">300</label>
+          <br>仓库任务
+        </div>
+        <div style="margin-top:20px;">
+          <label style="color: #F04B30;">300</label>
+          <br>派件任务
+        </div>
+      </el-card>
+      <el-card class="box-card" style="width:120px;margin:20px 5px;float: left;" shadow="hover">
+        <div>
+          <label style="color: #F04B30;">300</label>
+          <br>取件任务
+        </div>
+        <div style="margin-top:20px;">
+          <label style="color: #F04B30;">300</label>
+          <br>仓库任务
+        </div>
+        <div style="margin-top:20px;">
+          <label style="color: #F04B30;">300</label>
+          <br>派件任务
+        </div>
+      </el-card>
+      <el-card class="box-card" style="width:120px;margin:20px 5px;float: left;" shadow="hover">
+        <div>
+          <label style="color: #F04B30;">300</label>
+          <br>取件任务
+        </div>
+        <div style="margin-top:20px;">
+          <label style="color: #F04B30;">300</label>
+          <br>仓库任务
+        </div>
+        <div style="margin-top:20px;">
+          <label style="color: #F04B30;">300</label>
+          <br>派件任务
+        </div>
+      </el-card>
+
+      <div style="width:420px;margin:20px 5px;float: left;">
+        <div id="chart_example2" />
+      </div>
     </el-card>
+
+    <!-- 作业信息 /-->
   </div>
 </template>
 <script>
 import echarts from 'echarts'
-import { parseTime } from '@/utils'
-import countTo from 'vue-count-to'
-import resize from '@/components/Charts/mixins/resize'
-import { simplePie, simpleBar } from '@/utils/chartsOption'
-import dashboardApi from '@/api/Dashboard.js'
-
+import 'echarts/map/js/china.js'
 export default {
   name: 'Dashboard',
-  components: { countTo },
-  filters: {
-    userAvatarFilter(name) {
-      return name.charAt(0)
-    }
-  },
-  mixins: [resize],
   data() {
-    return {
-      welcomeMessage: '',
-      todayIp: 0,
-      todayVisit: 0,
-      totalVisit: 0,
-      chart: null,
-      chartOption: simpleBar(this.$t('common.visitTitle') + '\n'),
-      browserCountOption: simplePie('访问用户浏览器'),
-      operatingSystemCountOption: simplePie('访问用户操作系统'),
-      browserCountChart: null,
-      operatingSystemCountChart: null,
-      projects: [
+    return {}
+  },
+  computed: {},
+  mounted: function() {
+    this.chinaConfigure()
+    this.aa()
+    const myChart = echarts.init(document.getElementById('chart_example'))
+    const option = {
+      color: ['#f44'],
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      xAxis: [
         {
-          name: 'SpringBoot',
-          des: 'Spring Boot 2.1.2',
-          avatar: 'SB'
-        },
+          type: 'category',
+          data: [
+            '1月',
+            '2月',
+            '3月',
+            '4月',
+            '5月',
+            '6月',
+            '7月',
+            '8月',
+            '9月',
+            '10月',
+            '11月',
+            '12月'
+          ],
+          axisTick: {
+            alignWithLabel: true
+          }
+        }
+      ],
+      yAxis: [
         {
-          name: 'SpringCloud',
-          des: 'Spring Cloud Greenwich.RELEASE',
-          avatar: 'SC'
-        },
+          type: 'value'
+        }
+      ],
+      series: [
         {
-          name: 'Spring Cloud alibaba',
-          des: 'SpringCloudAlibaba2.1.0.RELEASE & nacos & seata & Sentinel',
-          avatar: 'SCA'
-        },
-        {
-          name: 'Mybatis-Plus',
-          des: 'Mybatis-plus 3.2.0：Mybatis 增强组件',
-          avatar: 'MP'
-        },
-        {
-          name: 'J2cache',
-          des: 'J2cache2.7.8: 二级缓存框架',
-          avatar: 'J'
-        },
-        {
-          name: '文件存储API',
-          des: '封装文件接口，实现本地存储、阿里云、FastDFS存储的配置化',
-          avatar: 'F'
-        },
-        {
-          name: '监控',
-          des:
-            '集成SpringBootAdmin、Zipkin、Redis、Mysql、定时任务等监控，对系统进行全方位监控护航',
-          avatar: 'M'
-        },
-        {
-          name: '容器技术',
-          des: '虚拟化容器技术，让迁移、部署更加方便快捷',
-          avatar: 'C'
+          name: '每月花费',
+          type: 'bar',
+          barWidth: '60%',
+          data: [995, 666, 444, 858, 654, 236, 645, 546, 846, 225, 547, 356]
         }
       ]
     }
+    myChart.setOption(option)
+    window.addEventListener('resize', function() {
+      myChart.resize()
+    })
   },
-  computed: {
-    user() {
-      return this.$store.state.account.user
-    },
-    avatar() {
-      if (!this.user['avatar']) {
-        return require(`@/assets/avatar/default.jpg`)
-      } else {
-        if (
-          this.user['avatar'].startsWith('http://') ||
-          this.user['avatar'].startsWith('https://')
-        ) {
-          return this.user['avatar']
-        } else {
-          return require(`@/assets/avatar/${this.user.avatar}`)
-        }
-      }
-      // return this.$store.state.account.user.avatar
-    }
-  },
-  mounted() {
-    this.welcomeMessage = this.welcome()
-    this.initIndexData()
-  },
+
+  created() {},
   methods: {
-    welcome() {
-      const date = new Date()
-      const hour = date.getHours()
-      const time =
-        hour < 6
-          ? this.$t('common.goodMorning')
-          : hour <= 11
-          ? this.$t('common.goodMorning')
-          : hour <= 13
-          ? this.$t('common.goodAfternoon')
-          : hour <= 18
-          ? this.$t('common.goodAfternoon')
-          : this.$t('common.goodEvening')
-
-      const welcomeArr = Array.from({ length: 10 }, (v, i) =>
-        this.$t('common.randomMessage.' + i)
-      )
-      const index = Math.floor(Math.random() * welcomeArr.length)
-      return `${time}, ${this.user.name}, ${welcomeArr[index]}`
-    },
-    initIndexData: function() {
-      dashboardApi.getVisitList({}).then(response => {
-        const res = response.data
-
-        const data = res.data
-        this.todayIp = Number(data.todayIp)
-        this.totalVisit = Number(data.totalVisitCount)
-        this.todayVisit = Number(data.todayVisitCount)
-
-        this.tenDaysData(data)
-        this.browserCount(data.browserCount)
-        this.operatingSystemCount(data.operatingSystemCount)
-      })
-    },
-    tenDaysData(data) {
-      const tenVisitCount = []
-      const dateArr = []
-      const tenUserVisitCount = []
-
-      for (let i = 9; i >= 0; i--) {
-        const time = parseTime(
-          new Date(new Date().getTime() - 24 * 60 * 60 * 1000 * i),
-          '{y}-{m}-{d}'
-        )
-        let contain = false
-        for (const o of data.lastTenVisitCount) {
-          if (o.login_date === time) {
-            contain = true
-            tenVisitCount.push(o.count)
-            break
+    chinaConfigure() {
+      const myChart = echarts.init(document.getElementById('chart_example1'))
+      window.onresize = myChart.resize
+      myChart.setOption({
+        // 进行相关配置
+        backgroundColor: '#fff',
+        tooltip: {}, // 鼠标移到图里面的浮动提示框
+        dataRange: {
+          show: false,
+          min: 0,
+          max: 1000,
+          text: ['High', 'Low'],
+          realtime: true,
+          calculable: true,
+          color: ['orangered', 'yellow', 'lightskyblue']
+        },
+        geo: {
+          // 这个是重点配置区
+          map: 'china', // 表示中国地图
+          roam: true,
+          label: {
+            normal: {
+              show: true, // 是否显示对应地名
+              textStyle: {
+                color: 'rgba(0,0,0,0.4)'
+              }
+            }
+          },
+          itemStyle: {
+            normal: {
+              borderColor: 'rgba(0, 0, 0, 0.2)'
+            },
+            emphasis: {
+              areaColor: null,
+              shadowOffsetX: 0,
+              shadowOffsetY: 0,
+              shadowBlur: 20,
+              borderWidth: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
           }
-        }
-        if (!contain) {
-          tenVisitCount.push(0)
-        }
-
-        let userContain = false
-        for (const o of data.lastTenUserVisitCount) {
-          if (o.login_date === time) {
-            userContain = true
-            tenUserVisitCount.push(o.count)
-            break
+        },
+        series: [
+          {
+            type: 'scatter',
+            coordinateSystem: 'geo' // 对应上方配置
+          },
+          {
+            name: '启动次数', // 浮动框的标题
+            type: 'map',
+            geoIndex: 0,
+            data: [
+              {
+                name: '北京',
+                value: 599
+              },
+              {
+                name: '上海',
+                value: 142
+              },
+              {
+                name: '黑龙江',
+                value: 44
+              },
+              {
+                name: '深圳',
+                value: 92
+              },
+              {
+                name: '湖北',
+                value: 810
+              },
+              {
+                name: '四川',
+                value: 453
+              }
+            ]
           }
-        }
-        if (!userContain) {
-          tenUserVisitCount.push(0)
-        }
-        dateArr.push(time)
-      }
-
-      this.chart = echarts.init(document.getElementById('visit-count-chart'))
-      this.chartOption.legend.data = [
-        this.$t('common.you'),
-        this.$t('common.total')
-      ]
-      this.chartOption.xAxis.data = dateArr
-      this.chartOption.series.push({
-        name: this.$t('common.you'),
-        type: 'bar',
-        barWidth: '25%',
-        color: '#FD7270',
-        data: tenUserVisitCount
+        ]
       })
-      this.chartOption.series.push({
-        name: this.$t('common.total'),
-        type: 'bar',
-        barWidth: '25%',
-        color: '#5D7DF2',
-        data: tenVisitCount
-      })
-      this.chart.setOption(this.chartOption)
     },
-    browserCount(data) {
-      if (!data) {
-        return
-      }
-      const legend_data = []
-      const series_data = []
-      data.forEach(item => {
-        const browser = item.browser || '未知'
-        series_data.push({ value: item.count, name: browser })
-        legend_data.push(browser)
+    aa() {
+      const myChart1 = echarts.init(document.getElementById('chart_example2'))
+      window.onresize = myChart1.resize
+      myChart1.setOption({
+        title: {
+          left: 'center'
+        },
+        // legend: {
+        //   left: 'center',
+        //   top: 'bottom',
+        //   data: [
+        //     '待出库',
+        //     '未出库',
+        //     '已出库',
+        //     '已出库1',
+        //     '已出库2',
+        //     '已出库3',
+        //     '已出库4'
+        //   ]
+        // },
+
+        series: [
+          {
+            name: '半径模式',
+            type: 'pie',
+            radius: [20, 110],
+            center: ['60%', '40%'],
+            roseType: 'radius',
+            label: {
+              show: false
+            },
+            emphasis: {
+              label: {
+                show: true
+              }
+            },
+            data: [
+              { value: 7, name: '待出库' },
+              { value: 6, name: '未出库' },
+              { value: 5, name: '已出库' },
+              { value: 4, name: '已出库1' },
+              { value: 3, name: '已出库2' },
+              { value: 2, name: '已出库3' },
+              { value: 1, name: '已出库4' }
+            ]
+          }
+        ]
       })
-
-      this.browserCountOption.series[0].data = series_data
-      this.browserCountOption.legend.data = legend_data
-
-      this.browserCountChart = echarts.init(
-        document.getElementById('browser-count-chart'),
-        'westeros'
-      )
-      this.browserCountChart.setOption(this.browserCountOption)
-    },
-    operatingSystemCount(data) {
-      if (!data) {
-        return
-      }
-      const legend_data = []
-      const series_data = []
-      data.forEach(item => {
-        const browser = item.operating_system || '未知'
-        series_data.push({ value: item.count, name: browser })
-        legend_data.push(browser)
-      })
-
-      this.operatingSystemCountOption.series[0].data = series_data
-      this.operatingSystemCountOption.legend.data = legend_data
-
-      this.browserCountChart = echarts.init(
-        document.getElementById('operating-system-count-chart'),
-        'westeros'
-      )
-      this.browserCountChart.setOption(this.operatingSystemCountOption)
     }
   }
 }
 </script>
-<style lang="scss">
-.main {
-  padding: 10px;
-  .app-container {
-    margin: 0 0 10px 0;
-    background: #fff;
-  }
-  .user-container {
-    padding: 15px;
-  }
-  .user-wrapper {
-    width: 100%;
-    display: inline-block;
-    .user-header {
-      display: inline-block;
-      vertical-align: middle;
+<style rel="stylesheet/scss" lang="scss" scoped>
+.dashboard-container {
+  margin: 10px;
+}
+#chart_example {
+  height: 337px;
+  margin: 0 auto;
+}
+#chart_example1 {
+  height: 337px;
+  margin: 0 auto;
+}
+#chart_example2 {
+  height: 300px;
+  margin: 0 auto;
+}
+.box-card {
+  padding: 5px 10px;
+  .header {
+    height: 25px;
+    span {
+      color: #97a8be;
+      font-size: 14px;
     }
-    .user-info {
-      display: inline-block;
-      vertical-align: middle;
+    .item {
+      color: #97a8be;
+      float: right;
+      padding: 3px 0;
+    }
+  }
+  // 总销售额
+  .total {
+    font-size: 30px;
+    height: 140px;
+    line-height: 100px;
+  }
+  .trends {
+    height: 22px;
+    font-size: 14px;
+    span {
+      display: inline;
+      i {
+        color: red;
+      }
+    }
+    span:last-child {
       margin-left: 20px;
-      .random-message {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-      }
-      .user-dept,
-      .user-login-info {
-        color: rgba(0, 0, 0, 0.45);
-        margin-bottom: 0.5rem;
-        font-size: 0.8rem;
-        line-height: 1.1rem;
+      display: inline;
+      i {
+        color: green;
       }
     }
   }
-  .user-visits {
-    text-align: center;
-    padding-right: 2rem;
-    margin-top: 1rem;
-    vertical-align: middle;
-    .num {
+  .chart {
+    height: 160px;
+  }
+  .hr {
+    border-top: 1px solid #e8e8e8;
+    margin: 0px 0px 10px 0px;
+  }
+  .footer {
+    span {
+      font-size: 14px;
+      line-height: 22px;
+    }
+    span:last-child {
+      margin-left: 8px;
+      color: rgba(0, 0, 0, 0.85);
+    }
+  }
+  // 总销售额 end
+}
+// 销售额
+.sales-card {
+  position: relative;
+  .header {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    z-index: 1;
+  }
+  .chart {
+    widows: 100%;
+    height: 300px;
+  }
+  .table {
+    color: rgba(0, 0, 0, 0.65);
+    h4 {
+      color: #000;
+      font-weight: 500;
+    }
+    ul {
+      list-style: none;
+      margin: 0px;
+      padding: 0px;
+      .row {
+        margin-bottom: 10px;
+      }
+    }
+    .circular {
+      width: 20px;
+      height: 20px;
+      background-color: #314659;
+      color: #fff;
+      text-align: center;
+      font-size: 12px;
+      line-height: 20px;
       font-weight: 600;
+      border-radius: 50%;
+    }
+    .light {
+      background-color: #f5f5f5;
+      color: rgba(0, 0, 0, 0.65);
     }
   }
-  .project-wrapper {
-    padding: 0;
-    .project-header {
-      padding: 18px;
-      margin-bottom: 16px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      td {
-        width: 50%;
-        border-top: 1px solid #f1f1f1;
-        border-bottom: 1px solid #f1f1f1;
-        padding: 0.6rem;
-        .project-avatar-wrapper {
-          display: inline-block;
-          float: left;
-          margin-right: 0.7rem;
-          .project-avatar {
-            color: #42b983;
-            background-color: #d6f8b8;
-          }
-        }
-        &:nth-child(odd) {
-          border-right: 1px solid #f1f1f1;
-        }
-      }
-    }
-    .project-detail {
-      display: inline-block;
-      float: left;
-      text-align: left;
-      width: 75%;
-      .project-name {
-        font-size: 0.9rem;
-        margin-top: -2px;
-        font-weight: 600;
-      }
-      .project-desc {
-        color: rgba(0, 0, 0, 0.45);
-        p {
-          margin: 5px 0 0 0;
-          font-size: 0.7rem;
-          line-height: 1.3rem;
-          white-space: normal;
-        }
-      }
-    }
-  }
-  @media screen and (max-width: 1366px) {
-    .user-info {
-      max-width: 25rem;
-    }
-  }
-  @media screen and (max-width: 1300px) {
-    .user-info {
-      max-width: 19rem;
-    }
-  }
+}
 
-  @media screen and (max-width: 1120px) {
-    .user-info {
-      max-width: 17rem;
+// 线上热门搜索
+.hots {
+  height: 400px;
+  position: relative;
+  .header {
+    color: #97a8be;
+    .ops {
+      position: absolute;
+      right: 20px;
     }
+  }
+  .pagination {
+    position: absolute;
+    right: 12px;
+    bottom: 5px;
+  }
+  .chart {
+    height: 300px;
+  }
+}
+
+// 周搜索
+.month-card {
+  height: 400px;
+  .chart {
+    height: 300px;
   }
 }
 </style>

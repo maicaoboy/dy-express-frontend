@@ -500,11 +500,14 @@ export default {
         })
     },
     handleArrangeTruck(row) {
+      const that = this
       this.$refs.tripEdit.settransportrip(row)
       var line = this.tableData.items.find(item => item.id === row.transportLineId)
       console.log('line', row, this.transportlinetypeList)
       this.$refs.tripEdit.settransportline(line)
-      transporttripApi.relation(row.transportLineId).then(response => {
+      transporttripApi.relation({
+        transportTripsId: row.id
+      }).then(response => {
         const res = response.data
         console.log('relation', res)
         var seleted = []
@@ -513,16 +516,20 @@ export default {
         })
         this.$refs.tripEdit.setSeleted(seleted)
         // this.$refs.tripEdit.settruckData(res)
+        that.$refs.tripEdit.doLayout()
       })
       this.dialog.type = 'addTruck'
       this.dialog.isTripEditVisible = true
     },
     handleArrangeDriver(row) {
+      const that = this
       this.$refs.tripEdit.settransportrip(row)
       var line = this.tableData.items.find(item => item.id === row.transportLineId)
       console.log('line', row, this.transportlinetypeList)
       this.$refs.tripEdit.settransportline(line)
-      transporttripApi.relation(row.transportLineId).then(response => {
+      transporttripApi.relation({
+        transportTripsId: row.id
+      }).then(response => {
         const res = response.data
         console.log('relation', res)
         var seleted = []
@@ -543,6 +550,7 @@ export default {
         })
         this.$refs.tripEdit.settruckDataSelected(truckDataSelected)
         this.$refs.tripEdit.setDriverData(this.driverData)
+        that.$refs.tripEdit.doLayout()
       })
       this.dialog.type = 'addDriver'
       this.dialog.isTripEditVisible = true
