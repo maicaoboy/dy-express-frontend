@@ -102,7 +102,7 @@
         <!--货物的默认体积-->
         <el-table-column
           prop="volume"
-          :label="$t('table.goodsType.defaultVolume')"
+          :label="$t('table.goodsType.defaultVolume') +'千克'"
           align="center"
         >
           <template slot-scope="scope">
@@ -112,7 +112,7 @@
         <!--货物的默认重量-->
         <el-table-column
           prop="weight"
-          :label="$t('table.goodsType.defaultWeight')"
+          :label="$t('table.goodsType.defaultWeight')+'立方'"
           align="center"
         >
           <template slot-scope="scope">

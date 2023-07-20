@@ -324,8 +324,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          this.driverGetTransportOrderList(row)
           row.status = 3
+          this.driverGetTransportOrderList(row)
           this.driverUpdate(row)
         })
         .catch(() => {

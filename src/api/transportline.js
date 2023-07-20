@@ -20,6 +20,10 @@ const apiList = {
   listorg: {
     url: `/authority/org`,
     method: 'GET'
+  },
+  get: {
+    url: `/base/base/transportLine`,
+    method: 'GET'
   }
 }
 
@@ -52,6 +56,12 @@ export default {
   listOrg() {
     return axiosApi({
       ...apiList.listorg
+    })
+  },
+  get(ids) {
+    return axiosApi({
+      ...apiList.get,
+      ids
     })
   }
 }

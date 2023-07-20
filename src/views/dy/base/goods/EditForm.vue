@@ -21,10 +21,18 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('table.goodsType.defaultWeight')" prop="id">
-        <el-input v-model="good.defaultWeight" />
+        <el-input v-model="good.defaultWeight">
+          <template slot="append">
+            千克
+          </template>
+          </el-input>
       </el-form-item>
       <el-form-item :label="$t('table.goodsType.defaultVolume')" prop="status">
-        <el-input v-model="good.defaultVolume" />
+        <el-input v-model="good.defaultVolume">
+        <template slot="append">
+          立方
+        </template>
+        </el-input>
       </el-form-item>
       <el-form-item :label="$t('table.goodsType.describe')" prop="status">
         <el-input v-model="good.remark" />

@@ -178,6 +178,7 @@
         ref="detail"
         :is-visible="detailForm.isVisible"
         :truck-type-options="truckTypeOptions"
+        :orgs="orgs"
         @close="editClose"
         @handelEdittruck="handelEdittruck"
       />
@@ -190,6 +191,7 @@ import TruckApi from '@/api/Truck'
 import TruckTypeApi from '@/api/TruckType'
 import EditForm from '@/views/dy/base/trucks/EditForm.vue'
 import Detail from '@/views/dy/base/trucks/Detail.vue'
+import OrgApi from '@/api/Org'
 export default {
   name: 'TruckIndex',
   components: {
@@ -209,6 +211,7 @@ export default {
         items: [],
         total: 0
       },
+      orgs: [],
       sort: {},
       queryParams: {},
       truckTypeOptions: [],
@@ -245,6 +248,12 @@ export default {
         const res = response.data
         this.loading = false
         this.tableData = res
+      })
+      OrgApi.page(params).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.orgs = res.data
+        }
       })
     },
     search() {
@@ -332,6 +341,7 @@ export default {
     editClose() {
       this.dialog.isVisible = false
       this.detailForm.isVisible = false
+      this.search()
     },
     inittruckTypeOptions() {
       const params = {}

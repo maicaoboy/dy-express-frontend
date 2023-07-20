@@ -96,7 +96,7 @@
 import AxiosApi from '@/api/AxiosApi'
 import MyMap from '@/views/dy/station/stationworkscope/MyMap.vue'
 import areaApi from '@/api/Area'
-import { codeToText, regionData } from 'element-china-area-data'
+import { regionData } from 'element-china-area-data'
 export default {
   name: 'StationWorkScope',
   components: { MyMap },
@@ -144,7 +144,7 @@ export default {
       console.log(this.searchOptions)
       if (this.searchOptions.length > 0) {
         this.searchForm.areaId = this.searchOptions[this.searchOptions.length - 1]
-      }else {
+      } else {
         this.searchForm.areaId = ''
       }
       AxiosApi({

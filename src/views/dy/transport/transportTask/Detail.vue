@@ -224,13 +224,6 @@ export default {
         lng: 116.508328,
         lat: 39.919141
       },
-      rules: {
-        status: {
-          required: true,
-          message: this.$t('rules.require'),
-          trigger: 'blur'
-        }
-      },
       pagination: {
         size: 10,
         current: 1
@@ -239,9 +232,6 @@ export default {
     }
   },
   methods: {
-    close() {
-      this.$emit('close')
-    },
     setTransportTasks(transportTask) {
       this.transportTask = { ...transportTask }
     },

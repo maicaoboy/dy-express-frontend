@@ -70,7 +70,7 @@
         </el-form>
         <el-form v-if="lineisVisible" ref="lineform" :model="truck" label-position="right" label-width="100px">
           <el-form-item :label="$t('table.truck.line')" prop="status">
-            <el-input v-model="truck.lineName" />
+            <el-input v-model="truck.transportLineId" />
           </el-form-item>
           <el-form-item :label="$t('table.truck.tripid')" prop="status">
             <el-input v-model="truck.transportTripsId" />
@@ -94,6 +94,10 @@
   </el-dialog>
 </template>
 <script>
+import OrgApi from '@/api/Org'
+import AreaApi from '@/api/Area'
+// import TransportLineApi from '@/api/transportline'
+
 export default {
   props: {
     type: {
@@ -107,6 +111,10 @@ export default {
     truckTypeOptions: {
       type: Array,
       default: () => []
+    },
+    orgs: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -115,6 +123,14 @@ export default {
       truck: {},
       truckisVisible: true,
       lineisVisible: false,
+      areaId: {
+        areaStartId: '131024',
+        areaEndId: '131026'
+      },
+      orgId: {
+        orgStartId: '',
+        orgEndId: ''
+      },
       start: {
         lng: 116.301934,
         lat: 39.977552
@@ -126,9 +142,30 @@ export default {
       BaiduMapAK: 'BaiduMapAK'
     }
   },
+  // watch: {
+  //   truck() {
+  //     // 通过线路Id集合找到线路实体
+  //     TransportLineApi.get(this.truck.transportLineId).then(response => {
+  //       const res = response.data
+  //       // 循环遍历线路实体
+  //       for (let i = 0; i < res.length; i++) {
+  //         OrgApi.get(res[i].startAgencyId).then(response => {
+  //           const res2 = response.data
+  //           if (res2.isSuccess) {
+  //             console.log(res.data)
+  //           }
+  //         })
+  //       }
+  //       // this.orgId.orgStartId = res[0].startAgencyId
+  //       // this.orgId.orgEndId = res[0].endAgencyId
+  //     })
+  //   }
+  // },
   methods: {
     closeForm() {
       this.$emit('close')
+      this.truckisVisible = true
+      this.lineisVisible = false
     },
     submitForm() {
       const temp = this
@@ -141,11 +178,45 @@ export default {
     setTruck(truck) {
       this.truck = { ...truck }
     },
+    setStart() {
+      OrgApi.get(this.orgId.orgStartId).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.areaId.areaStartId = res.data.areaId
+          console.log(this.areaId.areaStartId)
+        }
+      })
+      AreaApi.getByCode(this.areaId.areaStartId).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.start.lat = res.data.lat
+          this.start.lng = res.data.lng
+        }
+      })
+    },
+    setEnd() {
+      OrgApi.get(this.orgId.orgEndId).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.areaId.areaEndId = res.data.areaId
+          console.log(this.areaId.areaEndId)
+        }
+      })
+      AreaApi.getByCode(this.areaId.areaEndId).then(response => {
+        const res = response.data
+        if (res.isSuccess) {
+          this.end.lat = res.data.lat
+          this.end.lng = res.data.lng
+        }
+      })
+    },
     handelSelect(index) {
       if (index === 'truckdetail') {
         this.truckisVisible = true
         this.lineisVisible = false
       } else if (index === 'linedetail') {
+        this.setStart()
+        this.setEnd()
         this.truckisVisible = false
         this.lineisVisible = true
       }
